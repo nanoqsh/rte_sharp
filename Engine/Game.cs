@@ -61,6 +61,11 @@ namespace OpenGLEngine.Engine
         {
             base.OnLoad(e);
 
+            Attributes = ShaderProgram.GetAttributes("coord");
+            Uniforms = ShaderProgram.GetUniforms("color");
+
+            CheckOpenGLError();
+
             Vertex2D[] vertices =
             {
                 new Vertex2D(0.0f, 0.0f),
@@ -72,13 +77,9 @@ namespace OpenGLEngine.Engine
             BufferObject = new BufferObject(
                 BufferTarget.ArrayBuffer,
                 vertices,
-                2
+                2,
+                Attributes["coord"]
                 );
-
-            CheckOpenGLError();
-
-            Attributes = ShaderProgram.GetAttributes("coord");
-            Uniforms = ShaderProgram.GetUniforms("color");
 
             CheckOpenGLError();
         }
@@ -99,7 +100,7 @@ namespace OpenGLEngine.Engine
 
             GL.Uniform4(Uniforms["color"], Color.CadetBlue);
 
-            BufferObject.Draw(Attributes["coord"]);
+            BufferObject.Draw();
 
             ShaderProgram.Disable();
 

@@ -16,8 +16,14 @@ namespace OpenGLEngine.Engine
         {
             get => index;
         }
+        public int AttributeIndex { get; }
 
-        public BufferObject(BufferTarget bufferTarget, Vertex2D[] vertices, int sizeOfElements)
+        public BufferObject(
+            BufferTarget bufferTarget,
+            Vertex2D[] vertices,
+            int sizeOfElements,
+            int attributeIndex
+            )
         {
             BufferTarget = bufferTarget;
             this.sizeOfElements = sizeOfElements;
@@ -32,17 +38,9 @@ namespace OpenGLEngine.Engine
                 vertices,
                 BufferUsageHint.StaticDraw
                 );
-        }
 
-        public void Dispose()
-        {
-            GL.BindBuffer(BufferTarget, 0);
-            GL.DeleteBuffers(1, ref index);
-        }
 
-        public void Draw(int attributeIndex)
-        {
-            GL.BindBuffer(BufferTarget, index);
+            // Set attribute
             GL.EnableVertexAttribArray(attributeIndex);
             GL.VertexAttribPointer(
                 attributeIndex,
@@ -53,10 +51,21 @@ namespace OpenGLEngine.Engine
                 0
                 );
 
-            GL.DrawArrays(PrimitiveType.Quads, 0, count);
+            AttributeIndex = attributeIndex;
+        }
 
+        public void Dispose()
+        {
             GL.BindBuffer(BufferTarget, 0);
-            GL.DisableVertexAttribArray(attributeIndex);
+            GL.DisableVertexAttribArray(AttributeIndex);
+            GL.DeleteBuffers(1, ref index);
+        }
+
+        public void Draw()
+        {
+            GL.BindBuffer(BufferTarget, index);
+            GL.DrawArrays(PrimitiveType.Quads, 0, count);
+            GL.BindBuffer(BufferTarget, 0);
         }
     }
 }
