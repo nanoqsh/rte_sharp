@@ -10,6 +10,8 @@ namespace OpenGLEngine.Engine
         public readonly int Index;
         public readonly Shader[] Shaders;
 
+        private Texture texture;
+
         public ShaderProgram(params Shader[] shaders)
         {
             Shaders = shaders;
@@ -64,6 +66,24 @@ namespace OpenGLEngine.Engine
         public void Disable()
         {
             GL.UseProgram(0);
+        }
+
+        public void SetTexture(Texture texture)
+        {
+            this.texture = texture;
+        }
+
+        public void BindTexture(int unit, string uniformName)
+        {
+            if (unit < 0 || unit > 31)
+                throw new Exception("Unit must be from 0 to 31 !");
+
+
+            int location = GL.GetUniformLocation(Index, uniformName);
+            GL.Uniform1(location, unit);
+
+            GL.ActiveTexture(TextureUnit.Texture0 + unit);
+            GL.BindTexture(TextureTarget.Texture2D, texture.Index);
         }
     }
 }

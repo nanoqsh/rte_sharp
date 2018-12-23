@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using OpenGLEngine.Engine;
+using OpenTK;
 using OpenTK.Graphics.OpenGL4;
 
 
@@ -10,10 +11,10 @@ namespace OpenGLEngine
     {
         static void ShowShadersInfo(ShaderProgram shader)
         {
-            foreach (KeyValuePair<string, int> pair in shader.GetAttributes("coord", "ver_color"))
+            foreach (KeyValuePair<string, int> pair in shader.GetAttributes("coord", "tex_coord"))
                 Console.WriteLine(pair.Key + ": " + pair.Value);
 
-            foreach (KeyValuePair<string, int> pair in shader.GetUniforms("color"))
+            foreach (KeyValuePair<string, int> pair in shader.GetUniforms("color", "tex"))
                 Console.WriteLine(pair.Key + ": " + pair.Value);
 
             foreach (Shader sh in shader.Shaders)
@@ -28,16 +29,14 @@ namespace OpenGLEngine
 
 
             ShaderProgram shader = new ShaderProgram(
-                    new Shader("vertexShader.glsl", ShaderType.VertexShader),
-                    new Shader("fragmentShader.glsl", ShaderType.FragmentShader)
-                    );
+                new Shader("vertexShader.glsl", ShaderType.VertexShader),
+                new Shader("fragmentShader.glsl", ShaderType.FragmentShader)
+                );
 
             ShowShadersInfo(shader);
 
             game.SetShaderProgram(shader);
             game.Run(10);
-
-            Console.ReadKey();
         }
     }
 }

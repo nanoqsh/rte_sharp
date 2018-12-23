@@ -17,7 +17,7 @@ namespace OpenGLEngine.Engine
         private Dictionary<string, int> Uniforms;
         private Dictionary<string, int> Attributes;
 
-        private BufferObject<Vertex5D> BufferObject;
+        private BufferObject<Vertex4D> BufferObject;
 
 
         public Game(int width, int height, string title) :
@@ -61,22 +61,27 @@ namespace OpenGLEngine.Engine
         {
             base.OnLoad(e);
 
-            Attributes = ShaderProgram.GetAttributes("coord", "ver_color");
-            Uniforms = ShaderProgram.GetUniforms("color");
+            Attributes = ShaderProgram.GetAttributes("coord", "tex_coord");
+            Uniforms = ShaderProgram.GetUniforms("color", "tex");
 
-            Vertex5D[] vertices =
+            Vertex4D[] vertices =
             {
-                new Vertex5D(-0.5f, 0.6f, 1.0f, 1.0f, 1.0f),
-                new Vertex5D(0.5f, 0.5f, 0.0f, 1.0f, 0.0f),
-                new Vertex5D(0.5f, -0.5f, 0.0f, 0.0f, 1.0f),
-                new Vertex5D(-0.5f, -0.5f, 1.0f, 0.0f, 0.0f)
+                new Vertex4D(-0.6f, 0.8f, 1.0f, 0.0f),
+                new Vertex4D(0.6f, 0.6f, 0.0f, 0.0f),
+                new Vertex4D(0.5f, -0.5f, 0.0f, 1.0f),
+                new Vertex4D(-0.6f, -0.6f, 1.0f, 1.0f)
             };
 
-            BufferObject = new BufferObject<Vertex5D>(BufferTarget.ArrayBuffer, vertices);
-            BufferObject.SetAttributes(
-                new ShaderAttribute("coord", Attributes["coord"], 2, 5 * 4, 0),
-                new ShaderAttribute("ver_color", Attributes["ver_color"], 3, 5 * 4, 2 * 4)
+            BufferObject = new BufferObject<Vertex4D>(BufferTarget.ArrayBuffer, vertices);
+            BufferObject.AddAttributes(
+                new ShaderAttribute("coord", Attributes["coord"], 2, 4, 0),
+                new ShaderAttribute("tex_coord", Attributes["tex_coord"], 2, 4, 2)
                 );
+
+            CheckOpenGLError();
+
+            // Set texture
+            ShaderProgram.SetTexture(new Texture("sky.png"));
 
             CheckOpenGLError();
         }
@@ -90,14 +95,13 @@ namespace OpenGLEngine.Engine
         {
             base.OnRenderFrame(e);
 
-            GL.ClearColor(Color4.Khaki);
+            GL.ClearColor(Color4.PowderBlue);
             GL.Clear(ClearBufferMask.ColorBufferBit);
 
             ShaderProgram.Enable();
+            ShaderProgram.BindTexture(0, "tex");
 
-            int color = Uniforms["color"];
-            if (color >= 0)
-                GL.Uniform4(color, Color.CadetBlue);
+            GL.Uniform4(Uniforms["color"], Color.CadetBlue);
 
             BufferObject.Draw();
 
@@ -110,15 +114,7 @@ namespace OpenGLEngine.Engine
         {
             base.OnResize(e);
 
-            Rectangle client = ClientRectangle;
-
-            GL.Viewport(
-                client.X,
-                client.Y,
-                client.Width,
-                client.Height
-                );
+            GL.Viewport(ClientRectangle);
         }
-
     }
 }

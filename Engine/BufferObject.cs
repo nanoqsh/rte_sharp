@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using OpenTK.Graphics.OpenGL4;
 
@@ -12,7 +13,7 @@ namespace OpenGLEngine.Engine
         private int index;
         private readonly int count;
         private readonly BufferTarget BufferTarget;
-        private ShaderAttribute[] shaderAttributes;
+        private List<ShaderAttribute> shaderAttributes;
 
         public int Index
         {
@@ -36,6 +37,8 @@ namespace OpenGLEngine.Engine
                 vertices,
                 BufferUsageHint.StaticDraw
                 );
+
+            shaderAttributes = new List<ShaderAttribute>();
         }
 
         public void Dispose()
@@ -48,9 +51,9 @@ namespace OpenGLEngine.Engine
             GL.DeleteBuffers(1, ref index);
         }
 
-        public void SetAttributes(params ShaderAttribute[] attributes)
+        public void AddAttributes(params ShaderAttribute[] attributes)
         {
-            shaderAttributes = attributes;
+            shaderAttributes.AddRange(attributes);
 
             GL.BindBuffer(BufferTarget, index);
 
@@ -62,8 +65,8 @@ namespace OpenGLEngine.Engine
                     attribute.SizeOfElements,
                     VertexAttribPointerType.Float,
                     false,
-                    attribute.Stride,
-                    attribute.Offset
+                    attribute.StrideOfElements * sizeof(float),
+                    attribute.OffsetOfElements * sizeof(float)
                     );
             }
         }
