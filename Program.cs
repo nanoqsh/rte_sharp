@@ -10,7 +10,7 @@ namespace OpenGLEngine
     {
         static void ShowShadersInfo(ShaderProgram shader)
         {
-            foreach (KeyValuePair<string, int> pair in shader.GetAttributes("coord"))
+            foreach (KeyValuePair<string, int> pair in shader.GetAttributes("coord", "ver_color"))
                 Console.WriteLine(pair.Key + ": " + pair.Value);
 
             foreach (KeyValuePair<string, int> pair in shader.GetUniforms("color"))

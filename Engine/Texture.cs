@@ -74,5 +74,22 @@ namespace OpenGLEngine.Engine
         {
             GL.DeleteTexture(Index);
         }
+
+        public void Bind()
+        {
+            /**
+             * void texture::bind(int unit, GLuint sh_prog, const std::string & name)
+             * {
+	         *     assert(unit >= 0 && unit <= 31);
+             *
+	         *     GLint loc = glGetUniformLocation(sh_prog, name.c_str());
+	         *     glUniform1i(loc, unit);
+             *
+	         *     glActiveTexture(GL_TEXTURE0 + unit);
+	         *     glBindTexture(GL_TEXTURE_2D, this->texture_handle);
+             * }
+             *
+             */
+        }
     }
 }

@@ -5,28 +5,26 @@ using OpenTK.Graphics.OpenGL4;
 
 namespace OpenGLEngine.Engine
 {
-    class BufferObject : IDisposable
+    class BufferObject<V>
+        : IDisposable
+        where V : struct
     {
         private int index;
-        private readonly int sizeOfElements;
         private readonly int count;
         private readonly BufferTarget BufferTarget;
+        private ShaderAttribute[] shaderAttributes;
 
         public int Index
         {
             get => index;
         }
-        public int AttributeIndex { get; }
 
         public BufferObject(
             BufferTarget bufferTarget,
-            Vertex2D[] vertices,
-            int sizeOfElements,
-            int attributeIndex
+            V[] vertices
             )
         {
             BufferTarget = bufferTarget;
-            this.sizeOfElements = sizeOfElements;
             count = vertices.Length;
 
             GL.GenBuffers(1, out index);
@@ -34,31 +32,40 @@ namespace OpenGLEngine.Engine
 
             GL.BufferData(
                 bufferTarget,
-                vertices.Length * Marshal.SizeOf(typeof(Vertex2D)),
+                vertices.Length * Marshal.SizeOf(typeof(V)),
                 vertices,
                 BufferUsageHint.StaticDraw
                 );
-
-
-            // Set attribute
-            GL.EnableVertexAttribArray(attributeIndex);
-            GL.VertexAttribPointer(
-                attributeIndex,
-                sizeOfElements,
-                VertexAttribPointerType.Float,
-                false,
-                0,
-                0
-                );
-
-            AttributeIndex = attributeIndex;
         }
 
         public void Dispose()
         {
             GL.BindBuffer(BufferTarget, 0);
-            GL.DisableVertexAttribArray(AttributeIndex);
+
+            foreach (ShaderAttribute attribute in shaderAttributes)
+                GL.DisableVertexAttribArray(attribute.Index);
+
             GL.DeleteBuffers(1, ref index);
+        }
+
+        public void SetAttributes(params ShaderAttribute[] attributes)
+        {
+            shaderAttributes = attributes;
+
+            GL.BindBuffer(BufferTarget, index);
+
+            foreach (ShaderAttribute attribute in attributes)
+            {
+                GL.EnableVertexAttribArray(attribute.Index);
+                GL.VertexAttribPointer(
+                    attribute.Index,
+                    attribute.SizeOfElements,
+                    VertexAttribPointerType.Float,
+                    false,
+                    attribute.Stride,
+                    attribute.Offset
+                    );
+            }
         }
 
         public void Draw()

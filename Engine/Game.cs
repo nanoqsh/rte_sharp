@@ -17,7 +17,7 @@ namespace OpenGLEngine.Engine
         private Dictionary<string, int> Uniforms;
         private Dictionary<string, int> Attributes;
 
-        private BufferObject BufferObject;
+        private BufferObject<Vertex5D> BufferObject;
 
 
         public Game(int width, int height, string title) :
@@ -45,7 +45,7 @@ namespace OpenGLEngine.Engine
 
             if (errCode != ErrorCode.NoError)
                 throw new Exception(
-                    string.Format("OpenGl error! - {0}: {1}", errCode, errCode.ToString())
+                    string.Format("OpenGl error! - {0}", errCode)
                     );
         }
 
@@ -61,24 +61,21 @@ namespace OpenGLEngine.Engine
         {
             base.OnLoad(e);
 
-            Attributes = ShaderProgram.GetAttributes("coord");
+            Attributes = ShaderProgram.GetAttributes("coord", "ver_color");
             Uniforms = ShaderProgram.GetUniforms("color");
 
-            CheckOpenGLError();
-
-            Vertex2D[] vertices =
+            Vertex5D[] vertices =
             {
-                new Vertex2D(0.0f, 0.0f),
-                new Vertex2D(0.0f, 1.0f),
-                new Vertex2D(0.8f, 1.0f),
-                new Vertex2D(1.0f, 0.2f)
+                new Vertex5D(-0.5f, 0.6f, 1.0f, 1.0f, 1.0f),
+                new Vertex5D(0.5f, 0.5f, 0.0f, 1.0f, 0.0f),
+                new Vertex5D(0.5f, -0.5f, 0.0f, 0.0f, 1.0f),
+                new Vertex5D(-0.5f, -0.5f, 1.0f, 0.0f, 0.0f)
             };
 
-            BufferObject = new BufferObject(
-                BufferTarget.ArrayBuffer,
-                vertices,
-                2,
-                Attributes["coord"]
+            BufferObject = new BufferObject<Vertex5D>(BufferTarget.ArrayBuffer, vertices);
+            BufferObject.SetAttributes(
+                new ShaderAttribute("coord", Attributes["coord"], 2, 5 * 4, 0),
+                new ShaderAttribute("ver_color", Attributes["ver_color"], 3, 5 * 4, 2 * 4)
                 );
 
             CheckOpenGLError();
@@ -98,7 +95,9 @@ namespace OpenGLEngine.Engine
 
             ShaderProgram.Enable();
 
-            GL.Uniform4(Uniforms["color"], Color.CadetBlue);
+            int color = Uniforms["color"];
+            if (color >= 0)
+                GL.Uniform4(color, Color.CadetBlue);
 
             BufferObject.Draw();
 

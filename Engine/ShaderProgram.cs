@@ -24,9 +24,9 @@ namespace OpenGLEngine.Engine
             GL.GetProgram(
                 Index,
                 GetProgramParameterName.LinkStatus,
-                out int linkOK);
+                out int linkStatus);
 
-            if (linkOK == 0)
+            if (linkStatus == 0)
                 throw new Exception("Error attach shaders!");
         }
 
