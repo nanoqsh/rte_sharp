@@ -9,9 +9,8 @@ namespace OpenGLEngine.Engine
     {
         public readonly int Index;
         public readonly Shader[] Shaders;
-
-        private List<Texture> textures;
-        private List<Uniform> uniforms;
+        
+        private readonly List<Uniform> uniforms;
 
         public ShaderProgram(params Shader[] shaders)
         {
@@ -31,8 +30,8 @@ namespace OpenGLEngine.Engine
 
             if (linkStatus == 0)
                 throw new Exception("Error attach shaders!");
-
-            textures = new List<Texture>();
+            
+            uniforms = new List<Uniform>();
         }
 
         public void Dispose()
@@ -74,6 +73,9 @@ namespace OpenGLEngine.Engine
         public void Enable()
         {
             GL.UseProgram(Index);
+
+            foreach (Uniform uniform in uniforms)
+                uniform.Bind(GetUniform(uniform.Name));
         }
 
         public void Disable()
@@ -84,30 +86,6 @@ namespace OpenGLEngine.Engine
         public void AddUniforms(params Uniform[] uniforms)
         {
             this.uniforms.AddRange(uniforms);
-        }
-
-        public void Bind()
-        {
-            foreach (Uniform uniform in uniforms)
-                uniform.Bind(GetUniform(uniform.Name));
-        }
-
-        public void AddTextures(params Texture[] textures)
-        {
-            if (this.textures.Count + textures.Length > 31)
-                throw new Exception("Max number of textures is 31");
-
-            this.textures.AddRange(textures);
-        }
-
-        public void BindTextures()
-        {
-            for (int i = 0; i < textures.Count; i++)
-            {
-                GL.Uniform1(GetUniform("tex"), i);
-                GL.ActiveTexture(TextureUnit.Texture0 + i);
-                GL.BindTexture(TextureTarget.Texture2D, textures[i].Index);
-            }
         }
     }
 }

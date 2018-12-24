@@ -71,11 +71,12 @@ namespace OpenGLEngine.Engine
                 new Attribute("coord", ShaderProgram.GetAttribute("coord"), 2, 4, 0),
                 new Attribute("tex_coord", ShaderProgram.GetAttribute("tex_coord"), 2, 4, 2)
                 );
+            
 
-            CheckOpenGLError();
-
-            // Set texture
-            ShaderProgram.AddTextures(new Texture("sky.png"));
+            ShaderProgram.AddUniforms(
+                new UniformTexture("tex", new Texture("sky.png"), 0),
+                new UniformColor("color", Color.HotPink)
+                );
 
             CheckOpenGLError();
         }
@@ -93,9 +94,6 @@ namespace OpenGLEngine.Engine
             GL.Clear(ClearBufferMask.ColorBufferBit);
 
             ShaderProgram.Enable();
-            ShaderProgram.BindTextures();
-
-            GL.Uniform4(ShaderProgram.GetUniform("color"), Color.CadetBlue);
 
             BufferObject.Draw();
 

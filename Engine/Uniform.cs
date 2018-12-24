@@ -11,6 +11,6 @@ namespace OpenGLEngine.Engine
             Name = name;
         }
 
-        public abstract void Bind(int unit);
+        public abstract void Bind(int index);
     }
 }
