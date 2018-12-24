@@ -5,12 +5,14 @@ using OpenTK.Graphics.OpenGL4;
 
 namespace OpenGLEngine.Engine
 {
-    class Shader
+    abstract class Shader
     {
         public readonly int Index;
         public readonly string Name;
 
-        public Shader(string shaderName, ShaderType shaderType)
+        protected abstract ShaderType ShaderType { get; }
+
+        public Shader(string shaderName)
         {
             Name = shaderName;
 
@@ -22,7 +24,7 @@ namespace OpenGLEngine.Engine
             string shaderCode = File.ReadAllText(path);
             
 
-            Index = GL.CreateShader(shaderType);
+            Index = GL.CreateShader(ShaderType);
             GL.ShaderSource(Index, shaderCode);
             GL.CompileShader(Index);
         }

@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using OpenGLEngine.Engine;
-using OpenTK;
 using OpenTK.Graphics.OpenGL4;
 
 
@@ -29,8 +28,8 @@ namespace OpenGLEngine
 
 
             ShaderProgram shader = new ShaderProgram(
-                new Shader("vertexShader.glsl", ShaderType.VertexShader),
-                new Shader("fragmentShader.glsl", ShaderType.FragmentShader)
+                new VertexShader("vertexShader.glsl"),
+                new FragmentShader("fragmentShader.glsl")
                 );
 
             ShowShadersInfo(shader);
