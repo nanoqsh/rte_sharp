@@ -10,7 +10,8 @@ namespace OpenGLEngine.Engine
         public readonly int Index;
         public readonly Shader[] Shaders;
 
-        private Texture texture;
+        private List<Texture> textures;
+        private List<Uniform> uniforms;
 
         public ShaderProgram(params Shader[] shaders)
         {
@@ -30,6 +31,8 @@ namespace OpenGLEngine.Engine
 
             if (linkStatus == 0)
                 throw new Exception("Error attach shaders!");
+
+            textures = new List<Texture>();
         }
 
         public void Dispose()
@@ -58,6 +61,16 @@ namespace OpenGLEngine.Engine
             return map;
         }
 
+        public int GetAttribute(string name)
+        {
+            return GL.GetAttribLocation(Index, name);
+        }
+
+        public int GetUniform(string name)
+        {
+            return GL.GetUniformLocation(Index, name);
+        }
+
         public void Enable()
         {
             GL.UseProgram(Index);
@@ -68,22 +81,33 @@ namespace OpenGLEngine.Engine
             GL.UseProgram(0);
         }
 
-        public void SetTexture(Texture texture)
+        public void AddUniforms(params Uniform[] uniforms)
         {
-            this.texture = texture;
+            this.uniforms.AddRange(uniforms);
         }
 
-        public void BindTexture(int unit, string uniformName)
+        public void Bind()
         {
-            if (unit < 0 || unit > 31)
-                throw new Exception("Unit must be from 0 to 31 !");
+            foreach (Uniform uniform in uniforms)
+                uniform.Bind(GetUniform(uniform.Name));
+        }
 
+        public void AddTextures(params Texture[] textures)
+        {
+            if (this.textures.Count + textures.Length > 31)
+                throw new Exception("Max number of textures is 31");
 
-            int location = GL.GetUniformLocation(Index, uniformName);
-            GL.Uniform1(location, unit);
+            this.textures.AddRange(textures);
+        }
 
-            GL.ActiveTexture(TextureUnit.Texture0 + unit);
-            GL.BindTexture(TextureTarget.Texture2D, texture.Index);
+        public void BindTextures()
+        {
+            for (int i = 0; i < textures.Count; i++)
+            {
+                GL.Uniform1(GetUniform("tex"), i);
+                GL.ActiveTexture(TextureUnit.Texture0 + i);
+                GL.BindTexture(TextureTarget.Texture2D, textures[i].Index);
+            }
         }
     }
 }

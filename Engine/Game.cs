@@ -14,9 +14,6 @@ namespace OpenGLEngine.Engine
         public readonly string VideoVersion;
         private ShaderProgram ShaderProgram;
 
-        private Dictionary<string, int> Uniforms;
-        private Dictionary<string, int> Attributes;
-
         private BufferObject<Vertex4D> BufferObject;
 
 
@@ -61,9 +58,6 @@ namespace OpenGLEngine.Engine
         {
             base.OnLoad(e);
 
-            Attributes = ShaderProgram.GetAttributes("coord", "tex_coord");
-            Uniforms = ShaderProgram.GetUniforms("color", "tex");
-
             Vertex4D[] vertices =
             {
                 new Vertex4D(-0.6f, 0.8f, 1.0f, 0.0f),
@@ -74,14 +68,14 @@ namespace OpenGLEngine.Engine
 
             BufferObject = new BufferObject<Vertex4D>(BufferTarget.ArrayBuffer, vertices);
             BufferObject.AddAttributes(
-                new ShaderAttribute("coord", Attributes["coord"], 2, 4, 0),
-                new ShaderAttribute("tex_coord", Attributes["tex_coord"], 2, 4, 2)
+                new Attribute("coord", ShaderProgram.GetAttribute("coord"), 2, 4, 0),
+                new Attribute("tex_coord", ShaderProgram.GetAttribute("tex_coord"), 2, 4, 2)
                 );
 
             CheckOpenGLError();
 
             // Set texture
-            ShaderProgram.SetTexture(new Texture("sky.png"));
+            ShaderProgram.AddTextures(new Texture("sky.png"));
 
             CheckOpenGLError();
         }
@@ -99,9 +93,9 @@ namespace OpenGLEngine.Engine
             GL.Clear(ClearBufferMask.ColorBufferBit);
 
             ShaderProgram.Enable();
-            ShaderProgram.BindTexture(0, "tex");
+            ShaderProgram.BindTextures();
 
-            GL.Uniform4(Uniforms["color"], Color.CadetBlue);
+            GL.Uniform4(ShaderProgram.GetUniform("color"), Color.CadetBlue);
 
             BufferObject.Draw();
 

@@ -13,7 +13,7 @@ namespace OpenGLEngine.Engine
         private int index;
         private readonly int count;
         private readonly BufferTarget BufferTarget;
-        private List<ShaderAttribute> shaderAttributes;
+        private List<Attribute> shaderAttributes;
 
         public int Index
         {
@@ -38,26 +38,26 @@ namespace OpenGLEngine.Engine
                 BufferUsageHint.StaticDraw
                 );
 
-            shaderAttributes = new List<ShaderAttribute>();
+            shaderAttributes = new List<Attribute>();
         }
 
         public void Dispose()
         {
             GL.BindBuffer(BufferTarget, 0);
 
-            foreach (ShaderAttribute attribute in shaderAttributes)
+            foreach (Attribute attribute in shaderAttributes)
                 GL.DisableVertexAttribArray(attribute.Index);
 
             GL.DeleteBuffers(1, ref index);
         }
 
-        public void AddAttributes(params ShaderAttribute[] attributes)
+        public void AddAttributes(params Attribute[] attributes)
         {
             shaderAttributes.AddRange(attributes);
 
             GL.BindBuffer(BufferTarget, index);
 
-            foreach (ShaderAttribute attribute in attributes)
+            foreach (Attribute attribute in attributes)
             {
                 GL.EnableVertexAttribArray(attribute.Index);
                 GL.VertexAttribPointer(
