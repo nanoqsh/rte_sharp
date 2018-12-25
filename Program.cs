@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using OpenGLEngine.Engine;
-using OpenTK.Graphics.OpenGL4;
 
 
 namespace OpenGLEngine

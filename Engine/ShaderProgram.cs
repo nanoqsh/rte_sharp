@@ -10,7 +10,7 @@ namespace OpenGLEngine.Engine
         public readonly int Index;
         public readonly Shader[] Shaders;
         
-        private readonly List<Uniform> uniforms;
+        private readonly Dictionary<int, Uniform> uniforms;
 
         public ShaderProgram(params Shader[] shaders)
         {
@@ -31,7 +31,7 @@ namespace OpenGLEngine.Engine
             if (linkStatus == 0)
                 throw new Exception("Error attach shaders!");
             
-            uniforms = new List<Uniform>();
+            uniforms = new Dictionary<int, Uniform>();
         }
 
         public void Dispose()
@@ -70,22 +70,23 @@ namespace OpenGLEngine.Engine
             return GL.GetUniformLocation(Index, name);
         }
 
+        public void AddUniforms(params Uniform[] uniforms)
+        {
+            foreach (Uniform uniform in uniforms)
+                this.uniforms.Add(GetUniform(uniform.Name), uniform);
+        }
+
         public void Enable()
         {
             GL.UseProgram(Index);
 
-            foreach (Uniform uniform in uniforms)
-                uniform.Bind(GetUniform(uniform.Name));
+            foreach (KeyValuePair<int, Uniform> pair in uniforms)
+                pair.Value.Bind(pair.Key);
         }
 
         public void Disable()
         {
             GL.UseProgram(0);
-        }
-
-        public void AddUniforms(params Uniform[] uniforms)
-        {
-            this.uniforms.AddRange(uniforms);
         }
     }
 }

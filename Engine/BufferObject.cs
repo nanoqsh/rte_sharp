@@ -20,19 +20,16 @@ namespace OpenGLEngine.Engine
             get => index;
         }
 
-        public BufferObject(
-            BufferTarget bufferTarget,
-            V[] vertices
-            )
+        public BufferObject(params V[] vertices)
         {
-            BufferTarget = bufferTarget;
+            BufferTarget = BufferTarget.ArrayBuffer;
             count = vertices.Length;
 
             GL.GenBuffers(1, out index);
-            GL.BindBuffer(bufferTarget, index);
+            GL.BindBuffer(BufferTarget, index);
 
             GL.BufferData(
-                bufferTarget,
+                BufferTarget,
                 vertices.Length * Marshal.SizeOf(typeof(V)),
                 vertices,
                 BufferUsageHint.StaticDraw

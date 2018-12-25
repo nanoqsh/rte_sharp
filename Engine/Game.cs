@@ -34,6 +34,11 @@ namespace OpenGLEngine.Engine
         public void SetShaderProgram(ShaderProgram shader)
         {
             ShaderProgram = shader;
+
+            ShaderProgram.AddUniforms(
+                new UniformTexture("tex", new Texture("sky.png"), 0),
+                new UniformColor("color", Color.HotPink)
+                );
         }
 
         private static void CheckOpenGLError()
@@ -58,24 +63,16 @@ namespace OpenGLEngine.Engine
         {
             base.OnLoad(e);
 
-            Vertex4D[] vertices =
-            {
+            BufferObject = new BufferObject<Vertex4D>(
                 new Vertex4D(-0.6f, 0.8f, 1.0f, 0.0f),
                 new Vertex4D(0.6f, 0.6f, 0.0f, 0.0f),
                 new Vertex4D(0.5f, -0.5f, 0.0f, 1.0f),
                 new Vertex4D(-0.6f, -0.6f, 1.0f, 1.0f)
-            };
+                );
 
-            BufferObject = new BufferObject<Vertex4D>(BufferTarget.ArrayBuffer, vertices);
             BufferObject.AddAttributes(
                 new Attribute("coord", ShaderProgram.GetAttribute("coord"), 2, 4, 0),
                 new Attribute("tex_coord", ShaderProgram.GetAttribute("tex_coord"), 2, 4, 2)
-                );
-            
-
-            ShaderProgram.AddUniforms(
-                new UniformTexture("tex", new Texture("sky.png"), 0),
-                new UniformColor("color", Color.HotPink)
                 );
 
             CheckOpenGLError();
