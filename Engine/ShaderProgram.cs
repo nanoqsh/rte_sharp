@@ -32,6 +32,9 @@ namespace OpenGLEngine.Engine
                 throw new Exception("Error attach shaders!");
             
             uniforms = new Dictionary<int, Uniform>();
+
+            foreach (Shader shader in shaders)
+                GL.DeleteShader(shader.Index);
         }
 
         public void Dispose()

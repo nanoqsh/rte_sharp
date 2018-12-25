@@ -12,7 +12,6 @@ namespace OpenGLEngine.Engine
     {
         private int index;
         private readonly int count;
-        private readonly BufferTarget BufferTarget;
         private List<Attribute> shaderAttributes;
 
         public int Index
@@ -22,25 +21,27 @@ namespace OpenGLEngine.Engine
 
         public BufferObject(params V[] vertices)
         {
-            BufferTarget = BufferTarget.ArrayBuffer;
             count = vertices.Length;
 
-            GL.GenBuffers(1, out index);
-            GL.BindBuffer(BufferTarget, index);
+            GL.GenVertexArrays(1, out index);
+            GL.BindVertexArray(index);
+            GL.BindBuffer(BufferTarget.ArrayBuffer, index);
 
             GL.BufferData(
-                BufferTarget,
+                BufferTarget.ArrayBuffer,
                 vertices.Length * Marshal.SizeOf(typeof(V)),
                 vertices,
                 BufferUsageHint.StaticDraw
                 );
+
+            GL.BindVertexArray(0);
 
             shaderAttributes = new List<Attribute>();
         }
 
         public void Dispose()
         {
-            GL.BindBuffer(BufferTarget, 0);
+            GL.BindVertexArray(0);
 
             foreach (Attribute attribute in shaderAttributes)
                 GL.DisableVertexAttribArray(attribute.Index);
@@ -52,7 +53,7 @@ namespace OpenGLEngine.Engine
         {
             shaderAttributes.AddRange(attributes);
 
-            GL.BindBuffer(BufferTarget, index);
+            GL.BindVertexArray(index);
 
             foreach (Attribute attribute in attributes)
             {
@@ -66,13 +67,15 @@ namespace OpenGLEngine.Engine
                     attribute.OffsetOfElements * sizeof(float)
                     );
             }
+
+            GL.BindVertexArray(0);
         }
 
         public void Draw()
         {
-            GL.BindBuffer(BufferTarget, index);
+            GL.BindVertexArray(index);
             GL.DrawArrays(PrimitiveType.Quads, 0, count);
-            GL.BindBuffer(BufferTarget, 0);
+            GL.BindVertexArray(0);
         }
     }
 }
