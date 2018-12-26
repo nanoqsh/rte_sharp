@@ -19,9 +19,12 @@ namespace OpenGLEngine
                 Console.Write(sh.Name + ": " + sh.GetLogInfo());
         }
 
+        const int WIDTH = 800;
+        const int HEIGHT = 600;
+
         static void Main(string[] args)
         {
-            Game game = new Game(800, 600, "Engine");
+            Game game = new Game(WIDTH, HEIGHT, "Engine");
 
             Console.WriteLine(game.VideoVersion);
 

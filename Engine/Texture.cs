@@ -45,6 +45,40 @@ namespace OpenGLEngine.Engine
 
             bitmap.UnlockBits(bitdata);
 
+            SetDefaultParameters();
+            GL.BindTexture(TextureTarget.Texture2D, 0);
+        }
+
+        public Texture(int width, int height, string name)
+        {
+            Name = name;
+
+            Index = GL.GenTexture();
+            GL.BindTexture(TextureTarget.Texture2D, Index);
+
+            GL.TexImage2D(
+                TextureTarget.Texture2D,
+                0,
+                PixelInternalFormat.Rgba,
+                width,
+                height,
+                0,
+                OpenTK.Graphics.OpenGL4.PixelFormat.Bgra,
+                PixelType.UnsignedByte,
+                IntPtr.Zero
+                );
+
+            SetDefaultParameters();
+            GL.BindTexture(TextureTarget.Texture2D, 0);
+        }
+
+        public void Dispose()
+        {
+            GL.DeleteTexture(Index);
+        }
+
+        private void SetDefaultParameters()
+        {
             GL.TexParameter(
                 TextureTarget.Texture2D,
                 TextureParameterName.TextureWrapS,
@@ -68,11 +102,6 @@ namespace OpenGLEngine.Engine
                 TextureParameterName.TextureMagFilter,
                 (int)TextureMagFilter.Nearest
                 );
-        }
-
-        public void Dispose()
-        {
-            GL.DeleteTexture(Index);
         }
     }
 }

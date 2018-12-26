@@ -12,9 +12,13 @@ namespace OpenGLEngine.Engine
     class Game : GameWindow
     {
         public readonly string VideoVersion;
-        private ShaderProgram ShaderProgram;
 
+        private ShaderProgram ShaderProgram;
         private BufferObject<Vertex4D> BufferObject;
+
+        private FrameBuffer FrameBuffer;
+        private BufferObject<Vertex4D> QuadObject;
+        private ShaderProgram QuadShaderProgram;
 
 
         public Game(int width, int height, string title) :
@@ -75,6 +79,31 @@ namespace OpenGLEngine.Engine
                 new Attribute("tex_coord", ShaderProgram.GetAttribute("tex_coord"), 2, 4, 2)
                 );
 
+
+            var client = ClientRectangle;
+            FrameBuffer = new FrameBuffer(client.Width, client.Height);
+
+            QuadShaderProgram = new ShaderProgram(
+                new VertexShader("defaultVertexShader.glsl"),
+                new FragmentShader("defaultFragmentShader.glsl")
+                );
+
+            QuadShaderProgram.AddUniforms(
+                new UniformTexture("tex", FrameBuffer.Frame, 0)
+                );
+
+            QuadObject = new BufferObject<Vertex4D>(
+                new Vertex4D(-1.0f, -1.0f, 0.0f, 0.0f),
+                new Vertex4D(-1.0f, 1.0f, 0.0f, 1.0f),
+                new Vertex4D(1.0f, 1.0f, 1.0f, 1.0f),
+                new Vertex4D(1.0f, -1.0f, 1.0f, 0.0f)
+                );
+
+            QuadObject.AddAttributes(
+                new Attribute("position", QuadShaderProgram.GetAttribute("position"), 2, 4, 0),
+                new Attribute("tex_coords", QuadShaderProgram.GetAttribute("tex_coords"), 2, 4, 2)
+                );
+
             CheckOpenGLError();
         }
 
@@ -87,14 +116,30 @@ namespace OpenGLEngine.Engine
         {
             base.OnRenderFrame(e);
 
+            //
+            FrameBuffer.Bind();
+            GL.ClearColor(Color4.PowderBlue);
+            GL.Clear(
+                  ClearBufferMask.ColorBufferBit
+                | ClearBufferMask.DepthBufferBit);
+
+            GL.Enable(EnableCap.DepthTest);
+
+            // Draw scene
+            ShaderProgram.Enable();
+            BufferObject.Draw();
+            ShaderProgram.Disable();
+
+            //
+            FrameBuffer.Unbind();
+
             GL.ClearColor(Color4.PowderBlue);
             GL.Clear(ClearBufferMask.ColorBufferBit);
 
-            ShaderProgram.Enable();
-
-            BufferObject.Draw();
-
-            ShaderProgram.Disable();
+            QuadShaderProgram.Enable();
+            GL.Disable(EnableCap.DepthTest);
+            QuadObject.Draw();
+            QuadShaderProgram.Disable();
 
             SwapBuffers();
         }
@@ -104,6 +149,16 @@ namespace OpenGLEngine.Engine
             base.OnResize(e);
 
             GL.Viewport(ClientRectangle);
+
+            var client = ClientRectangle;
+            FrameBuffer.Dispose();
+            FrameBuffer = null;
+            FrameBuffer = new FrameBuffer(client.Width, client.Height);
+
+            QuadShaderProgram.ClearUniforms();
+            QuadShaderProgram.AddUniforms(
+                new UniformTexture("tex", FrameBuffer.Frame, 0)
+                );
         }
     }
 }

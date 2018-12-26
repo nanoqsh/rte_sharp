@@ -79,6 +79,11 @@ namespace OpenGLEngine.Engine
                 this.uniforms.Add(GetUniform(uniform.Name), uniform);
         }
 
+        public void ClearUniforms()
+        {
+            uniforms.Clear();
+        }
+
         public void Enable()
         {
             GL.UseProgram(Index);
