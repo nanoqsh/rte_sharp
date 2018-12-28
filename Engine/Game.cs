@@ -33,16 +33,35 @@ namespace OpenGLEngine.Engine
             GL.Enable(EnableCap.Texture2D);
 
             VideoVersion = GL.GetString(StringName.Version);
-        }
 
-        public void SetShaderProgram(ShaderProgram shader)
-        {
-            ShaderProgram = shader;
+            ShaderProgram = new ShaderProgram(
+                new VertexShader("vertexShader.glsl"),
+                new FragmentShader("fragmentShader.glsl")
+                );
 
             ShaderProgram.AddUniforms(
                 new UniformTexture("tex", new Texture("sky.png"), 0),
+                new UniformTexture("tex2", new Texture("cube_zombie.png"), 1),
                 new UniformColor("color", Color.HotPink)
                 );
+        }
+
+        public string GetDebugInfo()
+        {
+            string[] attributes = new string[] { "coord", "tex_coord" };
+            string[] uniforms = new string[] { "color", "tex", "tex2" };
+            string res = "";
+
+            foreach (KeyValuePair<string, int> pair in ShaderProgram.GetAttributes(attributes))
+                Console.WriteLine(pair.Key + ": " + pair.Value);
+
+            foreach (KeyValuePair<string, int> pair in ShaderProgram.GetUniforms(uniforms))
+                Console.WriteLine(pair.Key + ": " + pair.Value);
+
+            foreach (Shader sh in ShaderProgram.Shaders)
+                Console.Write(sh.Name + ": " + sh.GetLogInfo());
+
+            return res;
         }
 
         private static void CheckOpenGLError()
@@ -68,10 +87,10 @@ namespace OpenGLEngine.Engine
             base.OnLoad(e);
 
             BufferObject = new BufferObject<Vertex4D>(
-                new Vertex4D(-0.6f, 0.8f, 1.0f, 0.0f),
-                new Vertex4D(0.6f, 0.6f, 0.0f, 0.0f),
-                new Vertex4D(0.5f, -0.5f, 0.0f, 1.0f),
-                new Vertex4D(-0.6f, -0.6f, 1.0f, 1.0f)
+                new Vertex4D(-0.1f, 0.1f, 1.0f, 0.0f),
+                new Vertex4D(0.1f, 0.1f, 0.0f, 0.0f),
+                new Vertex4D(0.1f, -0.1f, 0.0f, 1.0f),
+                new Vertex4D(-0.1f, -0.1f, 1.0f, 1.0f)
                 );
 
             BufferObject.AddAttributes(
@@ -81,7 +100,7 @@ namespace OpenGLEngine.Engine
 
 
             var client = ClientRectangle;
-            FrameBuffer = new FrameBuffer(client.Width, client.Height);
+            FrameBuffer = new FrameBuffer(client.Width / 8, client.Height / 8);
 
             QuadShaderProgram = new ShaderProgram(
                 new VertexShader("defaultVertexShader.glsl"),
@@ -105,11 +124,6 @@ namespace OpenGLEngine.Engine
                 );
 
             CheckOpenGLError();
-        }
-
-        protected override void OnUnload(EventArgs e)
-        {
-            base.OnUnload(e);
         }
 
         protected override void OnRenderFrame(FrameEventArgs e)
@@ -153,7 +167,7 @@ namespace OpenGLEngine.Engine
             var client = ClientRectangle;
             FrameBuffer.Dispose();
             FrameBuffer = null;
-            FrameBuffer = new FrameBuffer(client.Width, client.Height);
+            FrameBuffer = new FrameBuffer(client.Width / 8, client.Height / 8);
 
             QuadShaderProgram.ClearUniforms();
             QuadShaderProgram.AddUniforms(

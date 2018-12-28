@@ -21,6 +21,7 @@ namespace OpenGLEngine.Engine
 
         public override void Bind(int index)
         {
+            GL.Uniform1(index, Unit);
             GL.ActiveTexture(TextureUnit.Texture0 + Unit);
             GL.BindTexture(TextureTarget.Texture2D, Texture.Index);
         }

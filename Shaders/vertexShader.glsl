@@ -7,5 +7,6 @@ out vec2 fr_tex_coord;
 void main()
 {
 	fr_tex_coord = tex_coord;
-	gl_Position = vec4(coord, 0.0, 1.0);
+	float size = 8.0;
+	gl_Position = vec4(coord - (1.0 - 1.0 / size), 0.0, 1.0);
 }

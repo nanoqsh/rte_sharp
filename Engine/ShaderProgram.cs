@@ -76,7 +76,12 @@ namespace OpenGLEngine.Engine
         public void AddUniforms(params Uniform[] uniforms)
         {
             foreach (Uniform uniform in uniforms)
-                this.uniforms.Add(GetUniform(uniform.Name), uniform);
+            {
+                int key = GetUniform(uniform.Name);
+
+                if (key >= 0)
+                    this.uniforms.Add(key, uniform);
+            }
         }
 
         public void ClearUniforms()
