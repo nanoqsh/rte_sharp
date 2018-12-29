@@ -71,10 +71,10 @@ namespace OpenGLEngine.Engine
             GL.BindVertexArray(0);
         }
 
-        public void Draw()
+        public void Draw(PrimitiveType type)
         {
             GL.BindVertexArray(index);
-            GL.DrawArrays(PrimitiveType.Quads, 0, count);
+            GL.DrawArrays(type, 0, count);
             GL.BindVertexArray(0);
         }
     }

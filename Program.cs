@@ -6,12 +6,12 @@ namespace OpenGLEngine
 {
     class Program
     {
-        const int WIDTH = 800;
+        const int WIDTH = 600;
         const int HEIGHT = 600;
 
         static void Main(string[] args)
         {
-            Game game = new Game(WIDTH, HEIGHT, "Engine", 4);
+            Game game = new Game(WIDTH, HEIGHT, "RTE", 1);
 
             Console.WriteLine(game.VideoVersion);
             Console.WriteLine(game.GetDebugInfo());

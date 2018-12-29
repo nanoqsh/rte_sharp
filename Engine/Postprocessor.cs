@@ -78,7 +78,7 @@ namespace OpenGLEngine.Engine
             GL.Clear(ClearBufferMask.ColorBufferBit);
 
             shaderProgram.Enable();
-            quad.Draw();
+            quad.Draw(PrimitiveType.Quads);
             shaderProgram.Disable();
         }
     }

@@ -14,7 +14,7 @@ namespace OpenGLEngine.Engine
         public readonly string VideoVersion;
 
         private ShaderProgram ShaderProgram;
-        private BufferObject<Vertex4D> BufferObject;
+        private BufferObject<Vertex5D> CubeObject;
 
         private Postprocessor postprocessor;
         private readonly int pixelSize;
@@ -45,6 +45,11 @@ namespace OpenGLEngine.Engine
                 new UniformInt("pixelSize", pixelSize),
                 new UniformColor("color", Color.HotPink)
                 );
+
+
+            Matrix4 transform = Matrix4.CreateTranslation(0.1f, 0.1f, 0.0f);
+            Matrix4 rotation = Matrix4.CreateFromAxisAngle(new Vector3(0.5f, 1.0f, 0.0f), 1.0f);
+            ShaderProgram.AddUniforms(new UniformMatrix("transform", rotation * transform));
         }
 
         public string GetDebugInfo()
@@ -87,16 +92,10 @@ namespace OpenGLEngine.Engine
         {
             base.OnLoad(e);
 
-            BufferObject = new BufferObject<Vertex4D>(
-                new Vertex4D(-0.1f, 0.1f, 1.0f, 0.0f),
-                new Vertex4D(0.1f, 0.1f, 0.0f, 0.0f),
-                new Vertex4D(0.1f, -0.1f, 0.0f, 1.0f),
-                new Vertex4D(-0.1f, -0.1f, 1.0f, 1.0f)
-                );
-
-            BufferObject.AddAttributes(
-                new Attribute("coord", ShaderProgram.GetAttribute("coord"), 2, 4, 0),
-                new Attribute("tex_coord", ShaderProgram.GetAttribute("tex_coord"), 2, 4, 2)
+            CubeObject = Cube.Make();
+            CubeObject.AddAttributes(
+                new Attribute("coord", ShaderProgram.GetAttribute("coord"), 3, 5, 0),
+                new Attribute("tex_coord", ShaderProgram.GetAttribute("tex_coord"), 2, 5, 3)
                 );
 
 
@@ -121,7 +120,7 @@ namespace OpenGLEngine.Engine
                 | ClearBufferMask.DepthBufferBit);
             
             ShaderProgram.Enable();
-            BufferObject.Draw();
+            CubeObject.Draw(PrimitiveType.Triangles);
             ShaderProgram.Disable();
 
             //
