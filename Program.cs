@@ -11,7 +11,7 @@ namespace OpenGLEngine
 
         static void Main(string[] args)
         {
-            Game game = new Game(WIDTH, HEIGHT, "Engine");
+            Game game = new Game(WIDTH, HEIGHT, "Engine", 4);
 
             Console.WriteLine(game.VideoVersion);
             Console.WriteLine(game.GetDebugInfo());

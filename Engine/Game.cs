@@ -16,12 +16,10 @@ namespace OpenGLEngine.Engine
         private ShaderProgram ShaderProgram;
         private BufferObject<Vertex4D> BufferObject;
 
-        private FrameBuffer FrameBuffer;
-        private BufferObject<Vertex4D> QuadObject;
-        private ShaderProgram QuadShaderProgram;
+        private Postprocessor postprocessor;
+        private readonly int pixelSize;
 
-
-        public Game(int width, int height, string title) :
+        public Game(int width, int height, string title, int pixelSize = 1) :
             base(
                   width,
                   height,
@@ -30,6 +28,8 @@ namespace OpenGLEngine.Engine
                   GameWindowFlags.Default
                   )
         {
+            this.pixelSize = pixelSize;
+
             GL.Enable(EnableCap.Texture2D);
 
             VideoVersion = GL.GetString(StringName.Version);
@@ -42,6 +42,7 @@ namespace OpenGLEngine.Engine
             ShaderProgram.AddUniforms(
                 new UniformTexture("tex", new Texture("sky.png"), 0),
                 new UniformTexture("tex2", new Texture("cube_zombie.png"), 1),
+                new UniformInt("pixelSize", pixelSize),
                 new UniformColor("color", Color.HotPink)
                 );
         }
@@ -49,7 +50,7 @@ namespace OpenGLEngine.Engine
         public string GetDebugInfo()
         {
             string[] attributes = new string[] { "coord", "tex_coord" };
-            string[] uniforms = new string[] { "color", "tex", "tex2" };
+            string[] uniforms = new string[] { "color", "pixelSize", "tex", "tex2" };
             string res = "";
 
             foreach (KeyValuePair<string, int> pair in ShaderProgram.GetAttributes(attributes))
@@ -99,29 +100,7 @@ namespace OpenGLEngine.Engine
                 );
 
 
-            var client = ClientRectangle;
-            FrameBuffer = new FrameBuffer(client.Width / 8, client.Height / 8);
-
-            QuadShaderProgram = new ShaderProgram(
-                new VertexShader("defaultVertexShader.glsl"),
-                new FragmentShader("defaultFragmentShader.glsl")
-                );
-
-            QuadShaderProgram.AddUniforms(
-                new UniformTexture("tex", FrameBuffer.Frame, 0)
-                );
-
-            QuadObject = new BufferObject<Vertex4D>(
-                new Vertex4D(-1.0f, -1.0f, 0.0f, 0.0f),
-                new Vertex4D(-1.0f, 1.0f, 0.0f, 1.0f),
-                new Vertex4D(1.0f, 1.0f, 1.0f, 1.0f),
-                new Vertex4D(1.0f, -1.0f, 1.0f, 0.0f)
-                );
-
-            QuadObject.AddAttributes(
-                new Attribute("position", QuadShaderProgram.GetAttribute("position"), 2, 4, 0),
-                new Attribute("tex_coords", QuadShaderProgram.GetAttribute("tex_coords"), 2, 4, 2)
-                );
+            postprocessor = new Postprocessor(ClientRectangle, pixelSize);
 
             CheckOpenGLError();
         }
@@ -131,29 +110,24 @@ namespace OpenGLEngine.Engine
             base.OnRenderFrame(e);
 
             //
-            FrameBuffer.Bind();
+            postprocessor.Bind();
+
+            // Draw scene
+            GL.Enable(EnableCap.DepthTest);
+
             GL.ClearColor(Color4.PowderBlue);
             GL.Clear(
                   ClearBufferMask.ColorBufferBit
                 | ClearBufferMask.DepthBufferBit);
-
-            GL.Enable(EnableCap.DepthTest);
-
-            // Draw scene
+            
             ShaderProgram.Enable();
             BufferObject.Draw();
             ShaderProgram.Disable();
 
             //
-            FrameBuffer.Unbind();
-
-            GL.ClearColor(Color4.PowderBlue);
-            GL.Clear(ClearBufferMask.ColorBufferBit);
-
-            QuadShaderProgram.Enable();
             GL.Disable(EnableCap.DepthTest);
-            QuadObject.Draw();
-            QuadShaderProgram.Disable();
+
+            postprocessor.DrawFrame();
 
             SwapBuffers();
         }
@@ -163,16 +137,8 @@ namespace OpenGLEngine.Engine
             base.OnResize(e);
 
             GL.Viewport(ClientRectangle);
-
-            var client = ClientRectangle;
-            FrameBuffer.Dispose();
-            FrameBuffer = null;
-            FrameBuffer = new FrameBuffer(client.Width / 8, client.Height / 8);
-
-            QuadShaderProgram.ClearUniforms();
-            QuadShaderProgram.AddUniforms(
-                new UniformTexture("tex", FrameBuffer.Frame, 0)
-                );
+            
+            postprocessor.Resize(ClientRectangle);
         }
     }
 }
