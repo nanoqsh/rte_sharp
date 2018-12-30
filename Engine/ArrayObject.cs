@@ -22,7 +22,9 @@ namespace OpenGLEngine.Engine
 
             Index = GL.GenVertexArray();
             GL.BindVertexArray(Index);
-            GL.BindBuffer(BufferTarget.ArrayBuffer, Index);
+
+            int arrayBufferIndex = GL.GenBuffer();
+            GL.BindBuffer(BufferTarget.ArrayBuffer, arrayBufferIndex);
 
             GL.BufferData(
                 BufferTarget.ArrayBuffer,
@@ -42,8 +44,8 @@ namespace OpenGLEngine.Engine
 
             foreach (Attribute attribute in shaderAttributes)
                 GL.DisableVertexAttribArray(attribute.Index);
-            
-            GL.DeleteBuffer(Index);
+
+            GL.DeleteVertexArray(Index);
         }
 
         public ArrayObject<V> SetDrawMode(DrawMode mode)
@@ -54,8 +56,6 @@ namespace OpenGLEngine.Engine
 
         public ArrayObject<V> AddAttributes(params Attribute[] attributes)
         {
-            shaderAttributes.AddRange(attributes);
-
             GL.BindVertexArray(Index);
 
             foreach (Attribute attribute in attributes)
@@ -70,6 +70,8 @@ namespace OpenGLEngine.Engine
                     attribute.OffsetOfElements * sizeof(float)
                     );
             }
+
+            shaderAttributes.AddRange(attributes);
 
             GL.BindVertexArray(0);
             return this;

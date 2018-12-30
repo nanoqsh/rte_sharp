@@ -25,12 +25,12 @@ namespace OpenGLEngine.Engine
                 0
                 );
 
-            // Gen Renderbuffer for depth and stencil
+            // Gen Renderbuffer for depth and -stencil-
             renderBuffer = GL.GenRenderbuffer();
             GL.BindRenderbuffer(RenderbufferTarget.Renderbuffer, renderBuffer);
             GL.RenderbufferStorage(
                 RenderbufferTarget.Renderbuffer,
-                RenderbufferStorage.Depth24Stencil8,
+                RenderbufferStorage.DepthComponent24,
                 width,
                 height
                 );
@@ -38,7 +38,7 @@ namespace OpenGLEngine.Engine
             GL.BindRenderbuffer(RenderbufferTarget.Renderbuffer, 0);
             GL.FramebufferRenderbuffer(
                 FramebufferTarget.Framebuffer,
-                FramebufferAttachment.DepthStencilAttachment,
+                FramebufferAttachment.DepthAttachment,
                 RenderbufferTarget.Renderbuffer,
                 renderBuffer
                 );

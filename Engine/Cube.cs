@@ -4,18 +4,18 @@ namespace OpenGLEngine.Engine
 {
     static class Cube
     {
-        public static ElementArrayObject<Vertex3D> MakeIndexed()
+        public static ElementArrayObject<Vertex5D> MakeIndexed()
         {
-            return new ElementArrayObject<Vertex3D>(
-                    new Vertex3D(-0.5f, -0.5f, 0.5f),
-                    new Vertex3D(0.5f, -0.5f, 0.5f),
-                    new Vertex3D(0.5f, 0.5f, 0.5f),
-                    new Vertex3D(-0.5f, 0.5f, 0.5f),
+            return new ElementArrayObject<Vertex5D>(
+                    new Vertex5D(-0.5f, -0.5f, 0.5f, 0.0f, 0.0f),
+                    new Vertex5D(0.5f, -0.5f, 0.5f, 0.0f, 1.0f),
+                    new Vertex5D(0.5f, 0.5f, 0.5f, 1.0f, 1.0f),
+                    new Vertex5D(-0.5f, 0.5f, 0.5f, 1.0f, 0.0f),
 
-                    new Vertex3D(-0.5f, -0.5f, -0.5f),
-                    new Vertex3D(0.5f, -0.5f, -0.5f),
-                    new Vertex3D(0.5f, 0.5f, -0.5f),
-                    new Vertex3D(-0.5f, 0.5f, -0.5f)
+                    new Vertex5D(-0.5f, -0.5f, -0.5f, 1.0f, 1.0f),
+                    new Vertex5D(0.5f, -0.5f, -0.5f, 1.0f, 0.0f),
+                    new Vertex5D(0.5f, 0.5f, -0.5f, 0.0f, 0.0f),
+                    new Vertex5D(-0.5f, 0.5f, -0.5f, 0.0f, 1.0f)
                 ).CreateElementBuffer(
                     0, 1, 2,
                     2, 3, 0,

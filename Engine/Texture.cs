@@ -38,7 +38,7 @@ namespace OpenGLEngine.Engine
                 bitdata.Width,
                 bitdata.Height,
                 0,
-                OpenTK.Graphics.OpenGL4.PixelFormat.Bgra,
+                OpenTK.Graphics.OpenGL4.PixelFormat.Rgba,
                 PixelType.UnsignedByte,
                 bitdata.Scan0
                 );
@@ -63,7 +63,7 @@ namespace OpenGLEngine.Engine
                 width,
                 height,
                 0,
-                OpenTK.Graphics.OpenGL4.PixelFormat.Bgra,
+                OpenTK.Graphics.OpenGL4.PixelFormat.Rgba,
                 PixelType.UnsignedByte,
                 IntPtr.Zero
                 );

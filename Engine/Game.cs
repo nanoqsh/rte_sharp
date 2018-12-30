@@ -43,7 +43,7 @@ namespace OpenGLEngine.Engine
                 new UniformTexture("tex", new Texture("sky.png"), 0),
                 new UniformTexture("tex2", new Texture("cube_zombie.png"), 1),
                 new UniformInt("pixelSize", pixelSize),
-                new UniformColor("color", Color.HotPink)
+                new UniformColor("color", Color.Coral)
                 );
 
 
@@ -65,7 +65,7 @@ namespace OpenGLEngine.Engine
                 res += pair.Key + ": " + pair.Value + "\n";
 
             foreach (Shader sh in ShaderProgram.Shaders)
-                res += sh.Name + ": " + sh.GetLogInfo() + "\n";
+                res += sh.Name + ": " + sh.GetLogInfo();
 
             return res;
         }
@@ -92,7 +92,7 @@ namespace OpenGLEngine.Engine
         {
             base.OnLoad(e);
 
-            cube = Cube.Make().AddAttributes(
+            cube = Cube.MakeIndexed().AddAttributes(
                 new Attribute("coord", ShaderProgram.GetAttribute("coord"), 3, 5, 0),
                 new Attribute("tex_coord", ShaderProgram.GetAttribute("tex_coord"), 2, 5, 3)
                 );
@@ -101,7 +101,6 @@ namespace OpenGLEngine.Engine
             postprocessor = new Postprocessor(ClientRectangle, pixelSize);
 
             GL.PolygonMode(MaterialFace.FrontAndBack, PolygonMode.Fill);
-            GL.Enable(EnableCap.DepthTest);
 
             CheckOpenGLError();
         }
@@ -114,6 +113,8 @@ namespace OpenGLEngine.Engine
             postprocessor.Bind();
 
             // Draw scene
+            GL.Enable(EnableCap.DepthTest);
+
             GL.ClearColor(Color4.PowderBlue);
             GL.Clear(
                   ClearBufferMask.ColorBufferBit
