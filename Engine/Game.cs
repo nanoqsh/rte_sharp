@@ -14,7 +14,7 @@ namespace OpenGLEngine.Engine
         public readonly string VideoVersion;
 
         private ShaderProgram ShaderProgram;
-        private BufferObject<Vertex5D> CubeObject;
+        private ArrayObject<Vertex5D> cube;
 
         private Postprocessor postprocessor;
         private readonly int pixelSize;
@@ -92,14 +92,16 @@ namespace OpenGLEngine.Engine
         {
             base.OnLoad(e);
 
-            CubeObject = Cube.Make();
-            CubeObject.AddAttributes(
+            cube = Cube.Make();
+            cube.AddAttributes(
                 new Attribute("coord", ShaderProgram.GetAttribute("coord"), 3, 5, 0),
                 new Attribute("tex_coord", ShaderProgram.GetAttribute("tex_coord"), 2, 5, 3)
                 );
 
 
             postprocessor = new Postprocessor(ClientRectangle, pixelSize);
+
+            GL.Enable(EnableCap.DepthTest);
 
             CheckOpenGLError();
         }
@@ -112,20 +114,16 @@ namespace OpenGLEngine.Engine
             postprocessor.Bind();
 
             // Draw scene
-            GL.Enable(EnableCap.DepthTest);
-
             GL.ClearColor(Color4.PowderBlue);
             GL.Clear(
                   ClearBufferMask.ColorBufferBit
                 | ClearBufferMask.DepthBufferBit);
             
             ShaderProgram.Enable();
-            CubeObject.Draw(PrimitiveType.Triangles);
+            cube.Draw();
             ShaderProgram.Disable();
 
             //
-            GL.Disable(EnableCap.DepthTest);
-
             postprocessor.DrawFrame();
 
             SwapBuffers();

@@ -9,7 +9,7 @@ namespace OpenGLEngine.Engine
     class Postprocessor : IDisposable
     {
         private readonly ShaderProgram shaderProgram;
-        private readonly BufferObject<Vertex4D> quad;
+        private readonly ArrayObject<Vertex4D> quad;
         private FrameBuffer frameBuffer;
         public int PixelSize;
 
@@ -72,14 +72,20 @@ namespace OpenGLEngine.Engine
 
         public void DrawFrame()
         {
+            bool isDepthEnabled = GL.IsEnabled(EnableCap.DepthTest);
+            GL.Disable(EnableCap.DepthTest);
+
             frameBuffer.Unbind();
 
             GL.ClearColor(0.0f, 0.0f, 0.0f, 0.0f);
             GL.Clear(ClearBufferMask.ColorBufferBit);
 
             shaderProgram.Enable();
-            quad.Draw(PrimitiveType.Quads);
+            quad.Draw();
             shaderProgram.Disable();
+
+            if (isDepthEnabled)
+                GL.Enable(EnableCap.DepthTest);
         }
     }
 }
