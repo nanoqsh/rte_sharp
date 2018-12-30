@@ -19,6 +19,12 @@ namespace OpenGLEngine.Engine
         private Postprocessor postprocessor;
         private readonly int pixelSize;
 
+        private UniformMatrix model;
+        private Matrix4 rot;
+
+        private UniformMatrix view;
+        private Vector3 cameraPos;
+
         public Game(int width, int height, string title, int pixelSize = 1) :
             base(
                   width,
@@ -47,9 +53,30 @@ namespace OpenGLEngine.Engine
                 );
 
 
+            Matrix4 projection = Matrix4.CreatePerspectiveFieldOfView(
+                1.6f,
+                width / (float) height,
+                0.5f,
+                100.0f
+                );
+
+            view = new UniformMatrix("view", Matrix4.LookAt(
+                new Vector3(0.0f, 0.0f, 2.0f),
+                new Vector3(0.0f, 0.0f, 0.0f),
+                new Vector3(0.0f, 1.0f, 0.0f)
+                ));
+
+            ShaderProgram.AddUniforms(
+                new UniformMatrix("projection", projection),
+                view
+                );
+
             Matrix4 transform = Matrix4.CreateTranslation(0.1f, 0.1f, 0.0f);
-            Matrix4 rotation = Matrix4.CreateFromAxisAngle(new Vector3(0.5f, 1.0f, 0.0f), 1.0f);
-            ShaderProgram.AddUniforms(new UniformMatrix("transform", rotation * transform));
+            Matrix4 rotation = Matrix4.CreateFromAxisAngle(new Vector3(0.5f, 1.0f, 0.0f), 0.6f);
+            model = new UniformMatrix("model", rotation * transform);
+            ShaderProgram.AddUniforms(model);
+
+            rot = Matrix4.CreateFromAxisAngle(new Vector3(0.5f, 1.0f, 0.0f), 0.01f);
         }
 
         public string GetDebugInfo()
@@ -84,6 +111,21 @@ namespace OpenGLEngine.Engine
         {
             base.OnKeyDown(e);
 
+            float cameraSpeed = 0.1f;
+
+            if (e.Key == Key.W)
+                cameraPos += new Vector3(0.0f, 0.0f, cameraSpeed);
+
+            if (e.Key == Key.S)
+                cameraPos += new Vector3(0.0f, 0.0f, -cameraSpeed);
+
+            if (e.Key == Key.A)
+                cameraPos += new Vector3(cameraSpeed, 0.0f, 0.0f);
+
+            if (e.Key == Key.D)
+                cameraPos += new Vector3(-cameraSpeed, 0.0f, 0.0f);
+
+
             if (e.Key == Key.Escape)
                 Exit();
         }
@@ -108,6 +150,11 @@ namespace OpenGLEngine.Engine
         protected override void OnRenderFrame(FrameEventArgs e)
         {
             base.OnRenderFrame(e);
+
+            model.Matrix = rot * model.Matrix;
+
+            view.Matrix = Matrix4.CreateTranslation(cameraPos) * view.Matrix;
+            cameraPos = Vector3.Zero;
 
             //
             postprocessor.Bind();
