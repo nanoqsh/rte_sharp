@@ -14,7 +14,7 @@ namespace OpenGLEngine.Engine
         public readonly string VideoVersion;
 
         private ShaderProgram ShaderProgram;
-        private ArrayObject<Vertex3D> cube;
+        private ArrayObject<Vertex5D> cube;
 
         private Postprocessor postprocessor;
         private readonly int pixelSize;
@@ -59,13 +59,13 @@ namespace OpenGLEngine.Engine
             string res = "";
 
             foreach (KeyValuePair<string, int> pair in ShaderProgram.GetAttributes(attributes))
-                Console.WriteLine(pair.Key + ": " + pair.Value);
+                res += pair.Key + ": " + pair.Value + "\n";
 
             foreach (KeyValuePair<string, int> pair in ShaderProgram.GetUniforms(uniforms))
-                Console.WriteLine(pair.Key + ": " + pair.Value);
+                res += pair.Key + ": " + pair.Value + "\n";
 
             foreach (Shader sh in ShaderProgram.Shaders)
-                Console.Write(sh.Name + ": " + sh.GetLogInfo());
+                res += sh.Name + ": " + sh.GetLogInfo() + "\n";
 
             return res;
         }
@@ -92,13 +92,13 @@ namespace OpenGLEngine.Engine
         {
             base.OnLoad(e);
 
-            cube = Cube.MakeIndexed().AddAttributes(
-                new Attribute("coord", ShaderProgram.GetAttribute("coord"), 3, 0, 0)
-                // new Attribute("tex_coord", ShaderProgram.GetAttribute("tex_coord"), 2, 5, 3)
+            cube = Cube.Make().AddAttributes(
+                new Attribute("coord", ShaderProgram.GetAttribute("coord"), 3, 5, 0),
+                new Attribute("tex_coord", ShaderProgram.GetAttribute("tex_coord"), 2, 5, 3)
                 );
 
 
-            // postprocessor = new Postprocessor(ClientRectangle, pixelSize);
+            postprocessor = new Postprocessor(ClientRectangle, pixelSize);
 
             GL.PolygonMode(MaterialFace.FrontAndBack, PolygonMode.Fill);
             GL.Enable(EnableCap.DepthTest);
@@ -111,7 +111,7 @@ namespace OpenGLEngine.Engine
             base.OnRenderFrame(e);
 
             //
-            // postprocessor.Bind();
+            postprocessor.Bind();
 
             // Draw scene
             GL.ClearColor(Color4.PowderBlue);
@@ -124,7 +124,7 @@ namespace OpenGLEngine.Engine
             ShaderProgram.Disable();
 
             //
-            // postprocessor.DrawFrame();
+            postprocessor.DrawFrame();
 
             SwapBuffers();
         }
@@ -135,7 +135,7 @@ namespace OpenGLEngine.Engine
 
             GL.Viewport(ClientRectangle);
             
-            // postprocessor.Resize(ClientRectangle);
+            postprocessor.Resize(ClientRectangle);
         }
     }
 }

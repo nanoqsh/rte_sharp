@@ -8,6 +8,6 @@ in vec2 fr_tex_coord;
 
 void main()
 {
-	// gl_FragColor = mix(texture2D(tex, fr_tex_coord), texture2D(tex2, fr_tex_coord), 0.5);
-	gl_FragColor = color;
+	gl_FragColor = mix(texture2D(tex, fr_tex_coord), texture2D(tex2, fr_tex_coord), 0.5);
+	// gl_FragColor = color;
 }
