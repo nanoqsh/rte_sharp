@@ -6,28 +6,23 @@ using OpenTK.Graphics.OpenGL4;
 
 namespace OpenGLEngine.Engine
 {
-    class ArrayObject<V>
-        : IDisposable
+    class ArrayObject<V> : IDisposable
         where V : struct
     {
-        private int index;
-        private readonly int count;
+        protected int drawCount;
         private List<Attribute> shaderAttributes;
         private PrimitiveType primitiveType;
 
-        public int Index
-        {
-            get => index;
-        }
+        public int Index { get; }
 
         public ArrayObject(params V[] vertices)
         {
-            count = vertices.Length;
+            drawCount = vertices.Length;
             primitiveType = PrimitiveType.Triangles;
 
-            GL.GenVertexArrays(1, out index);
-            GL.BindVertexArray(index);
-            GL.BindBuffer(BufferTarget.ArrayBuffer, index);
+            Index = GL.GenVertexArray();
+            GL.BindVertexArray(Index);
+            GL.BindBuffer(BufferTarget.ArrayBuffer, Index);
 
             GL.BufferData(
                 BufferTarget.ArrayBuffer,
@@ -47,21 +42,21 @@ namespace OpenGLEngine.Engine
 
             foreach (Attribute attribute in shaderAttributes)
                 GL.DisableVertexAttribArray(attribute.Index);
-
-            GL.DeleteBuffers(1, ref index);
+            
+            GL.DeleteBuffer(Index);
         }
 
-        public ArrayObject<V> SetPrimitiveType(PrimitiveType type)
+        public ArrayObject<V> SetDrawMode(DrawMode mode)
         {
-            primitiveType = type;
+            primitiveType = mode.GetPrimitiveType();
             return this;
         }
 
-        public void AddAttributes(params Attribute[] attributes)
+        public ArrayObject<V> AddAttributes(params Attribute[] attributes)
         {
             shaderAttributes.AddRange(attributes);
 
-            GL.BindVertexArray(index);
+            GL.BindVertexArray(Index);
 
             foreach (Attribute attribute in attributes)
             {
@@ -77,12 +72,13 @@ namespace OpenGLEngine.Engine
             }
 
             GL.BindVertexArray(0);
+            return this;
         }
 
-        public void Draw()
+        public virtual void Draw()
         {
-            GL.BindVertexArray(index);
-            GL.DrawArrays(primitiveType, 0, count);
+            GL.BindVertexArray(Index);
+            GL.DrawArrays(primitiveType, 0, drawCount);
             GL.BindVertexArray(0);
         }
     }

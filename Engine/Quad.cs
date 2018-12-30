@@ -13,7 +13,7 @@ namespace OpenGLEngine.Engine
                 new Vertex4D(1.0f, 1.0f, 1.0f, 1.0f),
                 new Vertex4D(1.0f, -1.0f, 1.0f, 0.0f)
                 )
-                .SetPrimitiveType(PrimitiveType.Quads);
+                .SetDrawMode(DrawMode.Quads);
         }
     }
 }

@@ -31,8 +31,7 @@ namespace OpenGLEngine.Engine
                 new UniformTexture("tex", frameBuffer.Frame, 0)
                 );
 
-            quad = Quad.Make();
-            quad.AddAttributes(
+            quad = Quad.Make().AddAttributes(
                 new Attribute("position", shaderProgram.GetAttribute("position"), 2, 4, 0),
                 new Attribute("tex_coords", shaderProgram.GetAttribute("tex_coords"), 2, 4, 2)
                 );
