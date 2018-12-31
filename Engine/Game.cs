@@ -24,6 +24,8 @@ namespace OpenGLEngine.Engine
         private UniformMatrix view;
         private Vector3 cameraPos;
 
+        private List<Key> keys;
+
         public Game(int width, int height, string title, int pixelSize = 1) :
             base(
                   width,
@@ -39,6 +41,8 @@ namespace OpenGLEngine.Engine
             GL.Enable(EnableCap.Texture2D);
 
             VideoVersion = GL.GetString(StringName.Version);
+
+            keys = new List<Key>();
 
             ShaderProgram = new ShaderProgram(
                 new VertexShader("vertexShader.glsl"),
@@ -73,6 +77,7 @@ namespace OpenGLEngine.Engine
 
             Matrix4 transform = Matrix4.CreateTranslation(0.1f, 0.1f, 0.0f);
             Matrix4 rotation = Matrix4.CreateFromAxisAngle(new Vector3(0.5f, 1.0f, 0.0f), 0.6f);
+
             model = new UniformMatrix("model", rotation * transform);
             ShaderProgram.AddUniforms(model);
         }
@@ -109,20 +114,7 @@ namespace OpenGLEngine.Engine
         {
             base.OnKeyDown(e);
 
-            float cameraSpeed = 2.5f * (float)RenderTime;
-
-            if (e.Key == Key.W)
-                cameraPos += new Vector3(0.0f, 0.0f, cameraSpeed);
-
-            if (e.Key == Key.S)
-                cameraPos += new Vector3(0.0f, 0.0f, -cameraSpeed);
-
-            if (e.Key == Key.A)
-                cameraPos += new Vector3(cameraSpeed, 0.0f, 0.0f);
-
-            if (e.Key == Key.D)
-                cameraPos += new Vector3(-cameraSpeed, 0.0f, 0.0f);
-
+            keys.Add(e.Key);
 
             if (e.Key == Key.Escape)
                 Exit();
@@ -149,12 +141,32 @@ namespace OpenGLEngine.Engine
         {
             base.OnUpdateFrame(e);
 
+            float cameraSpeed = 2.5f;
+
+            if (keys.Contains(Key.W))
+                cameraPos += new Vector3(0.0f, 0.0f, cameraSpeed);
+
+            if (keys.Contains(Key.S))
+                cameraPos += new Vector3(0.0f, 0.0f, -cameraSpeed);
+
+            if (keys.Contains(Key.A))
+                cameraPos += new Vector3(cameraSpeed, 0.0f, 0.0f);
+
+            if (keys.Contains(Key.D))
+                cameraPos += new Vector3(-cameraSpeed, 0.0f, 0.0f);
+
+
             model.Matrix =
-                  Matrix4.CreateFromAxisAngle(new Vector3(0.5f, 1.0f, 0.0f), 0.5f * (float)e.Time)
+                  Matrix4.CreateFromAxisAngle(new Vector3(0.5f, 1.0f, 0.0f), 0.5f * (float) e.Time)
                 * model.Matrix;
 
-            view.Matrix = Matrix4.CreateTranslation(cameraPos) * view.Matrix;
+            view.Matrix =
+                  Matrix4.CreateTranslation(cameraPos * (float) e.Time)
+                * view.Matrix;
+
             cameraPos = Vector3.Zero;
+
+            keys.Clear();
         }
 
         protected override void OnRenderFrame(FrameEventArgs e)
