@@ -20,7 +20,6 @@ namespace OpenGLEngine.Engine
         private readonly int pixelSize;
 
         private UniformMatrix model;
-        private Matrix4 rot;
 
         private UniformMatrix view;
         private Vector3 cameraPos;
@@ -35,6 +34,7 @@ namespace OpenGLEngine.Engine
                   )
         {
             this.pixelSize = pixelSize;
+            VSync = VSyncMode.On;
 
             GL.Enable(EnableCap.Texture2D);
 
@@ -75,8 +75,6 @@ namespace OpenGLEngine.Engine
             Matrix4 rotation = Matrix4.CreateFromAxisAngle(new Vector3(0.5f, 1.0f, 0.0f), 0.6f);
             model = new UniformMatrix("model", rotation * transform);
             ShaderProgram.AddUniforms(model);
-
-            rot = Matrix4.CreateFromAxisAngle(new Vector3(0.5f, 1.0f, 0.0f), 0.01f);
         }
 
         public string GetDebugInfo()
@@ -111,7 +109,7 @@ namespace OpenGLEngine.Engine
         {
             base.OnKeyDown(e);
 
-            float cameraSpeed = 0.1f;
+            float cameraSpeed = 2.5f * (float)RenderTime;
 
             if (e.Key == Key.W)
                 cameraPos += new Vector3(0.0f, 0.0f, cameraSpeed);
@@ -134,7 +132,7 @@ namespace OpenGLEngine.Engine
         {
             base.OnLoad(e);
 
-            cube = Cube.MakeIndexed().AddAttributes(
+            cube = Cube.Make().AddAttributes(
                 new Attribute("coord", ShaderProgram.GetAttribute("coord"), 3, 5, 0),
                 new Attribute("tex_coord", ShaderProgram.GetAttribute("tex_coord"), 2, 5, 3)
                 );
@@ -147,14 +145,21 @@ namespace OpenGLEngine.Engine
             CheckOpenGLError();
         }
 
-        protected override void OnRenderFrame(FrameEventArgs e)
+        protected override void OnUpdateFrame(FrameEventArgs e)
         {
-            base.OnRenderFrame(e);
+            base.OnUpdateFrame(e);
 
-            model.Matrix = rot * model.Matrix;
+            model.Matrix =
+                  Matrix4.CreateFromAxisAngle(new Vector3(0.5f, 1.0f, 0.0f), 0.5f * (float)e.Time)
+                * model.Matrix;
 
             view.Matrix = Matrix4.CreateTranslation(cameraPos) * view.Matrix;
             cameraPos = Vector3.Zero;
+        }
+
+        protected override void OnRenderFrame(FrameEventArgs e)
+        {
+            base.OnRenderFrame(e);
 
             //
             postprocessor.Bind();

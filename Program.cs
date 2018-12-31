@@ -15,8 +15,8 @@ namespace OpenGLEngine
 
             Console.WriteLine(game.VideoVersion);
             Console.WriteLine(game.GetDebugInfo());
-
-            game.Run(10);
+            
+            game.Run(24);
         }
     }
 }
