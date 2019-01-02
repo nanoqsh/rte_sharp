@@ -1,2 +1,2 @@
 # rte
-Rampant Tails RPG Engine
+OpenGL 3D Game Engine
