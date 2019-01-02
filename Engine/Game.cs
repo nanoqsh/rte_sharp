@@ -24,7 +24,7 @@ namespace OpenGLEngine.Engine
         private UniformMatrix view;
         private Vector3 cameraPos;
 
-        private List<Key> keys;
+        private HashSet<Key> pressedKeys;
 
         public Game(int width, int height, string title, int pixelSize = 1) :
             base(
@@ -42,7 +42,7 @@ namespace OpenGLEngine.Engine
 
             VideoVersion = GL.GetString(StringName.Version);
 
-            keys = new List<Key>();
+            pressedKeys = new HashSet<Key>();
 
             ShaderProgram = new ShaderProgram(
                 new VertexShader("vertexShader.glsl"),
@@ -114,10 +114,17 @@ namespace OpenGLEngine.Engine
         {
             base.OnKeyDown(e);
 
-            keys.Add(e.Key);
+            pressedKeys.Add(e.Key);
 
             if (e.Key == Key.Escape)
                 Exit();
+        }
+
+        protected override void OnKeyUp(KeyboardKeyEventArgs e)
+        {
+            base.OnKeyUp(e);
+
+            pressedKeys.Remove(e.Key);
         }
 
         protected override void OnLoad(EventArgs e)
@@ -143,16 +150,16 @@ namespace OpenGLEngine.Engine
 
             float cameraSpeed = 2.5f;
 
-            if (keys.Contains(Key.W))
+            if (pressedKeys.Contains(Key.W))
                 cameraPos += new Vector3(0.0f, 0.0f, cameraSpeed);
 
-            if (keys.Contains(Key.S))
+            if (pressedKeys.Contains(Key.S))
                 cameraPos += new Vector3(0.0f, 0.0f, -cameraSpeed);
 
-            if (keys.Contains(Key.A))
+            if (pressedKeys.Contains(Key.A))
                 cameraPos += new Vector3(cameraSpeed, 0.0f, 0.0f);
 
-            if (keys.Contains(Key.D))
+            if (pressedKeys.Contains(Key.D))
                 cameraPos += new Vector3(-cameraSpeed, 0.0f, 0.0f);
 
 
@@ -165,8 +172,6 @@ namespace OpenGLEngine.Engine
                 * view.Matrix;
 
             cameraPos = Vector3.Zero;
-
-            keys.Clear();
         }
 
         protected override void OnRenderFrame(FrameEventArgs e)
