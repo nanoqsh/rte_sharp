@@ -8,6 +8,7 @@ namespace OpenGLEngine.Engine
         where V : struct
     {
         private bool elementBufferCreated;
+        private BeginMode beginMode = BeginMode.Triangles;
 
         public ElementArrayObject(params V[] vertices)
             : base(vertices)
@@ -38,10 +39,16 @@ namespace OpenGLEngine.Engine
             return this;
         }
 
+        public override ArrayObject<V> SetDrawMode(DrawMode mode)
+        {
+            beginMode = mode.GetBeginMode();
+            return this;
+        }
+
         public override void Draw()
         {
             GL.BindVertexArray(Index);
-            GL.DrawElements(BeginMode.Triangles, drawCount, DrawElementsType.UnsignedInt, 0);
+            GL.DrawElements(beginMode, drawCount, DrawElementsType.UnsignedInt, 0);
             GL.BindVertexArray(0);
         }
     }

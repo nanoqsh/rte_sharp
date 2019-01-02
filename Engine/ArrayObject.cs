@@ -11,14 +11,13 @@ namespace OpenGLEngine.Engine
     {
         protected int drawCount;
         private List<Attribute> shaderAttributes;
-        private PrimitiveType primitiveType;
+        private PrimitiveType primitiveType = PrimitiveType.Triangles;
 
         public int Index { get; }
 
         public ArrayObject(params V[] vertices)
         {
             drawCount = vertices.Length;
-            primitiveType = PrimitiveType.Triangles;
 
             Index = GL.GenVertexArray();
             GL.BindVertexArray(Index);
@@ -48,7 +47,7 @@ namespace OpenGLEngine.Engine
             GL.DeleteVertexArray(Index);
         }
 
-        public ArrayObject<V> SetDrawMode(DrawMode mode)
+        public virtual ArrayObject<V> SetDrawMode(DrawMode mode)
         {
             primitiveType = mode.GetPrimitiveType();
             return this;

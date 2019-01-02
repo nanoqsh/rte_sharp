@@ -24,7 +24,7 @@ namespace OpenGLEngine.Engine
         private UniformMatrix view;
         private Vector3 cameraPos;
 
-        private HashSet<Key> pressedKeys;
+        private HashSet<Key> pressedKeys = new HashSet<Key>();
 
         public Game(int width, int height, string title, int pixelSize = 1) :
             base(
@@ -41,8 +41,6 @@ namespace OpenGLEngine.Engine
             GL.Enable(EnableCap.Texture2D);
 
             VideoVersion = GL.GetString(StringName.Version);
-
-            pressedKeys = new HashSet<Key>();
 
             ShaderProgram = new ShaderProgram(
                 new VertexShader("vertexShader.glsl"),
@@ -131,7 +129,7 @@ namespace OpenGLEngine.Engine
         {
             base.OnLoad(e);
 
-            cube = Cube.Make().AddAttributes(
+            cube = Cube.MakeIndexed().AddAttributes(
                 new Attribute("coord", ShaderProgram.GetAttribute("coord"), 3, 5, 0),
                 new Attribute("tex_coord", ShaderProgram.GetAttribute("tex_coord"), 2, 5, 3)
                 );
