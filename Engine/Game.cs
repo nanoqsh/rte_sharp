@@ -24,8 +24,9 @@ namespace OpenGLEngine.Engine
         private UniformMatrix view;
         private Vector3 cameraPos;
         private Vector3 cameraFront;
-        private Vector3 cameraUp;
         private Vector2 cameraRot;
+
+        private Vector2 lastMousePos;
 
         private HashSet<Key> pressedKeys = new HashSet<Key>();
 
@@ -41,6 +42,11 @@ namespace OpenGLEngine.Engine
             this.pixelSize = pixelSize;
             VSync = VSyncMode.On;
             CursorVisible = false;
+
+            lastMousePos = new Vector2(
+                Mouse.GetState().X,
+                Mouse.GetState().Y
+                );
 
             GL.Enable(EnableCap.Texture2D);
 
@@ -68,13 +74,12 @@ namespace OpenGLEngine.Engine
 
             cameraPos = new Vector3(0.0f, 0.0f, 0.0f);
             cameraFront = new Vector3(0.0f, 0.0f, -1.0f);
-            cameraUp = new Vector3(0.0f, 1.0f, 0.0f);
             cameraRot = new Vector2(0.0f, 0.0f);
 
             view = new UniformMatrix("view", Matrix4.LookAt(
                 cameraPos,
                 cameraPos + cameraFront,
-                cameraUp
+                Vector3.UnitY
                 ));
 
             ShaderProgram.AddUniforms(
@@ -117,39 +122,14 @@ namespace OpenGLEngine.Engine
                     );
         }
 
-        protected override void OnMouseMove(MouseMoveEventArgs e)
+        protected override void OnFocusedChanged(EventArgs e)
         {
-            base.OnMouseMove(e);
+            base.OnFocusedChanged(e);
 
-            // Converting degrees to radians
-            double convert(double x) => Math.PI / 180 * x;
-
-            float MAX_PITCH = 89.0f;
-            float MIN_PITCH = -89.0f;
-
-            float sensitivity = 0.5f;
-
-            cameraRot.X += e.XDelta * sensitivity;
-            cameraRot.Y += e.YDelta * sensitivity;
-
-            Console.WriteLine(e.XDelta + ":" + e.YDelta);
-
-
-            if (cameraRot.Y > MAX_PITCH)
-                cameraRot.Y = MAX_PITCH;
-
-            if (cameraRot.Y < MIN_PITCH)
-                cameraRot.Y = MIN_PITCH;
-            
-
-            Vector3 front = new Vector3(
-                (float) Math.Cos(convert(cameraRot.X)) * (float) Math.Cos(convert(cameraRot.Y)),
-                (float) Math.Sin(convert(cameraRot.Y)),
-                (float) Math.Sin(convert(cameraRot.X)) * (float) Math.Cos(convert(cameraRot.Y))
+            lastMousePos = new Vector2(
+                Mouse.GetState().X,
+                Mouse.GetState().Y
                 );
-
-            front.Normalize();
-            cameraFront = front;
         }
 
         protected override void OnKeyDown(KeyboardKeyEventArgs e)
@@ -157,6 +137,9 @@ namespace OpenGLEngine.Engine
             base.OnKeyDown(e);
 
             pressedKeys.Add(e.Key);
+
+            if (e.Key == Key.F11)
+                WindowState = WindowState.Fullscreen;
 
             if (e.Key == Key.Escape)
                 Exit();
@@ -190,6 +173,51 @@ namespace OpenGLEngine.Engine
         {
             base.OnUpdateFrame(e);
 
+
+            // Converting degrees to radians
+            double convert(double x) => Math.PI / 180 * x;
+
+            float MAX_PITCH = 89.0f;
+            float MIN_PITCH = -89.0f;
+
+            float sensitivity = 0.3f;
+
+            if (Focused)
+            {
+                Vector2 delta = lastMousePos - new Vector2(
+                Mouse.GetState().X,
+                Mouse.GetState().Y
+                );
+
+                cameraRot.X = (cameraRot.X + delta.X * sensitivity) % 360;
+                cameraRot.Y += delta.Y * sensitivity;
+
+                lastMousePos = new Vector2(
+                    Mouse.GetState().X,
+                    Mouse.GetState().Y
+                    );
+
+
+                if (cameraRot.Y > MAX_PITCH)
+                    cameraRot.Y = MAX_PITCH;
+
+                if (cameraRot.Y < MIN_PITCH)
+                    cameraRot.Y = MIN_PITCH;
+
+                Console.WriteLine(cameraRot);
+
+
+                Vector3 front = new Vector3(
+                    (float)Math.Sin(convert(cameraRot.X)) * (float)Math.Cos(convert(cameraRot.Y)),
+                    (float)Math.Sin(convert(cameraRot.Y)),
+                    (float)Math.Cos(convert(cameraRot.X)) * (float)Math.Cos(convert(cameraRot.Y))
+                    );
+
+                front.Normalize();
+                cameraFront = front;
+            }
+
+
             float cameraSpeed = 1.0f * (float) e.Time;
 
             if (pressedKeys.Contains(Key.W))
@@ -199,10 +227,10 @@ namespace OpenGLEngine.Engine
                 cameraPos -= cameraSpeed * cameraFront;
 
             if (pressedKeys.Contains(Key.A))
-                cameraPos -= Vector3.Normalize(Vector3.Cross(cameraFront, cameraUp)) * cameraSpeed;
+                cameraPos -= Vector3.Normalize(Vector3.Cross(cameraFront, Vector3.UnitY)) * cameraSpeed;
 
             if (pressedKeys.Contains(Key.D))
-                cameraPos += Vector3.Normalize(Vector3.Cross(cameraFront, cameraUp)) * cameraSpeed;
+                cameraPos += Vector3.Normalize(Vector3.Cross(cameraFront, Vector3.UnitY)) * cameraSpeed;
             
 
             model.Matrix =
@@ -212,7 +240,7 @@ namespace OpenGLEngine.Engine
             view.Matrix = Matrix4.LookAt(
                 cameraPos,
                 cameraPos + cameraFront,
-                cameraUp
+                Vector3.UnitY
                 );
         }
 
