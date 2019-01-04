@@ -23,6 +23,9 @@ namespace OpenGLEngine.Engine
 
         private UniformMatrix view;
         private Vector3 cameraPos;
+        private Vector3 cameraFront;
+        private Vector3 cameraUp;
+        private Vector2 cameraRot;
 
         private HashSet<Key> pressedKeys = new HashSet<Key>();
 
@@ -37,6 +40,7 @@ namespace OpenGLEngine.Engine
         {
             this.pixelSize = pixelSize;
             VSync = VSyncMode.On;
+            CursorVisible = false;
 
             GL.Enable(EnableCap.Texture2D);
 
@@ -62,10 +66,15 @@ namespace OpenGLEngine.Engine
                 100.0f
                 );
 
+            cameraPos = new Vector3(0.0f, 0.0f, 0.0f);
+            cameraFront = new Vector3(0.0f, 0.0f, 1.0f);
+            cameraUp = new Vector3(0.0f, 1.0f, 0.0f);
+            cameraRot = new Vector2(0.0f, 0.0f);
+
             view = new UniformMatrix("view", Matrix4.LookAt(
-                new Vector3(0.0f, 0.0f, 2.0f),
-                new Vector3(0.0f, 0.0f, 0.0f),
-                new Vector3(0.0f, 1.0f, 0.0f)
+                cameraPos,
+                cameraPos + cameraFront,
+                cameraUp
                 ));
 
             ShaderProgram.AddUniforms(
@@ -108,6 +117,38 @@ namespace OpenGLEngine.Engine
                     );
         }
 
+        protected override void OnMouseMove(MouseMoveEventArgs e)
+        {
+            base.OnMouseMove(e);
+
+            // Converting degrees to radians
+            double convert(double x) => Math.PI / 180 * x;
+
+            float MAX_PITCH = 89.0f;
+            float MIN_PITCH = -89.0f;
+
+            float sensitivity = 0.5f;
+
+            cameraRot.X += e.XDelta * sensitivity;
+            cameraRot.Y += e.YDelta * sensitivity;
+
+            if (cameraRot.Y > MAX_PITCH)
+                cameraRot.Y = MAX_PITCH;
+
+            if (cameraRot.Y < MIN_PITCH)
+                cameraRot.Y = MIN_PITCH;
+
+
+            Vector3 front = new Vector3(
+                (float) Math.Cos(convert(cameraRot.X)) * (float) Math.Cos(convert(cameraRot.Y)),
+                (float) Math.Sin(convert(cameraRot.Y)),
+                (float) Math.Sin(convert(cameraRot.X)) * (float) Math.Cos(convert(cameraRot.Y))
+                );
+
+            front.Normalize();
+            cameraFront = front;
+        }
+
         protected override void OnKeyDown(KeyboardKeyEventArgs e)
         {
             base.OnKeyDown(e);
@@ -129,7 +170,7 @@ namespace OpenGLEngine.Engine
         {
             base.OnLoad(e);
 
-            cube = Cube.MakeIndexed().AddAttributes(
+            cube = Cube.Make().AddAttributes(
                 new Attribute("coord", ShaderProgram.GetAttribute("coord"), 3, 5, 0),
                 new Attribute("tex_coord", ShaderProgram.GetAttribute("tex_coord"), 2, 5, 3)
                 );
@@ -146,30 +187,30 @@ namespace OpenGLEngine.Engine
         {
             base.OnUpdateFrame(e);
 
-            float cameraSpeed = 2.5f;
+            float cameraSpeed = 1.0f * (float) e.Time;
 
             if (pressedKeys.Contains(Key.W))
-                cameraPos += new Vector3(0.0f, 0.0f, cameraSpeed);
+                cameraPos += cameraSpeed * cameraFront;
 
             if (pressedKeys.Contains(Key.S))
-                cameraPos += new Vector3(0.0f, 0.0f, -cameraSpeed);
+                cameraPos -= cameraSpeed * cameraFront;
 
             if (pressedKeys.Contains(Key.A))
-                cameraPos += new Vector3(cameraSpeed, 0.0f, 0.0f);
+                cameraPos -= Vector3.Normalize(Vector3.Cross(cameraFront, cameraUp)) * cameraSpeed;
 
             if (pressedKeys.Contains(Key.D))
-                cameraPos += new Vector3(-cameraSpeed, 0.0f, 0.0f);
-
+                cameraPos += Vector3.Normalize(Vector3.Cross(cameraFront, cameraUp)) * cameraSpeed;
+            
 
             model.Matrix =
                   Matrix4.CreateFromAxisAngle(new Vector3(0.5f, 1.0f, 0.0f), 0.5f * (float) e.Time)
                 * model.Matrix;
 
-            view.Matrix =
-                  Matrix4.CreateTranslation(cameraPos * (float) e.Time)
-                * view.Matrix;
-
-            cameraPos = Vector3.Zero;
+            view.Matrix = Matrix4.LookAt(
+                cameraPos,
+                cameraPos + cameraFront,
+                cameraUp
+                );
         }
 
         protected override void OnRenderFrame(FrameEventArgs e)
@@ -185,7 +226,8 @@ namespace OpenGLEngine.Engine
             GL.ClearColor(Color4.PowderBlue);
             GL.Clear(
                   ClearBufferMask.ColorBufferBit
-                | ClearBufferMask.DepthBufferBit);
+                | ClearBufferMask.DepthBufferBit
+                );
             
             ShaderProgram.Enable();
             cube.Draw();
