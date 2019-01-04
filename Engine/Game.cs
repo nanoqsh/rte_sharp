@@ -67,7 +67,7 @@ namespace OpenGLEngine.Engine
                 );
 
             cameraPos = new Vector3(0.0f, 0.0f, 0.0f);
-            cameraFront = new Vector3(0.0f, 0.0f, 1.0f);
+            cameraFront = new Vector3(0.0f, 0.0f, -1.0f);
             cameraUp = new Vector3(0.0f, 1.0f, 0.0f);
             cameraRot = new Vector2(0.0f, 0.0f);
 
@@ -132,12 +132,15 @@ namespace OpenGLEngine.Engine
             cameraRot.X += e.XDelta * sensitivity;
             cameraRot.Y += e.YDelta * sensitivity;
 
+            Console.WriteLine(e.XDelta + ":" + e.YDelta);
+
+
             if (cameraRot.Y > MAX_PITCH)
                 cameraRot.Y = MAX_PITCH;
 
             if (cameraRot.Y < MIN_PITCH)
                 cameraRot.Y = MIN_PITCH;
-
+            
 
             Vector3 front = new Vector3(
                 (float) Math.Cos(convert(cameraRot.X)) * (float) Math.Cos(convert(cameraRot.Y)),
