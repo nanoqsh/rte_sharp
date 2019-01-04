@@ -59,8 +59,7 @@ namespace OpenGLEngine.Engine
                 );
 
             ShaderProgram.AddUniforms(
-                new UniformTexture("tex", new Texture("sky.png"), 0),
-                new UniformTexture("tex2", new Texture("cube_zombie.png"), 1),
+                new UniformTexture("tex", new Texture("trapdoor.png"), 0),
                 new UniformInt("pixelSize", pixelSize),
                 new UniformColor("color", Color.Coral)
                 );
@@ -69,7 +68,7 @@ namespace OpenGLEngine.Engine
             projection = new UniformMatrix("projection", Matrix4.CreatePerspectiveFieldOfView(
                 1.6f,
                 width / (float) height,
-                0.5f,
+                0.1f,
                 100.0f
                 ));
 
@@ -95,7 +94,7 @@ namespace OpenGLEngine.Engine
         public string GetDebugInfo()
         {
             string[] attributes = new string[] { "coord", "tex_coord" };
-            string[] uniforms = new string[] { "color", "pixelSize", "tex", "tex2" };
+            string[] uniforms = new string[] { "color", "pixelSize", "tex" };
             string res = "";
 
             foreach (KeyValuePair<string, int> pair in ShaderProgram.GetAttributes(attributes))
@@ -276,7 +275,7 @@ namespace OpenGLEngine.Engine
             projection.Matrix = Matrix4.CreatePerspectiveFieldOfView(
                 1.6f,
                 ClientRectangle.Width / (float) ClientRectangle.Height,
-                0.5f,
+                0.1f,
                 100.0f
                 );
 
