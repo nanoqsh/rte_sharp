@@ -20,8 +20,9 @@ namespace OpenGLEngine.Engine
         private readonly int pixelSize;
 
         private UniformMatrix model;
-
         private UniformMatrix view;
+        private UniformMatrix projection;
+
         private Vector3 cameraPos;
         private Vector3 cameraFront;
         private Vector2 cameraRot;
@@ -65,14 +66,14 @@ namespace OpenGLEngine.Engine
                 );
 
 
-            Matrix4 projection = Matrix4.CreatePerspectiveFieldOfView(
+            projection = new UniformMatrix("projection", Matrix4.CreatePerspectiveFieldOfView(
                 1.6f,
                 width / (float) height,
                 0.5f,
                 100.0f
-                );
+                ));
 
-            cameraPos = new Vector3(0.0f, 0.0f, 0.0f);
+            cameraPos = new Vector3(0.0f, 0.0f, -2.0f);
             cameraFront = new Vector3(0.0f, 0.0f, -1.0f);
             cameraRot = new Vector2(0.0f, 0.0f);
 
@@ -82,10 +83,7 @@ namespace OpenGLEngine.Engine
                 Vector3.UnitY
                 ));
 
-            ShaderProgram.AddUniforms(
-                new UniformMatrix("projection", projection),
-                view
-                );
+            ShaderProgram.AddUniforms(projection, view);
 
             Matrix4 transform = Matrix4.CreateTranslation(0.1f, 0.1f, 0.0f);
             Matrix4 rotation = Matrix4.CreateFromAxisAngle(new Vector3(0.5f, 1.0f, 0.0f), 0.6f);
@@ -139,7 +137,9 @@ namespace OpenGLEngine.Engine
             pressedKeys.Add(e.Key);
 
             if (e.Key == Key.F11)
-                WindowState = WindowState.Fullscreen;
+                WindowState = WindowState == WindowState.Fullscreen
+                    ? WindowState.Normal
+                    : WindowState.Fullscreen;
 
             if (e.Key == Key.Escape)
                 Exit();
@@ -160,7 +160,6 @@ namespace OpenGLEngine.Engine
                 new Attribute("coord", ShaderProgram.GetAttribute("coord"), 3, 5, 0),
                 new Attribute("tex_coord", ShaderProgram.GetAttribute("tex_coord"), 2, 5, 3)
                 );
-
 
             postprocessor = new Postprocessor(ClientRectangle, pixelSize);
 
@@ -203,8 +202,6 @@ namespace OpenGLEngine.Engine
 
                 if (cameraRot.Y < MIN_PITCH)
                     cameraRot.Y = MIN_PITCH;
-
-                Console.WriteLine(cameraRot);
 
 
                 Vector3 front = new Vector3(
@@ -275,7 +272,14 @@ namespace OpenGLEngine.Engine
             base.OnResize(e);
 
             GL.Viewport(ClientRectangle);
-            
+
+            projection.Matrix = Matrix4.CreatePerspectiveFieldOfView(
+                1.6f,
+                ClientRectangle.Width / (float) ClientRectangle.Height,
+                0.5f,
+                100.0f
+                );
+
             postprocessor.Resize(ClientRectangle);
         }
     }
