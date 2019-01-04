@@ -23,6 +23,10 @@ namespace OpenGLEngine.Engine
         private UniformMatrix view;
         private UniformMatrix projection;
 
+        private Vector3 position;
+        private Vector3 rotation;
+        private Vector3 scale;
+
         private Vector3 cameraPos;
         private Vector3 cameraFront;
         private Vector2 cameraRot;
@@ -84,10 +88,18 @@ namespace OpenGLEngine.Engine
 
             ShaderProgram.AddUniforms(projection, view);
 
-            Matrix4 transform = Matrix4.CreateTranslation(0.1f, 0.1f, 0.0f);
-            Matrix4 rotation = Matrix4.CreateFromAxisAngle(new Vector3(0.5f, 1.0f, 0.0f), 0.6f);
+            position = new Vector3(0.0f, 0.0f, 0.0f);
+            rotation = new Vector3(0.0f, 0.0f, 0.0f);
+            scale = new Vector3(1.0f, 1.0f, 1.0f);
 
-            model = new UniformMatrix("model", rotation * transform);
+            Matrix4 matrix =
+                  Matrix4.CreateTranslation(position)
+                * Matrix4.CreateRotationX(rotation.X)
+                * Matrix4.CreateRotationY(rotation.Y)
+                * Matrix4.CreateRotationZ(rotation.Z)
+                * Matrix4.CreateScale(scale);
+
+            model = new UniformMatrix("model", matrix);
             ShaderProgram.AddUniforms(model);
         }
 
@@ -227,11 +239,57 @@ namespace OpenGLEngine.Engine
 
             if (pressedKeys.Contains(Key.D))
                 cameraPos += Vector3.Normalize(Vector3.Cross(cameraFront, Vector3.UnitY)) * cameraSpeed;
+
+            float rotationSpeed = 0.1f;
+
+            if (pressedKeys.Contains(Key.Number1))
+                rotation.X = rotation.X + rotationSpeed;
+
+            if (pressedKeys.Contains(Key.Number2))
+                rotation.X -= rotationSpeed;
+
+            if (pressedKeys.Contains(Key.Number3))
+                rotation.Y += rotationSpeed;
+
+            if (pressedKeys.Contains(Key.Number4))
+                rotation.Y -= rotationSpeed;
+
+            if (pressedKeys.Contains(Key.Number5))
+                rotation.Z += rotationSpeed;
+
+            if (pressedKeys.Contains(Key.Number6))
+                rotation.Z -= rotationSpeed;
+
+            float scaleSpeed = 0.1f;
+
+            if (pressedKeys.Contains(Key.Z))
+                scale.X += scaleSpeed;
+
+            if (pressedKeys.Contains(Key.X))
+                scale.X -= scaleSpeed;
+
+            float positionSpeed = 0.1f;
+
+            if (pressedKeys.Contains(Key.T))
+                position.Z -= positionSpeed;
+
+            if (pressedKeys.Contains(Key.G))
+                position.Z += positionSpeed;
+
+            if (pressedKeys.Contains(Key.F))
+                position.X += positionSpeed;
+
+            if (pressedKeys.Contains(Key.H))
+                position.X -= positionSpeed;
             
 
             model.Matrix =
-                  Matrix4.CreateFromAxisAngle(new Vector3(0.5f, 1.0f, 0.0f), 0.5f * (float) e.Time)
-                * model.Matrix;
+                  Matrix4.CreateScale(scale)
+                * Matrix4.CreateRotationZ(rotation.Z)
+                * Matrix4.CreateRotationY(rotation.Y)
+                * Matrix4.CreateRotationX(rotation.X)
+                * Matrix4.CreateTranslation(position);
+
 
             view.Matrix = Matrix4.LookAt(
                 cameraPos,
