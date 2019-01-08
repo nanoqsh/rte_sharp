@@ -27,9 +27,7 @@ namespace OpenGLEngine.Engine
         private Vector3 rotation;
         private Vector3 scale;
 
-        private Vector3 cameraPos;
-        private Vector3 cameraFront;
-        private Vector2 cameraRot;
+        private Camera camera;
 
         private Vector2 lastMousePos;
 
@@ -69,11 +67,12 @@ namespace OpenGLEngine.Engine
                 );
 
 
-            cameraPos = new Vector3(0.0f, 0.0f, -2.0f);
-            cameraFront = new Vector3(0.0f, 0.0f, -1.0f);
-            cameraRot = new Vector2(0.0f, 0.0f);
+            camera = new Camera(
+                new Vector3(0.0f, 0.0f, -2.0f),
+                new Vector3(0.0f, 0.0f, -1.0f)
+                );
 
-            view = new UniformMatrix("view", CreateView());
+            view = new UniformMatrix("view", camera.View);
             projection = new UniformMatrix(
                 "projection",
                 CreatePerspective(width / (float) height)
@@ -101,15 +100,6 @@ namespace OpenGLEngine.Engine
                 aspect,
                 0.1f,
                 100.0f
-                );
-        }
-
-        private Matrix4 CreateView()
-        {
-            return Matrix4.LookAt(
-                cameraPos,
-                cameraPos + cameraFront,
-                Vector3.UnitY
                 );
         }
 
@@ -193,62 +183,40 @@ namespace OpenGLEngine.Engine
         {
             base.OnUpdateFrame(e);
 
-
-            // Converting degrees to radians
-            double convert(double x) => Math.PI / 180 * x;
-
-            float MAX_PITCH = 89.0f;
-            float MIN_PITCH = -89.0f;
-
-            float sensitivity = 0.3f;
-
             if (Focused)
             {
+                float sensitivity = 0.3f;
+
                 Vector2 delta = lastMousePos - new Vector2(
                 Mouse.GetState().X,
                 Mouse.GetState().Y
                 );
 
-                cameraRot.X = (cameraRot.X + delta.X * sensitivity) % 360;
-                cameraRot.Y += delta.Y * sensitivity;
+                camera.Rotate(
+                    delta.X * sensitivity,
+                    delta.Y * sensitivity
+                    );
 
                 lastMousePos = new Vector2(
                     Mouse.GetState().X,
                     Mouse.GetState().Y
                     );
-
-
-                if (cameraRot.Y > MAX_PITCH)
-                    cameraRot.Y = MAX_PITCH;
-
-                if (cameraRot.Y < MIN_PITCH)
-                    cameraRot.Y = MIN_PITCH;
-
-
-                Vector3 front = new Vector3(
-                    (float)Math.Sin(convert(cameraRot.X)) * (float)Math.Cos(convert(cameraRot.Y)),
-                    (float)Math.Sin(convert(cameraRot.Y)),
-                    (float)Math.Cos(convert(cameraRot.X)) * (float)Math.Cos(convert(cameraRot.Y))
-                    );
-
-                front.Normalize();
-                cameraFront = front;
             }
 
 
             float cameraSpeed = 1.0f * (float) e.Time;
 
             if (pressedKeys.Contains(Key.W))
-                cameraPos += cameraSpeed * cameraFront;
+                camera.Move(cameraSpeed * camera.Front);
 
             if (pressedKeys.Contains(Key.S))
-                cameraPos -= cameraSpeed * cameraFront;
+                camera.Move(cameraSpeed * -camera.Front);
 
             if (pressedKeys.Contains(Key.A))
-                cameraPos -= Vector3.Normalize(Vector3.Cross(cameraFront, Vector3.UnitY)) * cameraSpeed;
+                camera.Move(-Vector3.Normalize(Vector3.Cross(camera.Front, Vector3.UnitY)) * cameraSpeed);
 
             if (pressedKeys.Contains(Key.D))
-                cameraPos += Vector3.Normalize(Vector3.Cross(cameraFront, Vector3.UnitY)) * cameraSpeed;
+                camera.Move(Vector3.Normalize(Vector3.Cross(camera.Front, Vector3.UnitY)) * cameraSpeed);
 
 
             float rotationSpeed = 0.1f;
@@ -300,7 +268,7 @@ namespace OpenGLEngine.Engine
                 * Matrix4.CreateTranslation(position);
 
             
-            view.Matrix = CreateView();
+            view.Matrix = camera.View;
         }
 
         protected override void OnRenderFrame(FrameEventArgs e)
