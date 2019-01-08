@@ -58,8 +58,8 @@ namespace OpenGLEngine.Engine
             VideoVersion = GL.GetString(StringName.Version);
 
             ShaderProgram = new ShaderProgram(
-                new VertexShader("vertexShader.glsl"),
-                new FragmentShader("fragmentShader.glsl")
+                new VertexShader("meshVS.glsl"),
+                new FragmentShader("meshFS.glsl")
                 );
 
             ShaderProgram.AddUniforms(
@@ -69,24 +69,17 @@ namespace OpenGLEngine.Engine
                 );
 
 
-            projection = new UniformMatrix("projection", Matrix4.CreatePerspectiveFieldOfView(
-                1.6f,
-                width / (float) height,
-                0.1f,
-                100.0f
-                ));
-
             cameraPos = new Vector3(0.0f, 0.0f, -2.0f);
             cameraFront = new Vector3(0.0f, 0.0f, -1.0f);
             cameraRot = new Vector2(0.0f, 0.0f);
 
-            view = new UniformMatrix("view", Matrix4.LookAt(
-                cameraPos,
-                cameraPos + cameraFront,
-                Vector3.UnitY
-                ));
-
-            ShaderProgram.AddUniforms(projection, view);
+            view = new UniformMatrix("view", CreateView());
+            projection = new UniformMatrix(
+                "projection",
+                CreatePerspective(width / (float) height)
+                );
+            
+            ShaderProgram.AddUniforms(view, projection);
 
             position = new Vector3(0.0f, 0.0f, 0.0f);
             rotation = new Vector3(0.0f, 0.0f, 0.0f);
@@ -94,19 +87,36 @@ namespace OpenGLEngine.Engine
 
             Matrix4 matrix =
                   Matrix4.CreateTranslation(position)
-                * Matrix4.CreateRotationX(rotation.X)
-                * Matrix4.CreateRotationY(rotation.Y)
-                * Matrix4.CreateRotationZ(rotation.Z)
+                * Matrix4.CreateFromQuaternion(new Quaternion(rotation))
                 * Matrix4.CreateScale(scale);
 
             model = new UniformMatrix("model", matrix);
             ShaderProgram.AddUniforms(model);
         }
 
+        private Matrix4 CreatePerspective(float aspect)
+        {
+            return Matrix4.CreatePerspectiveFieldOfView(
+                1.6f,
+                aspect,
+                0.1f,
+                100.0f
+                );
+        }
+
+        private Matrix4 CreateView()
+        {
+            return Matrix4.LookAt(
+                cameraPos,
+                cameraPos + cameraFront,
+                Vector3.UnitY
+                );
+        }
+
         public string GetDebugInfo()
         {
             string[] attributes = new string[] { "coord", "texCoord" };
-            string[] uniforms = new string[] { "color", "pixelSize", "tex" };
+            string[] uniforms = new string[] { "color", "pixelSize", "tex", "projView", "model" };
             string res = "";
 
             foreach (KeyValuePair<string, int> pair in ShaderProgram.GetAttributes(attributes))
@@ -286,17 +296,11 @@ namespace OpenGLEngine.Engine
 
             model.Matrix =
                   Matrix4.CreateScale(scale)
-                * Matrix4.CreateRotationZ(rotation.Z)
-                * Matrix4.CreateRotationY(rotation.Y)
-                * Matrix4.CreateRotationX(rotation.X)
+                * Matrix4.CreateFromQuaternion(new Quaternion(rotation))
                 * Matrix4.CreateTranslation(position);
 
-
-            view.Matrix = Matrix4.LookAt(
-                cameraPos,
-                cameraPos + cameraFront,
-                Vector3.UnitY
-                );
+            
+            view.Matrix = CreateView();
         }
 
         protected override void OnRenderFrame(FrameEventArgs e)
@@ -331,12 +335,7 @@ namespace OpenGLEngine.Engine
 
             GL.Viewport(ClientRectangle);
 
-            projection.Matrix = Matrix4.CreatePerspectiveFieldOfView(
-                1.6f,
-                ClientRectangle.Width / (float) ClientRectangle.Height,
-                0.1f,
-                100.0f
-                );
+            projection.Matrix = CreatePerspective(ClientRectangle.Width / (float)ClientRectangle.Height);
 
             postprocessor.Resize(ClientRectangle);
         }
