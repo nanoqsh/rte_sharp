@@ -192,10 +192,7 @@ namespace OpenGLEngine.Engine
                 Mouse.GetState().Y
                 );
 
-                camera.Rotate(
-                    delta.X * sensitivity,
-                    delta.Y * sensitivity
-                    );
+                camera.Rotate(delta * sensitivity);
 
                 lastMousePos = new Vector2(
                     Mouse.GetState().X,

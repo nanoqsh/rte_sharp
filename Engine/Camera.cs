@@ -23,7 +23,7 @@ namespace OpenGLEngine.Engine
         public Camera(Vector3 position, Vector3 front, Vector2 rotation)
         {
             this.position = position;
-            this.front = front;
+            this.front = Vector3.Normalize(front);
             this.rotation = rotation;
         }
 
@@ -43,10 +43,10 @@ namespace OpenGLEngine.Engine
 
         private double Convert(double x) => Math.PI / 180 * x;
 
-        public void Rotate(float deltaX, float deltaY)
+        public void Rotate(Vector2 delta)
         {
-            rotation.X = (rotation.X + deltaX) % 360;
-            rotation.Y += deltaY;
+            rotation.X = (rotation.X + delta.X) % 360;
+            rotation.Y += delta.Y;
 
             if (rotation.Y > MAX_PITCH)
                 rotation.Y = MAX_PITCH;
@@ -54,15 +54,11 @@ namespace OpenGLEngine.Engine
             if (rotation.Y < MIN_PITCH)
                 rotation.Y = MIN_PITCH;
 
-
-            Vector3 front = new Vector3(
-                    (float)Math.Sin(Convert(rotation.X)) * (float)Math.Cos(Convert(rotation.Y)),
-                    (float)Math.Sin(Convert(rotation.Y)),
-                    (float)Math.Cos(Convert(rotation.X)) * (float)Math.Cos(Convert(rotation.Y))
-                    );
-
-            front.Normalize();
-            this.front = front;
+            front = Vector3.Normalize(new Vector3(
+                (float)Math.Sin(Convert(rotation.X)) * (float)Math.Cos(Convert(rotation.Y)),
+                (float)Math.Sin(Convert(rotation.Y)),
+                (float)Math.Cos(Convert(rotation.X)) * (float)Math.Cos(Convert(rotation.Y))
+                ));
         }
     }
 }
