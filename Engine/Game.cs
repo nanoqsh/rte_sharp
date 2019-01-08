@@ -105,7 +105,7 @@ namespace OpenGLEngine.Engine
 
         public string GetDebugInfo()
         {
-            string[] attributes = new string[] { "coord", "tex_coord" };
+            string[] attributes = new string[] { "coord", "texCoord" };
             string[] uniforms = new string[] { "color", "pixelSize", "tex" };
             string res = "";
 
@@ -169,7 +169,7 @@ namespace OpenGLEngine.Engine
 
             cube = Cube.Make().AddAttributes(
                 new Attribute("coord", ShaderProgram.GetAttribute("coord"), 3, 5, 0),
-                new Attribute("tex_coord", ShaderProgram.GetAttribute("tex_coord"), 2, 5, 3)
+                new Attribute("texCoord", ShaderProgram.GetAttribute("texCoord"), 2, 5, 3)
                 );
 
             postprocessor = new Postprocessor(ClientRectangle, pixelSize);
@@ -239,6 +239,7 @@ namespace OpenGLEngine.Engine
 
             if (pressedKeys.Contains(Key.D))
                 cameraPos += Vector3.Normalize(Vector3.Cross(cameraFront, Vector3.UnitY)) * cameraSpeed;
+
 
             float rotationSpeed = 0.1f;
 

@@ -33,7 +33,7 @@ namespace OpenGLEngine.Engine
 
             quad = Quad.Make().AddAttributes(
                 new Attribute("position", shaderProgram.GetAttribute("position"), 2, 4, 0),
-                new Attribute("tex_coords", shaderProgram.GetAttribute("tex_coords"), 2, 4, 2)
+                new Attribute("texCoords", shaderProgram.GetAttribute("texCoords"), 2, 4, 2)
                 );
         }
 
