@@ -2,7 +2,7 @@
 using System;
 
 
-namespace OpenGLEngine.Engine
+namespace RTE.Engine
 {
     enum DrawMode
     {

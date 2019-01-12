@@ -1,6 +1,6 @@
 ﻿
 
-namespace OpenGLEngine.Engine
+namespace RTE.Engine
 {
     class Attribute
     {

@@ -1,6 +1,6 @@
 ﻿
 
-namespace OpenGLEngine.Engine
+namespace RTE.Engine
 {
     abstract class Uniform
     {

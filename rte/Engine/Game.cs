@@ -7,14 +7,14 @@ using OpenTK.Graphics.OpenGL4;
 using OpenTK.Input;
 
 
-namespace OpenGLEngine.Engine
+namespace RTE.Engine
 {
     class Game : GameWindow
     {
         public readonly string VideoVersion;
 
         private ShaderProgram ShaderProgram;
-        private ArrayObject<Vertex5D> cube;
+        private ArrayObject<Vertex5> cube;
 
         private Postprocessor postprocessor;
         private readonly int pixelSize;

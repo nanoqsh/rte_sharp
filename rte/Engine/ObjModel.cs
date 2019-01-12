@@ -1,13 +1,14 @@
 ﻿using System;
 using System.IO;
+using OpenTK;
 
 
-namespace OpenGLEngine.Engine
+namespace RTE.Engine
 {
     class ObjModel
     {
         public readonly string Name;
-        public readonly Vertex3D[] Vertices;
+        public readonly Vector3[] Vertices;
 
         public ObjModel(string name)
         {
@@ -18,7 +19,7 @@ namespace OpenGLEngine.Engine
                 throw new FileNotFoundException(string.Format("File {0} not found!", path));
 
             // Load
-            Vertices = new Vertex3D[0];
+            Vertices = new Vector3[0];
         }
     }
 }

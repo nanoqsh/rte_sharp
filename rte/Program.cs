@@ -1,8 +1,8 @@
 ﻿using System;
-using OpenGLEngine.Engine;
+using RTE.Engine;
 
 
-namespace OpenGLEngine
+namespace RTE
 {
     class Program
     {

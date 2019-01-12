@@ -1,15 +1,15 @@
 ﻿using System;
 using System.Drawing;
-using OpenTK.Graphics;
+using OpenTK;
 using OpenTK.Graphics.OpenGL4;
 
 
-namespace OpenGLEngine.Engine
+namespace RTE.Engine
 {
     class Postprocessor : IDisposable
     {
         private readonly ShaderProgram shaderProgram;
-        private readonly ArrayObject<Vertex4D> quad;
+        private readonly ArrayObject<Vector4> quad;
         private FrameBuffer frameBuffer;
         public int PixelSize;
 

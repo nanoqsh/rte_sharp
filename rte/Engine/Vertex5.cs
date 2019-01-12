@@ -1,8 +1,8 @@
 ﻿
 
-namespace OpenGLEngine.Engine
+namespace RTE.Engine
 {
-    struct Vertex5D
+    struct Vertex5
     {
         public readonly float X;
         public readonly float Y;
@@ -10,7 +10,7 @@ namespace OpenGLEngine.Engine
         public readonly float W;
         public readonly float V;
 
-        public Vertex5D(float x, float y, float z, float w, float v)
+        public Vertex5(float x, float y, float z, float w, float v)
         {
             X = x;
             Y = y;

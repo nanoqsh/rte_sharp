@@ -2,7 +2,7 @@
 using OpenTK;
 
 
-namespace OpenGLEngine.Engine
+namespace RTE.Engine
 {
     class Camera
     {

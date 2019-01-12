@@ -2,7 +2,7 @@
 using System.Drawing;
 
 
-namespace OpenGLEngine.Engine
+namespace RTE.Engine
 {
     class UniformColor : Uniform
     {

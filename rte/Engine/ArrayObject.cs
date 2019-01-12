@@ -4,7 +4,7 @@ using System.Runtime.InteropServices;
 using OpenTK.Graphics.OpenGL4;
 
 
-namespace OpenGLEngine.Engine
+namespace RTE.Engine
 {
     class ArrayObject<V> : IDisposable
         where V : struct

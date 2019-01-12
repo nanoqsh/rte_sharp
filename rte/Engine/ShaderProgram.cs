@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 
 
-namespace OpenGLEngine.Engine
+namespace RTE.Engine
 {
     class ShaderProgram : IDisposable
     {
