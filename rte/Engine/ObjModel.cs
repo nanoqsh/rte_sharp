@@ -2,7 +2,6 @@
 using System.IO;
 using OpenTK;
 
-
 namespace RTE.Engine
 {
     class ObjModel
@@ -16,7 +15,7 @@ namespace RTE.Engine
             string path = Environment.CurrentDirectory + "/Models/" + name;
 
             if (!File.Exists(path))
-                throw new FileNotFoundException(string.Format("File {0} not found!", path));
+                throw new FileNotFoundException($"File {path} not found!");
 
             // Load
             Vertices = new Vector3[0];

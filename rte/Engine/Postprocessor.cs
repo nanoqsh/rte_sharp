@@ -3,7 +3,6 @@ using System.Drawing;
 using OpenTK;
 using OpenTK.Graphics.OpenGL4;
 
-
 namespace RTE.Engine
 {
     class Postprocessor : IDisposable
@@ -11,7 +10,7 @@ namespace RTE.Engine
         private readonly ShaderProgram shaderProgram;
         private readonly ArrayObject<Vector4> quad;
         private FrameBuffer frameBuffer;
-        public int PixelSize;
+        public readonly int PixelSize;
 
         public Postprocessor(Rectangle client, int pixelSize = 1)
         {
@@ -66,7 +65,7 @@ namespace RTE.Engine
 
         public void Unbind()
         {
-            frameBuffer.Unbind();
+            FrameBuffer.Unbind();
         }
 
         public void DrawFrame()
@@ -74,7 +73,7 @@ namespace RTE.Engine
             bool isDepthEnabled = GL.IsEnabled(EnableCap.DepthTest);
             GL.Disable(EnableCap.DepthTest);
 
-            frameBuffer.Unbind();
+            FrameBuffer.Unbind();
 
             GL.ClearColor(0.0f, 0.0f, 0.0f, 0.0f);
             GL.Clear(ClearBufferMask.ColorBufferBit);

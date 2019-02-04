@@ -1,7 +1,5 @@
 ﻿using OpenTK.Graphics.OpenGL4;
 using System;
-
-
 namespace RTE.Engine
 {
     enum DrawMode

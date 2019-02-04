@@ -1,12 +1,11 @@
 ﻿using OpenTK.Graphics.OpenGL4;
 using System;
 
-
 namespace RTE.Engine
 {
     class UniformTexture : Uniform
     {
-        public Texture Texture;
+        public readonly Texture Texture;
         public readonly int Unit;
 
         public UniformTexture(string name, Texture texture, int unit)

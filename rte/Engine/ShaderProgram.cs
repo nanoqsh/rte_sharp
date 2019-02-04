@@ -1,7 +1,7 @@
 ﻿using OpenTK.Graphics.OpenGL4;
 using System;
 using System.Collections.Generic;
-
+using System.Linq;
 
 namespace RTE.Engine
 {
@@ -45,22 +45,14 @@ namespace RTE.Engine
 
         public Dictionary<string, int> GetAttributes(params string[] names)
         {
-            Dictionary<string, int> map = new Dictionary<string, int>();
-
-            foreach (string name in names)
-                map.Add(name, GL.GetAttribLocation(Index, name));
-
-            return map;
+            return names
+                .ToDictionary(n => n, n => GL.GetAttribLocation(Index, n));
         }
 
         public Dictionary<string, int> GetUniforms(params string[] names)
         {
-            Dictionary<string, int> map = new Dictionary<string, int>();
-
-            foreach (string name in names)
-                map.Add(name, GL.GetUniformLocation(Index, name));
-
-            return map;
+            return names
+                .ToDictionary(n => n, n => GL.GetUniformLocation(Index, n));
         }
 
         public int GetAttribute(string name)

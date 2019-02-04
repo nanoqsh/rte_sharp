@@ -3,17 +3,16 @@ using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using OpenTK.Graphics.OpenGL4;
 
-
 namespace RTE.Engine
 {
     class ArrayObject<V> : IDisposable
         where V : struct
     {
         protected int drawCount;
-        private List<Attribute> shaderAttributes;
+        private readonly List<Attribute> shaderAttributes;
         private PrimitiveType primitiveType = PrimitiveType.Triangles;
 
-        public int Index { get; }
+        protected int Index { get; }
 
         public ArrayObject(params V[] vertices)
         {

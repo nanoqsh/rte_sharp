@@ -2,7 +2,6 @@
 using System.IO;
 using OpenTK.Graphics.OpenGL4;
 
-
 namespace RTE.Engine
 {
     abstract class Shader
@@ -12,17 +11,16 @@ namespace RTE.Engine
 
         protected abstract ShaderType ShaderType { get; }
 
-        public Shader(string shaderName)
+        protected Shader(string shaderName)
         {
             Name = shaderName;
 
             string path = Environment.CurrentDirectory + "/Shaders/" + shaderName;
 
             if (!File.Exists(path))
-                throw new FileNotFoundException(string.Format("File {0} not found!", path));
+                throw new FileNotFoundException($"File {path} not found!");
 
             string shaderCode = File.ReadAllText(path);
-            
 
             Index = GL.CreateShader(ShaderType);
             GL.ShaderSource(Index, shaderCode);

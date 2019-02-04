@@ -1,7 +1,6 @@
 ﻿using System;
 using OpenTK.Graphics.OpenGL4;
 
-
 namespace RTE.Engine
 {
     class FrameBuffer : IDisposable
@@ -43,13 +42,10 @@ namespace RTE.Engine
                 renderBuffer
                 );
 
-            // Check complition
-            var status = GL.CheckFramebufferStatus(FramebufferTarget.Framebuffer);
+            // Check completion
+            FramebufferErrorCode status = GL.CheckFramebufferStatus(FramebufferTarget.Framebuffer);
             if (status != FramebufferErrorCode.FramebufferComplete)
-                throw new Exception(string.Format(
-                    "Error do not complete! Status: {0}",
-                    status
-                    ));
+                throw new Exception($"Error do not complete! Status: {status}");
 
             GL.BindFramebuffer(FramebufferTarget.Framebuffer, 0);
         }
@@ -66,7 +62,7 @@ namespace RTE.Engine
             GL.BindFramebuffer(FramebufferTarget.Framebuffer, Index);
         }
 
-        public void Unbind()
+        public static void Unbind()
         {
             GL.BindFramebuffer(FramebufferTarget.Framebuffer, 0);
         }

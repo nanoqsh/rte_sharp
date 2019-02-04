@@ -1,6 +1,5 @@
 ﻿using OpenTK.Graphics.OpenGL4;
 
-
 namespace RTE.Engine
 {
     class VertexShader : Shader

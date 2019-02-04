@@ -1,12 +1,10 @@
-﻿
-
-namespace RTE.Engine
+﻿namespace RTE.Engine
 {
     abstract class Uniform
     {
         public string Name { get; }
 
-        public Uniform(string name)
+        protected Uniform(string name)
         {
             Name = name;
         }

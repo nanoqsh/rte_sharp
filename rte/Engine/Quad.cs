@@ -1,6 +1,5 @@
 ﻿using OpenTK;
 
-
 namespace RTE.Engine
 {
     static class Quad

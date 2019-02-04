@@ -6,32 +6,31 @@ using OpenTK.Graphics;
 using OpenTK.Graphics.OpenGL4;
 using OpenTK.Input;
 
-
 namespace RTE.Engine
 {
     class Game : GameWindow
     {
         public readonly string VideoVersion;
 
-        private ShaderProgram ShaderProgram;
+        private readonly ShaderProgram ShaderProgram;
         private ArrayObject<Vertex5> cube;
 
         private Postprocessor postprocessor;
         private readonly int pixelSize;
 
-        private UniformMatrix model;
-        private UniformMatrix view;
-        private UniformMatrix projection;
+        private readonly UniformMatrix model;
+        private readonly UniformMatrix view;
+        private readonly UniformMatrix projection;
 
         private Vector3 position;
         private Vector3 rotation;
         private Vector3 scale;
 
-        private Camera camera;
+        private readonly Camera camera;
 
         private Vector2 lastMousePos;
 
-        private HashSet<Key> pressedKeys = new HashSet<Key>();
+        private readonly HashSet<Key> pressedKeys = new HashSet<Key>();
 
         public Game(int width, int height, string title, int pixelSize = 1) :
             base(
@@ -93,7 +92,7 @@ namespace RTE.Engine
             ShaderProgram.AddUniforms(model);
         }
 
-        private Matrix4 CreatePerspective(float aspect)
+        private static Matrix4 CreatePerspective(float aspect)
         {
             return Matrix4.CreatePerspectiveFieldOfView(
                 1.6f,
@@ -127,8 +126,8 @@ namespace RTE.Engine
 
             if (errCode != ErrorCode.NoError)
                 throw new Exception(
-                    string.Format("OpenGl error! - {0}", errCode)
-                    );
+                    $"OpenGl error! - {errCode}"
+                );
         }
 
         protected override void OnFocusedChanged(EventArgs e)
@@ -185,19 +184,18 @@ namespace RTE.Engine
 
             if (Focused)
             {
-                float sensitivity = 0.3f;
+                const float sensitivity = 0.3f;
 
-                Vector2 delta = lastMousePos - new Vector2(
-                Mouse.GetState().X,
-                Mouse.GetState().Y
-                );
-
-                camera.Rotate(delta * sensitivity);
-
-                lastMousePos = new Vector2(
+                Vector2 mouse = new Vector2(
                     Mouse.GetState().X,
                     Mouse.GetState().Y
                     );
+
+                Vector2 delta = lastMousePos - mouse;
+                
+                camera.Rotate(delta * sensitivity);
+
+                lastMousePos = mouse;
             }
 
 
@@ -216,7 +214,7 @@ namespace RTE.Engine
                 camera.Move(Vector3.Normalize(Vector3.Cross(camera.Front, Vector3.UnitY)) * cameraSpeed);
 
 
-            float rotationSpeed = 0.1f;
+            const float rotationSpeed = 0.1f;
 
             if (pressedKeys.Contains(Key.Number1))
                 rotation.X = rotation.X + rotationSpeed;
@@ -236,7 +234,7 @@ namespace RTE.Engine
             if (pressedKeys.Contains(Key.Number6))
                 rotation.Z -= rotationSpeed;
 
-            float scaleSpeed = 0.1f;
+            const float scaleSpeed = 0.1f;
 
             if (pressedKeys.Contains(Key.Z))
                 scale.X += scaleSpeed;
@@ -244,7 +242,7 @@ namespace RTE.Engine
             if (pressedKeys.Contains(Key.X))
                 scale.X -= scaleSpeed;
 
-            float positionSpeed = 0.1f;
+            const float positionSpeed = 0.1f;
 
             if (pressedKeys.Contains(Key.T))
                 position.Z -= positionSpeed;

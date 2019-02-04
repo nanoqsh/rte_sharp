@@ -1,7 +1,6 @@
 ﻿using OpenTK.Graphics.OpenGL4;
 using OpenTK;
 
-
 namespace RTE.Engine
 {
     class UniformMatrix : Uniform
