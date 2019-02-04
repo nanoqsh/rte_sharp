@@ -3,6 +3,7 @@ using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
 using OpenTK.Graphics.OpenGL4;
+using PixelFormat = OpenTK.Graphics.OpenGL4.PixelFormat;
 
 namespace RTE.Engine
 {
@@ -37,7 +38,7 @@ namespace RTE.Engine
                 bitData.Width,
                 bitData.Height,
                 0,
-                OpenTK.Graphics.OpenGL4.PixelFormat.Bgra,
+                PixelFormat.Bgra,
                 PixelType.UnsignedByte,
                 bitData.Scan0
                 );
@@ -62,7 +63,7 @@ namespace RTE.Engine
                 width,
                 height,
                 0,
-                OpenTK.Graphics.OpenGL4.PixelFormat.Bgra,
+                PixelFormat.Bgra,
                 PixelType.UnsignedByte,
                 IntPtr.Zero
                 );

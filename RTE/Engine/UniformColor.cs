@@ -1,5 +1,5 @@
-﻿using OpenTK.Graphics.OpenGL4;
-using System.Drawing;
+﻿using OpenTK;
+using OpenTK.Graphics.OpenGL4;
 
 namespace RTE.Engine
 {

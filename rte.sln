@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.28307.168
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "rte", "rte\rte.csproj", "{9E56034F-52DC-4D4A-AF82-5DC4FE1EA86E}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RTE", "RTE\RTE.csproj", "{D969CE45-F20D-4E0A-8BF2-46FD9107B264}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -11,10 +11,10 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{9E56034F-52DC-4D4A-AF82-5DC4FE1EA86E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{9E56034F-52DC-4D4A-AF82-5DC4FE1EA86E}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{9E56034F-52DC-4D4A-AF82-5DC4FE1EA86E}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{9E56034F-52DC-4D4A-AF82-5DC4FE1EA86E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D969CE45-F20D-4E0A-8BF2-46FD9107B264}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D969CE45-F20D-4E0A-8BF2-46FD9107B264}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D969CE45-F20D-4E0A-8BF2-46FD9107B264}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D969CE45-F20D-4E0A-8BF2-46FD9107B264}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
