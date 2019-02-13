@@ -2,7 +2,7 @@
 using System.IO;
 using OpenTK.Graphics.OpenGL4;
 
-namespace RTE.Engine
+namespace RTE.Engine.Shaders
 {
     abstract class Shader
     {

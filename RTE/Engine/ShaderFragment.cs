@@ -1,10 +1,11 @@
 ﻿using OpenTK.Graphics.OpenGL4;
+using RTE.Engine.Shaders;
 
 namespace RTE.Engine
 {
-    class FragmentShader : Shader
+    class ShaderFragment : Shader
     {
-        public FragmentShader(string shaderName)
+        public ShaderFragment(string shaderName)
             : base(shaderName)
         {
         }

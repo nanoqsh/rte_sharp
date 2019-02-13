@@ -1,6 +1,7 @@
 ﻿using System;
 using OpenTK;
 using OpenTK.Graphics.OpenGL4;
+using RTE.Engine.Shaders;
 
 namespace RTE.Engine
 {
@@ -21,8 +22,8 @@ namespace RTE.Engine
                 );
 
             shaderProgram = new ShaderProgram(
-                new VertexShader("defaultVertexShader.glsl"),
-                new FragmentShader("defaultFragmentShader.glsl")
+                new ShaderVertex("defaultVertexShader.glsl"),
+                new ShaderFragment("defaultFragmentShader.glsl")
                 );
 
             shaderProgram.AddUniforms(

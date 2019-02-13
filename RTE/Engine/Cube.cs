@@ -1,19 +1,21 @@
-﻿namespace RTE.Engine
+﻿using RTE.Engine.Vectors;
+
+namespace RTE.Engine
 {
     static class Cube
     {
-        public static ElementArrayObject<Vertex5> MakeIndexed()
+        public static ElementArrayObject<Vector5> MakeIndexed()
         {
-            return new ElementArrayObject<Vertex5>(
-                    new Vertex5(-0.5f, -0.5f, 0.5f, 0.0f, 0.0f),
-                    new Vertex5(0.5f, -0.5f, 0.5f, 0.0f, 1.0f),
-                    new Vertex5(0.5f, 0.5f, 0.5f, 1.0f, 1.0f),
-                    new Vertex5(-0.5f, 0.5f, 0.5f, 1.0f, 0.0f),
+            return new ElementArrayObject<Vector5>(
+                    new Vector5(-0.5f, -0.5f, 0.5f, 0.0f, 0.0f),
+                    new Vector5(0.5f, -0.5f, 0.5f, 0.0f, 1.0f),
+                    new Vector5(0.5f, 0.5f, 0.5f, 1.0f, 1.0f),
+                    new Vector5(-0.5f, 0.5f, 0.5f, 1.0f, 0.0f),
 
-                    new Vertex5(-0.5f, -0.5f, -0.5f, 1.0f, 1.0f),
-                    new Vertex5(0.5f, -0.5f, -0.5f, 1.0f, 0.0f),
-                    new Vertex5(0.5f, 0.5f, -0.5f, 0.0f, 0.0f),
-                    new Vertex5(-0.5f, 0.5f, -0.5f, 0.0f, 1.0f)
+                    new Vector5(-0.5f, -0.5f, -0.5f, 1.0f, 1.0f),
+                    new Vector5(0.5f, -0.5f, -0.5f, 1.0f, 0.0f),
+                    new Vector5(0.5f, 0.5f, -0.5f, 0.0f, 0.0f),
+                    new Vector5(-0.5f, 0.5f, -0.5f, 0.0f, 1.0f)
                 ).CreateElementBuffer(
                     0, 1, 2,
                     2, 3, 0,
@@ -35,50 +37,50 @@
                 );
         }
 
-        public static ArrayObject<Vertex5> Make()
+        public static ArrayObject<Vector5> Make()
         {
-            return new ArrayObject<Vertex5>(
-                new Vertex5(-0.5f, -0.5f, -0.5f, 0.0f, 0.0f),
-                new Vertex5(0.5f, -0.5f, -0.5f, 1.0f, 0.0f),
-                new Vertex5(0.5f, 0.5f, -0.5f, 1.0f, 1.0f),
-                new Vertex5(0.5f, 0.5f, -0.5f, 1.0f, 1.0f),
-                new Vertex5(-0.5f, 0.5f, -0.5f, 0.0f, 1.0f),
-                new Vertex5(-0.5f, -0.5f, -0.5f, 0.0f, 0.0f),
+            return new ArrayObject<Vector5>(
+                new Vector5(-0.5f, -0.5f, -0.5f, 0.0f, 0.0f),
+                new Vector5(0.5f, -0.5f, -0.5f, 1.0f, 0.0f),
+                new Vector5(0.5f, 0.5f, -0.5f, 1.0f, 1.0f),
+                new Vector5(0.5f, 0.5f, -0.5f, 1.0f, 1.0f),
+                new Vector5(-0.5f, 0.5f, -0.5f, 0.0f, 1.0f),
+                new Vector5(-0.5f, -0.5f, -0.5f, 0.0f, 0.0f),
 
-                new Vertex5(-0.5f, -0.5f, 0.5f, 0.0f, 0.0f),
-                new Vertex5(0.5f, -0.5f, 0.5f, 1.0f, 0.0f),
-                new Vertex5(0.5f, 0.5f, 0.5f, 1.0f, 1.0f),
-                new Vertex5(0.5f, 0.5f, 0.5f, 1.0f, 1.0f),
-                new Vertex5(-0.5f, 0.5f, 0.5f, 0.0f, 1.0f),
-                new Vertex5(-0.5f, -0.5f, 0.5f, 0.0f, 0.0f),
+                new Vector5(-0.5f, -0.5f, 0.5f, 0.0f, 0.0f),
+                new Vector5(0.5f, -0.5f, 0.5f, 1.0f, 0.0f),
+                new Vector5(0.5f, 0.5f, 0.5f, 1.0f, 1.0f),
+                new Vector5(0.5f, 0.5f, 0.5f, 1.0f, 1.0f),
+                new Vector5(-0.5f, 0.5f, 0.5f, 0.0f, 1.0f),
+                new Vector5(-0.5f, -0.5f, 0.5f, 0.0f, 0.0f),
 
-                new Vertex5(-0.5f, 0.5f, 0.5f, 1.0f, 0.0f),
-                new Vertex5(-0.5f, 0.5f, -0.5f, 1.0f, 1.0f),
-                new Vertex5(-0.5f, -0.5f, -0.5f, 0.0f, 1.0f),
-                new Vertex5(-0.5f, -0.5f, -0.5f, 0.0f, 1.0f),
-                new Vertex5(-0.5f, -0.5f, 0.5f, 0.0f, 0.0f),
-                new Vertex5(-0.5f, 0.5f, 0.5f, 1.0f, 0.0f),
+                new Vector5(-0.5f, 0.5f, 0.5f, 1.0f, 0.0f),
+                new Vector5(-0.5f, 0.5f, -0.5f, 1.0f, 1.0f),
+                new Vector5(-0.5f, -0.5f, -0.5f, 0.0f, 1.0f),
+                new Vector5(-0.5f, -0.5f, -0.5f, 0.0f, 1.0f),
+                new Vector5(-0.5f, -0.5f, 0.5f, 0.0f, 0.0f),
+                new Vector5(-0.5f, 0.5f, 0.5f, 1.0f, 0.0f),
 
-                new Vertex5(0.5f, 0.5f, 0.5f, 1.0f, 0.0f),
-                new Vertex5(0.5f, 0.5f, -0.5f, 1.0f, 1.0f),
-                new Vertex5(0.5f, -0.5f, -0.5f, 0.0f, 1.0f),
-                new Vertex5(0.5f, -0.5f, -0.5f, 0.0f, 1.0f),
-                new Vertex5(0.5f, -0.5f, 0.5f, 0.0f, 0.0f),
-                new Vertex5(0.5f, 0.5f, 0.5f, 1.0f, 0.0f),
+                new Vector5(0.5f, 0.5f, 0.5f, 1.0f, 0.0f),
+                new Vector5(0.5f, 0.5f, -0.5f, 1.0f, 1.0f),
+                new Vector5(0.5f, -0.5f, -0.5f, 0.0f, 1.0f),
+                new Vector5(0.5f, -0.5f, -0.5f, 0.0f, 1.0f),
+                new Vector5(0.5f, -0.5f, 0.5f, 0.0f, 0.0f),
+                new Vector5(0.5f, 0.5f, 0.5f, 1.0f, 0.0f),
 
-                new Vertex5(-0.5f, -0.5f, -0.5f, 0.0f, 1.0f),
-                new Vertex5(0.5f, -0.5f, -0.5f, 1.0f, 1.0f),
-                new Vertex5(0.5f, -0.5f, 0.5f, 1.0f, 0.0f),
-                new Vertex5(0.5f, -0.5f, 0.5f, 1.0f, 0.0f),
-                new Vertex5(-0.5f, -0.5f, 0.5f, 0.0f, 0.0f),
-                new Vertex5(-0.5f, -0.5f, -0.5f, 0.0f, 1.0f),
+                new Vector5(-0.5f, -0.5f, -0.5f, 0.0f, 1.0f),
+                new Vector5(0.5f, -0.5f, -0.5f, 1.0f, 1.0f),
+                new Vector5(0.5f, -0.5f, 0.5f, 1.0f, 0.0f),
+                new Vector5(0.5f, -0.5f, 0.5f, 1.0f, 0.0f),
+                new Vector5(-0.5f, -0.5f, 0.5f, 0.0f, 0.0f),
+                new Vector5(-0.5f, -0.5f, -0.5f, 0.0f, 1.0f),
 
-                new Vertex5(-0.5f, 0.5f, -0.5f, 0.0f, 1.0f),
-                new Vertex5(0.5f, 0.5f, -0.5f, 1.0f, 1.0f),
-                new Vertex5(0.5f, 0.5f, 0.5f, 1.0f, 0.0f),
-                new Vertex5(0.5f, 0.5f, 0.5f, 1.0f, 0.0f),
-                new Vertex5(-0.5f, 0.5f, 0.5f, 0.0f, 0.0f),
-                new Vertex5(-0.5f, 0.5f, -0.5f, 0.0f, 1.0f)
+                new Vector5(-0.5f, 0.5f, -0.5f, 0.0f, 1.0f),
+                new Vector5(0.5f, 0.5f, -0.5f, 1.0f, 1.0f),
+                new Vector5(0.5f, 0.5f, 0.5f, 1.0f, 0.0f),
+                new Vector5(0.5f, 0.5f, 0.5f, 1.0f, 0.0f),
+                new Vector5(-0.5f, 0.5f, 0.5f, 0.0f, 0.0f),
+                new Vector5(-0.5f, 0.5f, -0.5f, 0.0f, 1.0f)
                 );
         }
     }

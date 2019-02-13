@@ -1,10 +1,10 @@
 ﻿using OpenTK.Graphics.OpenGL4;
 
-namespace RTE.Engine
+namespace RTE.Engine.Shaders
 {
-    class VertexShader : Shader
+    class ShaderVertex : Shader
     {
-        public VertexShader(string shaderName)
+        public ShaderVertex(string shaderName)
             : base(shaderName)
         {
         }

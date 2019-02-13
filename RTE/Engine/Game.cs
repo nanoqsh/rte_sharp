@@ -4,6 +4,8 @@ using OpenTK;
 using OpenTK.Graphics;
 using OpenTK.Graphics.OpenGL4;
 using OpenTK.Input;
+using RTE.Engine.Shaders;
+using RTE.Engine.Vectors;
 
 namespace RTE.Engine
 {
@@ -12,7 +14,7 @@ namespace RTE.Engine
         public readonly string VideoVersion;
 
         private readonly ShaderProgram ShaderProgram;
-        private ArrayObject<Vertex5> cube;
+        private ArrayObject<Vector5> cube;
 
         private Postprocessor postprocessor;
         private readonly int pixelSize;
@@ -54,8 +56,8 @@ namespace RTE.Engine
             VideoVersion = GL.GetString(StringName.Version);
 
             ShaderProgram = new ShaderProgram(
-                new VertexShader("meshVS.glsl"),
-                new FragmentShader("meshFS.glsl")
+                new ShaderVertex("meshVS.glsl"),
+                new ShaderFragment("meshFS.glsl")
                 );
 
             ShaderProgram.AddUniforms(
@@ -107,11 +109,11 @@ namespace RTE.Engine
             string[] uniforms = new string[] { "color", "pixelSize", "tex", "projView", "model" };
             string res = "";
 
-            foreach (KeyValuePair<string, int> pair in ShaderProgram.GetAttributes(attributes))
-                res += pair.Key + ": " + pair.Value + "\n";
+            foreach ((string key, int value) in ShaderProgram.GetAttributes(attributes))
+                res += key + ": " + value + "\n";
 
-            foreach (KeyValuePair<string, int> pair in ShaderProgram.GetUniforms(uniforms))
-                res += pair.Key + ": " + pair.Value + "\n";
+            foreach ((string key, int value) in ShaderProgram.GetUniforms(uniforms))
+                res += key + ": " + value + "\n";
 
             foreach (Shader sh in ShaderProgram.Shaders)
                 res += sh.Name + ": " + sh.GetLogInfo();
