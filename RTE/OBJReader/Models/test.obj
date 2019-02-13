@@ -1,0 +1,83 @@
+
+# test
+                    # tabs
+            # spaces
+            
+            
+# new\
+lines
+            
+            
+o 1
+
+maplib foo.map bar.map
+mtllib mat1.mtl mat2.mtl
+
+usemap map_name
+usemap off
+
+# Vertex list
+
+v   -0.5\
+    -0.5\
+    0.5
+    
+v -0.5 -0.5 -0.5
+     v -0.5 0.5 -0.5
+    v -0.5 0.5 0.5 2
+   v 0.5 -0.5 0.5 0     
+v 0.5 -0.5 -0.5 0.0
+v 0.5 0.5 -0.5 .3     
+v 0.5 0.5 0.5 .4                    
+
+        # points
+ p 1
+   p 1 2
+  p 3 2 2
+                p 1 1 1
+
+# lines
+l 1 2   3
+l 1 2  1
+l 1 1
+l -2 -1
+
+# vp u [v] [w]
+vp .0
+vp 1.0 -1.0
+vp -2   .0   -0
+vp .6 .456    -0.123
+
+# vn i j k
+vn 0.5 0.5 0.5
+vn -0.5 -0.5 -0.5
+
+# smoothing group
+s off
+s 1
+
+# vt u [v] [w]
+vt 1.2
+vt .0 .0
+vt 1.0 -2 -0.2
+
+g front cube
+f 1 2 3 4
+g back cube
+f -1 -2 -3 -4
+
+mg 1 0.4
+mg off
+
+# Point/Line/Face list
+
+usemtl Default
+
+f 2/1 1/3 3/3 3/2
+f 1\
+  2\
+  2\
+  1
+f 1 3 1 2
+
+# End of file
