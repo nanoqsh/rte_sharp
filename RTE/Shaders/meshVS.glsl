@@ -11,7 +11,7 @@ out vec2 FSTexCoord;
 
 void main()
 {
-	FSTexCoord = texCoord;
+	FSTexCoord = vec2(texCoord.x, 1.0 - texCoord.y);
 	vec3 sized = coord - (1.0 - 1.0 / float(pixelSize));
 	gl_Position = projection * view * model * vec4(sized, 1.0);
 }

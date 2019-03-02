@@ -14,7 +14,8 @@ namespace RTE.Engine
         public readonly string VideoVersion;
 
         private readonly ShaderProgram ShaderProgram;
-        private ArrayObject<Vector5> cube;
+        // private ArrayObject<Vector5> cube;
+        private Model objModel;
 
         private Postprocessor postprocessor;
         private readonly int pixelSize;
@@ -167,10 +168,11 @@ namespace RTE.Engine
         {
             base.OnLoad(e);
 
-            cube = Cube.Make().AddAttributes(
-                new Attribute("coord", ShaderProgram.GetAttribute("coord"), 3, 5, 0),
-                new Attribute("texCoord", ShaderProgram.GetAttribute("texCoord"), 2, 5, 3)
-                );
+            //cube = Cube.Make().AddAttributes(
+            //    new Attribute("coord", ShaderProgram.GetAttribute("coord"), 3, 5, 0),
+            //    new Attribute("texCoord", ShaderProgram.GetAttribute("texCoord"), 2, 5, 3)
+            //    );
+            objModel = new Model("Wood.obj", ShaderProgram);
 
             postprocessor = new Postprocessor(ClientRectangle, pixelSize);
 
@@ -282,10 +284,12 @@ namespace RTE.Engine
                   ClearBufferMask.ColorBufferBit
                 | ClearBufferMask.DepthBufferBit
                 );
+
+            //ShaderProgram.Enable();
+            //cube.Draw();
+            //ShaderProgram.Disable();
             
-            ShaderProgram.Enable();
-            cube.Draw();
-            ShaderProgram.Disable();
+            objModel.Draw();
 
             //
             postprocessor.DrawFrame();
