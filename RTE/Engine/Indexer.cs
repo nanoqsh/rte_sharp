@@ -1,7 +1,7 @@
 using RTE.OBJReader.OBJFormat;
 using System.Collections.Generic;
 
-namespace OBJReader
+namespace RTE.Engine
 {
     public static class Indexer
     {
