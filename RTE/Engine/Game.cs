@@ -61,7 +61,7 @@ namespace RTE.Engine
                 );
 
             ShaderProgram.AddUniforms(
-                new UniformTexture("tex", new Texture("trapdoor.png"), 0),
+                new UniformTexture("tex", new Texture("BaseTexture.png"), 0),
                 new UniformInt("pixelSize", pixelSize),
                 new UniformColor("color", Color.Coral)
                 );
