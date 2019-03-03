@@ -46,7 +46,6 @@ namespace RTE.Engine
         public void Resize(Rectangle client)
         {
             frameBuffer.Dispose();
-            frameBuffer = null;
             frameBuffer = new FrameBuffer(
                 client.Width / PixelSize,
                 client.Height / PixelSize

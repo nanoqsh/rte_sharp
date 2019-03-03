@@ -5,7 +5,6 @@ using OpenTK.Graphics;
 using OpenTK.Graphics.OpenGL4;
 using OpenTK.Input;
 using RTE.Engine.Shaders;
-using RTE.Engine.Vectors;
 
 namespace RTE.Engine
 {
@@ -74,6 +73,7 @@ namespace RTE.Engine
                 );
 
             view = new UniformMatrix("view", camera.View);
+
             projection = new UniformMatrix(
                 "projection",
                 CreatePerspective(width / (float) height)
@@ -303,7 +303,9 @@ namespace RTE.Engine
 
             GL.Viewport(ClientRectangle);
 
-            projection.Matrix = CreatePerspective(ClientRectangle.Width / (float)ClientRectangle.Height);
+            projection.Matrix = CreatePerspective(
+                ClientRectangle.Width / (float)ClientRectangle.Height
+                );
 
             postprocessor.Resize(ClientRectangle);
         }
