@@ -27,34 +27,10 @@ namespace RTE.Engine
 
             DataObject data = objects.First();
 
-            List<Vector5> vertexData = new List<Vector5>();
+            MeshData meshData = new MeshData(data);
 
-            foreach (DataFace face in data.Faces)
-            {
-                for (int i = 0; i < face.Vertices.Length; i++)
-                {
-                    Vector5 vec = new Vector5(
-                        face.Vertices[i].Data[0],
-                        face.Vertices[i].Data[1],
-                        face.Vertices[i].Data[2],
-                        face.VertexTextures[i].Data[0],
-                        face.VertexTextures[i].Data[1]
-                        );
-
-                    vertexData.Add(vec);
-                }
-            }
-
-            List<IFaceUnit> faces = new List<IFaceUnit>();
-
-            foreach (DataFace face in data.Faces)
-            {
-                faces.AddRange(face.OBJFace.Units);
-            }
-
-            uint[] indexes = Indexer.GetIndexes(faces.ToArray()).ToArray();
-
-            arrayObject = new ArrayObject<Vector5>(vertexData.ToArray());
+            arrayObject = new ElementArrayObject<Vector5>(meshData.Vectors)
+                .CreateElementBuffer(meshData.Indexes);
 
             arrayObject.AddAttributes(
                 new Attribute("coord", shader.GetAttribute("coord"), 3, 5, 0),
