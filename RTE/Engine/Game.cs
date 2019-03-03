@@ -13,7 +13,7 @@ namespace RTE.Engine
         public readonly string VideoVersion;
 
         private readonly ShaderProgram ShaderProgram;
-        private Model objModel;
+        private Mesh mesh;
 
         private Postprocessor postprocessor;
         private readonly int pixelSize;
@@ -165,8 +165,8 @@ namespace RTE.Engine
         protected override void OnLoad(EventArgs e)
         {
             base.OnLoad(e);
-            
-            objModel = new Model("Stone.obj", ShaderProgram);
+
+            mesh = new Mesh("Block.obj", ShaderProgram);
 
             postprocessor = new Postprocessor(ClientRectangle, pixelSize);
 
@@ -278,8 +278,8 @@ namespace RTE.Engine
                   ClearBufferMask.ColorBufferBit
                 | ClearBufferMask.DepthBufferBit
                 );
-            
-            objModel.Draw();
+
+            mesh.Draw();
 
             //
             postprocessor.DrawFrame();
