@@ -62,7 +62,7 @@ namespace RTE.Engine
             GL.BindFramebuffer(FramebufferTarget.Framebuffer, Index);
         }
 
-        public static void Unbind()
+        public void Unbind()
         {
             GL.BindFramebuffer(FramebufferTarget.Framebuffer, 0);
         }

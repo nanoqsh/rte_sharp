@@ -10,7 +10,7 @@ namespace RTE
 
         private static void Main(string[] args)
         {
-            Game game = new Game(WIDTH, HEIGHT, "RTE", 1);
+            Game game = new Game(WIDTH, HEIGHT, "RTE", 2);
 
             Console.WriteLine(game.VideoVersion);
             Console.WriteLine(game.GetDebugInfo());

@@ -13,7 +13,6 @@ namespace RTE.Engine
         public readonly string VideoVersion;
 
         private readonly ShaderProgram ShaderProgram;
-        // private ArrayObject<Vector5> cube;
         private Model objModel;
 
         private Postprocessor postprocessor;
@@ -62,7 +61,6 @@ namespace RTE.Engine
 
             ShaderProgram.AddUniforms(
                 new UniformTexture("tex", new Texture("BaseTexture.png"), 0),
-                new UniformInt("pixelSize", pixelSize),
                 new UniformColor("color", Color.Coral)
                 );
 
@@ -167,12 +165,8 @@ namespace RTE.Engine
         protected override void OnLoad(EventArgs e)
         {
             base.OnLoad(e);
-
-            //cube = Cube.Make().AddAttributes(
-            //    new Attribute("coord", ShaderProgram.GetAttribute("coord"), 3, 5, 0),
-            //    new Attribute("texCoord", ShaderProgram.GetAttribute("texCoord"), 2, 5, 3)
-            //    );
-            objModel = new Model("Wood.obj", ShaderProgram);
+            
+            objModel = new Model("Stone.obj", ShaderProgram);
 
             postprocessor = new Postprocessor(ClientRectangle, pixelSize);
 
@@ -284,10 +278,6 @@ namespace RTE.Engine
                   ClearBufferMask.ColorBufferBit
                 | ClearBufferMask.DepthBufferBit
                 );
-
-            //ShaderProgram.Enable();
-            //cube.Draw();
-            //ShaderProgram.Disable();
             
             objModel.Draw();
 
@@ -301,13 +291,11 @@ namespace RTE.Engine
         {
             base.OnResize(e);
 
-            GL.Viewport(ClientRectangle);
+            postprocessor.Resize(ClientRectangle);
 
             projection.Matrix = CreatePerspective(
                 ClientRectangle.Width / (float)ClientRectangle.Height
                 );
-
-            postprocessor.Resize(ClientRectangle);
         }
     }
 }

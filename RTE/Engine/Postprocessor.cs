@@ -11,10 +11,12 @@ namespace RTE.Engine
         private readonly ArrayObject<Vector4> quad;
         private FrameBuffer frameBuffer;
         public readonly int PixelSize;
+        private Rectangle client;
 
         public Postprocessor(Rectangle client, int pixelSize = 1)
         {
             PixelSize = pixelSize;
+            this.client = client;
 
             frameBuffer = new FrameBuffer(
                 client.Width / pixelSize,
@@ -55,16 +57,25 @@ namespace RTE.Engine
             shaderProgram.AddUniforms(
                 new UniformTexture("tex", frameBuffer.Frame, 0)
                 );
+
+            this.client = client;
         }
 
         public void Bind()
         {
+            GL.Viewport(new Rectangle(
+                0,
+                0,
+                client.Width / PixelSize,
+                client.Height / PixelSize
+                ));
+
             frameBuffer.Bind();
         }
 
         public void Unbind()
         {
-            FrameBuffer.Unbind();
+            frameBuffer.Unbind();
         }
 
         public void DrawFrame()
@@ -72,7 +83,9 @@ namespace RTE.Engine
             bool isDepthEnabled = GL.IsEnabled(EnableCap.DepthTest);
             GL.Disable(EnableCap.DepthTest);
 
-            FrameBuffer.Unbind();
+            frameBuffer.Unbind();
+
+            GL.Viewport(client);
 
             GL.ClearColor(0.0f, 0.0f, 0.0f, 0.0f);
             GL.Clear(ClearBufferMask.ColorBufferBit);

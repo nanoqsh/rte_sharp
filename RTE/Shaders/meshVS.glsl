@@ -2,7 +2,6 @@
 attribute vec3 coord;
 attribute vec2 texCoord;
 
-uniform int pixelSize;
 uniform mat4 model;
 uniform mat4 projection;
 uniform mat4 view;
