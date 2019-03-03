@@ -29,8 +29,7 @@ namespace RTE.Engine
 
             MeshData meshData = new MeshData(data);
 
-            arrayObject = new ElementArrayObject<Vector5>(meshData.Vectors)
-                .CreateElementBuffer(meshData.Indexes);
+            arrayObject = new ArrayObject<Vector5>(meshData.Vectors);
 
             arrayObject.AddAttributes(
                 new Attribute("coord", shader.GetAttribute("coord"), 3, 5, 0),

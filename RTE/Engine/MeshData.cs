@@ -10,48 +10,31 @@ namespace RTE.Engine
     class MeshData
     {
         public Vector5[] Vectors;
-        public uint[] Indexes;
 
         public MeshData(DataObject data)
         {
             List<IFaceUnit> units = new List<IFaceUnit>();
+            List<Vector5> vectors = new List<Vector5>();
 
             foreach (DataFace face in data.Faces)
-                units.AddRange(face.OBJFace.Units);
+                for (int i = 0; i < face.OBJFace.Units.Count; i++)
+                    switch (face.OBJFace.Units[i])
+                    {
+                        case FaceUnitVTN vtn:
+                            vectors.Add(new Vector5(
+                                face.Vertices[i].Data[0],
+                                face.Vertices[i].Data[1],
+                                face.Vertices[i].Data[2],
+                                face.VertexTextures[i].Data[0],
+                                face.VertexTextures[i].Data[1]
+                                ));
+                            break;
 
-            Indexes = Indexer.GetIndexes(units.ToArray()).ToArray();
+                        default:
+                            throw new Exception("Unsupported type!");
+                    }
 
-            Vectors = new Vector5[Indexes.Max() + 1];
-
-            foreach (uint index in Indexes.Distinct())
-            {
-                FaceUnitVT face;
-
-                switch (units[(int) index])
-                {
-                    case FaceUnitVT vt:
-                        face = vt;
-                        break;
-
-                    case FaceUnitVTN vtn:
-                        face = new FaceUnitVT(vtn.V, vtn.T);
-                        break;
-
-                    default:
-                        throw new Exception("Not supported type!");
-                }
-
-                Vertex vertex = data.Vertices[face.V - 1];
-                VertexTexture vertexTexture = data.VertexTextures[face.T - 1];
-
-                Vectors[index] = new Vector5(
-                    vertex.Data[0],
-                    vertex.Data[1],
-                    vertex.Data[2],
-                    vertexTexture.Data[0],
-                    vertexTexture.Data[1]
-                    );
-            }
+            Vectors = vectors.ToArray();
         }
     }
 }
