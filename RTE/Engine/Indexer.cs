@@ -1,11 +1,15 @@
 using RTE.OBJReader.OBJFormat;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace RTE.Engine
 {
-    public static class Indexer
+    public class Indexer
     {
-        public static IEnumerable<uint> GetIndexes(IFaceUnit[] faces, uint start = 0)
+        public readonly uint[] Indexes;
+        public readonly IFaceUnit[] UniqueFaces;
+
+        public Indexer(IFaceUnit[] faces, uint start = 0)
         {
             Dictionary<IFaceUnit, uint> units = new Dictionary<IFaceUnit, uint>();
             uint index = start;
@@ -14,12 +18,12 @@ namespace RTE.Engine
                 if (!units.ContainsKey(unit))
                     units.Add(unit, index++);
 
-            uint[] indexes = new uint[faces.Length];
+            Indexes = new uint[faces.Length];
 
-            for (int i = 0; i < indexes.Length; i++)
-                indexes[i] = units[faces[i]];
+            for (int i = 0; i < Indexes.Length; i++)
+                Indexes[i] = units[faces[i]];
 
-            return indexes;
+            UniqueFaces = units.Keys.ToArray();
         }
     }
 }

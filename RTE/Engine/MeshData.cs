@@ -9,30 +9,43 @@ namespace RTE.Engine
 {
     class MeshData
     {
-        public Vector5[] Vectors;
+        public readonly Vector5[] Vectors;
+        public readonly uint[] Indexes;
 
         public MeshData(DataObject data)
         {
             List<IFaceUnit> units = new List<IFaceUnit>();
-            List<Vector5> vectors = new List<Vector5>();
 
             foreach (DataFace face in data.Faces)
-                for (int i = 0; i < face.OBJFace.Units.Count; i++)
-                    switch (face.OBJFace.Units[i])
-                    {
-                        case FaceUnitVTN vtn:
-                            vectors.Add(new Vector5(
-                                face.Vertices[i].Data[0],
-                                face.Vertices[i].Data[1],
-                                face.Vertices[i].Data[2],
-                                face.VertexTextures[i].Data[0],
-                                face.VertexTextures[i].Data[1]
-                                ));
-                            break;
+                foreach (IFaceUnit unit in face.OBJFace.Units)
+                    units.Add(unit);
 
-                        default:
-                            throw new Exception("Unsupported type!");
-                    }
+            Indexer indexer = new Indexer(units.ToArray());
+
+            Indexes = indexer.Indexes;
+
+
+            List<Vector5> vectors = new List<Vector5>();
+
+            foreach (IFaceUnit unit in indexer.UniqueFaces)
+                switch (unit)
+                {
+                    case FaceUnitVTN vtn:
+                        int v = vtn.V - 1;
+                        int t = vtn.T - 1;
+
+                        vectors.Add(new Vector5(
+                            data.Vertices[v].Data[0],
+                            data.Vertices[v].Data[1],
+                            data.Vertices[v].Data[2],
+                            data.VertexTextures[t].Data[0],
+                            data.VertexTextures[t].Data[1]
+                            ));
+                        break;
+
+                    default:
+                        throw new Exception("Unsupported type!");
+                }
 
             Vectors = vectors.ToArray();
         }
