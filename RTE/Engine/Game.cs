@@ -12,7 +12,7 @@ namespace RTE.Engine
     {
         public readonly string VideoVersion;
 
-        private readonly ShaderProgram ShaderProgram;
+        private readonly ShaderProgram MeshShaderProgram;
         private Mesh mesh;
 
         private Postprocessor postprocessor;
@@ -51,12 +51,12 @@ namespace RTE.Engine
 
             VideoVersion = GL.GetString(StringName.Version);
 
-            ShaderProgram = new ShaderProgram(
+            MeshShaderProgram = new ShaderProgram(
                 new ShaderVertex("meshVS.glsl"),
                 new ShaderFragment("meshFS.glsl")
                 );
 
-            ShaderProgram.AddUniforms(
+            MeshShaderProgram.AddUniforms(
                 new UniformTexture("tex", new Texture("BaseTexture.png"), 0),
                 new UniformColor("color", Color.Coral)
                 );
@@ -73,7 +73,7 @@ namespace RTE.Engine
                 CreatePerspective(width / (float) height)
                 );
             
-            ShaderProgram.AddUniforms(view, projection);
+            MeshShaderProgram.AddUniforms(view, projection);
 
             position = new Vector3(0.0f, 0.0f, 0.0f);
             rotation = new Vector3(0.0f, 0.0f, 0.0f);
@@ -85,7 +85,7 @@ namespace RTE.Engine
                 * Matrix4.CreateScale(scale);
 
             model = new UniformMatrix("model", matrix);
-            ShaderProgram.AddUniforms(model);
+            MeshShaderProgram.AddUniforms(model);
         }
 
         private static Matrix4 CreatePerspective(float aspect)
@@ -104,13 +104,13 @@ namespace RTE.Engine
             string[] uniforms = new string[] { "color", "pixelSize", "tex", "projView", "model" };
             string res = "";
 
-            foreach ((string key, int value) in ShaderProgram.GetAttributes(attributes))
+            foreach ((string key, int value) in MeshShaderProgram.GetAttributes(attributes))
                 res += key + ": " + value + "\n";
 
-            foreach ((string key, int value) in ShaderProgram.GetUniforms(uniforms))
+            foreach ((string key, int value) in MeshShaderProgram.GetUniforms(uniforms))
                 res += key + ": " + value + "\n";
 
-            foreach (Shader sh in ShaderProgram.Shaders)
+            foreach (Shader sh in MeshShaderProgram.Shaders)
                 res += sh.Name + ": " + sh.GetLogInfo();
 
             return res;
@@ -152,7 +152,7 @@ namespace RTE.Engine
         {
             base.OnLoad(e);
 
-            mesh = new Mesh("Block.obj", ShaderProgram);
+            mesh = new Mesh("Block.obj", MeshShaderProgram);
 
             postprocessor = new Postprocessor(ClientRectangle, pixelSize);
 
@@ -265,7 +265,9 @@ namespace RTE.Engine
                 | ClearBufferMask.DepthBufferBit
                 );
 
+            MeshShaderProgram.Enable();
             mesh.Draw();
+            MeshShaderProgram.Disable();
 
             //
             postprocessor.DrawFrame();

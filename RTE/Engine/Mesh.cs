@@ -12,7 +12,6 @@ namespace RTE.Engine
     class Mesh : IDisposable
     {
         private readonly ArrayObject<Vector5> arrayObject;
-        private readonly ShaderProgram shaderProgram;
 
         public Mesh(string meshName, ShaderProgram shader)
         {
@@ -27,8 +26,6 @@ namespace RTE.Engine
                     new Attribute("coord", shader.GetAttribute("coord"), 3, 5, 0),
                     new Attribute("texCoord", shader.GetAttribute("texCoord"), 2, 5, 3)
                     );
-
-            shaderProgram = shader;
         }
 
         private static IEnumerable<DataObject> ReadObjectsFromFile(string meshName)
@@ -49,9 +46,7 @@ namespace RTE.Engine
 
         public void Draw()
         {
-            shaderProgram.Enable();
             arrayObject.Draw();
-            shaderProgram.Disable();
         }
     }
 }
