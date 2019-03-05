@@ -13,11 +13,13 @@ namespace RTE.Engine
     {
         private readonly ArrayObject<Vector5> arrayObject;
 
-        public Mesh(string meshName, ShaderProgram shader)
+        public Mesh(string meshName)
         {
             DataObject data = ReadObjectsFromFile(meshName).First();
 
             MeshData meshData = new MeshData(data);
+
+            ShaderProgram shader = MeshRenderer.Instance.ShaderProgram;
 
             arrayObject = new ElementArrayObject<Vector5>(meshData.Vectors)
                 .CreateElementBuffer(meshData.Indexes)

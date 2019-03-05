@@ -11,18 +11,14 @@ namespace RTE.Engine
     {
         public readonly string VideoVersion;
 
-        private Postprocessor postprocessor;
-        private readonly int pixelSize;
-
         private readonly Camera camera;
 
         private readonly MousePosition mousePosition;
 
         private readonly HashSet<Key> pressedKeys = new HashSet<Key>();
-
-        private readonly MeshRenderer meshRenderer;
-        private Actor block;
+        
         private Actor actor;
+        private Scene scene;
 
         public Game(int width, int height, string title, int pixelSize = 1)
             : base(
@@ -33,7 +29,6 @@ namespace RTE.Engine
                   GameWindowFlags.Default
                   )
         {
-            this.pixelSize = pixelSize;
             VSync = VSyncMode.On;
             CursorVisible = false;
 
@@ -43,21 +38,18 @@ namespace RTE.Engine
 
             VideoVersion = GL.GetString(StringName.Version);
 
+            Viewport.Instance.SetPixelSize(pixelSize);
+
             camera = new Camera(
                 new Vector3(0.0f, 0.0f, -2.0f),
                 new Vector3(0.0f, 0.0f, -1.0f)
                 );
 
-            meshRenderer = new MeshRenderer()
+            MeshRenderer.Instance
                 .SetCamera(camera)
                 .SetPerspectiveAspect(
                     ClientRectangle.Width / (float)ClientRectangle.Height
                     );
-        }
-
-        public MeshRenderer GetMeshRenderer()
-        {
-            return meshRenderer;
         }
 
         private static void CheckOpenGLError()
@@ -95,18 +87,17 @@ namespace RTE.Engine
         protected override void OnLoad(EventArgs e)
         {
             base.OnLoad(e);
-            
+
+            Viewport.Instance
+                .Resize(ClientRectangle);
+
             actor = new Actor(
                 "actor",
-                meshRenderer.CreateMesh("Icosphere.obj")
+                new Mesh("Icosphere.obj")
                 );
 
-            block = new Actor(
-                "block",
-                meshRenderer.CreateMesh("Block.obj")
-                );
-
-            postprocessor = new Postprocessor(ClientRectangle, pixelSize);
+            scene = new Scene("main")
+                .AddActor(actor);
 
             GL.PolygonMode(MaterialFace.FrontAndBack, PolygonMode.Fill);
 
@@ -201,22 +192,7 @@ namespace RTE.Engine
         {
             base.OnRenderFrame(e);
 
-            //
-            postprocessor.Bind();
-
-            // Draw scene
-            GL.Enable(EnableCap.DepthTest);
-
-            GL.ClearColor(Color4.PowderBlue);
-            GL.Clear(
-                  ClearBufferMask.ColorBufferBit
-                | ClearBufferMask.DepthBufferBit
-                );
-
-            meshRenderer.Draw(actor, block);
-
-            //
-            postprocessor.DrawFrame();
+            scene.Draw();
 
             SwapBuffers();
         }
@@ -225,9 +201,9 @@ namespace RTE.Engine
         {
             base.OnResize(e);
 
-            postprocessor.Resize(ClientRectangle);
+            Viewport.Instance.Resize(ClientRectangle);
 
-            meshRenderer.SetPerspectiveAspect(
+            MeshRenderer.Instance.SetPerspectiveAspect(
                 ClientRectangle.Width / (float)ClientRectangle.Height
                 );
         }

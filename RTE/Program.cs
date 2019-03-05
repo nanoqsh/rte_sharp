@@ -10,7 +10,7 @@ namespace RTE
 
         private static void Main(string[] args)
         {
-            Game game = new Game(WIDTH, HEIGHT, "RTE", 2);
+            Game game = new Game(WIDTH, HEIGHT, "RTE", 1);
 
             string[] attributes = new string[]
             {
@@ -29,7 +29,7 @@ namespace RTE
             };
 
             Console.WriteLine(game.VideoVersion);
-            Console.WriteLine(game.GetMeshRenderer().GetDebugInfo(attributes, uniforms));
+            Console.WriteLine(MeshRenderer.Instance.GetDebugInfo(attributes, uniforms));
             
             game.Run(60);
         }

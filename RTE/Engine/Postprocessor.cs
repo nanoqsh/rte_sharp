@@ -10,18 +10,17 @@ namespace RTE.Engine
         private readonly ShaderProgram shaderProgram;
         private readonly ArrayObject<Vector4> quad;
         private FrameBuffer frameBuffer;
-        public readonly int PixelSize;
-        private Rectangle client;
 
-        public Postprocessor(Rectangle client, int pixelSize = 1)
+        public Postprocessor()
         {
-            PixelSize = pixelSize;
-            this.client = client;
+            Viewport viewport = Viewport.Instance;
 
             frameBuffer = new FrameBuffer(
-                client.Width / pixelSize,
-                client.Height / pixelSize
+                viewport.Size.Width / viewport.PixelSize,
+                viewport.Size.Height / viewport.PixelSize
                 );
+
+            viewport.OnResize += Resize;
 
             shaderProgram = new ShaderProgram(
                 new ShaderVertex("defaultVertexShader.glsl"),
@@ -48,26 +47,29 @@ namespace RTE.Engine
         public void Resize(Rectangle client)
         {
             frameBuffer.Dispose();
+
+            Viewport viewport = Viewport.Instance;
+
             frameBuffer = new FrameBuffer(
-                client.Width / PixelSize,
-                client.Height / PixelSize
+                viewport.Size.Width / viewport.PixelSize,
+                viewport.Size.Height / viewport.PixelSize
                 );
 
             shaderProgram.ClearUniforms();
             shaderProgram.AddUniforms(
                 new UniformTexture("tex", frameBuffer.Frame, 0)
                 );
-
-            this.client = client;
         }
 
         public void Bind()
         {
+            Viewport viewport = Viewport.Instance;
+
             GL.Viewport(new Rectangle(
                 0,
                 0,
-                client.Width / PixelSize,
-                client.Height / PixelSize
+                viewport.Size.Width / viewport.PixelSize,
+                viewport.Size.Height / viewport.PixelSize
                 ));
 
             frameBuffer.Bind();
@@ -85,7 +87,7 @@ namespace RTE.Engine
 
             frameBuffer.Unbind();
 
-            GL.Viewport(client);
+            GL.Viewport(Viewport.Instance.Size);
 
             shaderProgram.Enable();
             shaderProgram.BindUniforms();

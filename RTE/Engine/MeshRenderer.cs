@@ -9,18 +9,34 @@ namespace RTE.Engine
         private UniformMatrix view;
         private UniformMatrix projection;
 
-        private readonly ShaderProgram meshShaderProgram;
+        private readonly ShaderProgram shaderProgram;
+        public ShaderProgram ShaderProgram
+        {
+            get => shaderProgram;
+        }
 
         private Camera camera;
 
-        public MeshRenderer()
+        private static MeshRenderer instance;
+        public static MeshRenderer Instance
         {
-            meshShaderProgram = new ShaderProgram(
+            get
+            {
+                if (instance == null)
+                    instance = new MeshRenderer();
+
+                return instance;
+            }
+        }
+
+        private MeshRenderer()
+        {
+            shaderProgram = new ShaderProgram(
                 new ShaderVertex("meshVS.glsl"),
                 new ShaderFragment("meshFS.glsl")
                 );
 
-            meshShaderProgram.AddUniforms(
+            shaderProgram.AddUniforms(
                 new UniformTexture("tex", new Texture("BaseTexture.png"), 0),
                 new UniformColor("color", Color.Coral)
                 );
@@ -29,28 +45,23 @@ namespace RTE.Engine
             view = new UniformMatrix("view", Matrix4.Identity);
             projection = new UniformMatrix("projection", Matrix4.Identity);
 
-            meshShaderProgram.AddUniforms(model, view, projection);
+            shaderProgram.AddUniforms(model, view, projection);
         }
 
         public void Draw(params Actor[] actors)
         {
-            meshShaderProgram.Enable();
+            shaderProgram.Enable();
 
             view.Matrix = camera.View;
 
             foreach (Actor actor in actors)
             {
                 model.Matrix = actor.Transform.GetModel();
-                meshShaderProgram.BindUniforms();
+                shaderProgram.BindUniforms();
                 actor.Mesh.Draw();
             }
 
-            meshShaderProgram.Disable();
-        }
-
-        public Mesh CreateMesh(string meshName)
-        {
-            return new Mesh(meshName, meshShaderProgram);
+            shaderProgram.Disable();
         }
 
         public MeshRenderer SetPerspectiveAspect(float aspect)
@@ -76,13 +87,13 @@ namespace RTE.Engine
         {
             string res = "";
 
-            foreach ((string key, int value) in meshShaderProgram.GetAttributes(attributes))
+            foreach ((string key, int value) in shaderProgram.GetAttributes(attributes))
                 res += key + ": " + value + "\n";
 
-            foreach ((string key, int value) in meshShaderProgram.GetUniforms(uniforms))
+            foreach ((string key, int value) in shaderProgram.GetUniforms(uniforms))
                 res += key + ": " + value + "\n";
 
-            foreach (Shader sh in meshShaderProgram.Shaders)
+            foreach (Shader sh in shaderProgram.Shaders)
                 res += sh.Name + ": " + sh.GetLogInfo();
 
             return res;
