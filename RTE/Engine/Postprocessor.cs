@@ -87,9 +87,6 @@ namespace RTE.Engine
 
             GL.Viewport(client);
 
-            GL.ClearColor(0.0f, 0.0f, 0.0f, 0.0f);
-            GL.Clear(ClearBufferMask.ColorBufferBit);
-
             shaderProgram.Enable();
             quad.Draw();
             shaderProgram.Disable();

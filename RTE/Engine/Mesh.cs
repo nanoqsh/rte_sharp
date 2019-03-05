@@ -17,29 +17,30 @@ namespace RTE.Engine
 
         public Mesh(string meshName, ShaderProgram shader)
         {
+            DataObject data = ReadObjectsFromFile(meshName).First();
+
+            MeshData meshData = new MeshData(data);
+
+            arrayObject = new ElementArrayObject<Vector5>(meshData.Vectors)
+                .CreateElementBuffer(meshData.Indexes)
+                .SetDrawMode(DrawMode.Triangles)
+                .AddAttributes(
+                    new Attribute("coord", shader.GetAttribute("coord"), 3, 5, 0),
+                    new Attribute("texCoord", shader.GetAttribute("texCoord"), 2, 5, 3)
+                    );
+
+            shaderProgram = shader;
+        }
+
+        private static IEnumerable<DataObject> ReadObjectsFromFile(string meshName)
+        {
             string path = Environment.CurrentDirectory + "/Models/" + meshName;
 
             if (!File.Exists(path))
                 throw new FileNotFoundException($"File {path} not found!");
 
             string objText = File.ReadAllText(path);
-            IEnumerable<DataObject> objects = Reader.TextToObjects(objText);
-
-            DataObject data = objects.First();
-
-            MeshData meshData = new MeshData(data);
-
-            arrayObject = new ElementArrayObject<Vector5>(meshData.Vectors)
-                .CreateElementBuffer(meshData.Indexes);
-
-            arrayObject.AddAttributes(
-                new Attribute("coord", shader.GetAttribute("coord"), 3, 5, 0),
-                new Attribute("texCoord", shader.GetAttribute("texCoord"), 2, 5, 3)
-                );
-
-            arrayObject.SetDrawMode(DrawMode.Triangles);
-
-            shaderProgram = shader;
+            return Reader.TextToObjects(objText);
         }
 
         public void Dispose()

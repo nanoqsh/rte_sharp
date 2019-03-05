@@ -162,6 +162,13 @@ namespace RTE.Engine
             CheckOpenGLError();
         }
 
+        protected override void OnFocusedChanged(EventArgs e)
+        {
+            base.OnFocusedChanged(e);
+
+            mousePosition.Update();
+        }
+
         protected override void OnUpdateFrame(FrameEventArgs e)
         {
             base.OnUpdateFrame(e);
