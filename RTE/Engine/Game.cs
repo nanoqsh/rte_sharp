@@ -28,7 +28,7 @@ namespace RTE.Engine
 
         private readonly Camera camera;
 
-        private Vector2 lastMousePos;
+        private readonly MousePosition mousePosition;
 
         private readonly HashSet<Key> pressedKeys = new HashSet<Key>();
 
@@ -45,10 +45,7 @@ namespace RTE.Engine
             VSync = VSyncMode.On;
             CursorVisible = false;
 
-            lastMousePos = new Vector2(
-                Mouse.GetState().X,
-                Mouse.GetState().Y
-                );
+            mousePosition = new MousePosition();
 
             GL.Enable(EnableCap.Texture2D);
 
@@ -130,16 +127,6 @@ namespace RTE.Engine
                 );
         }
 
-        protected override void OnFocusedChanged(EventArgs e)
-        {
-            base.OnFocusedChanged(e);
-
-            lastMousePos = new Vector2(
-                Mouse.GetState().X,
-                Mouse.GetState().Y
-                );
-        }
-
         protected override void OnKeyDown(KeyboardKeyEventArgs e)
         {
             base.OnKeyDown(e);
@@ -183,16 +170,9 @@ namespace RTE.Engine
             {
                 const float sensitivity = 0.3f;
 
-                Vector2 mouse = new Vector2(
-                    Mouse.GetState().X,
-                    Mouse.GetState().Y
-                    );
+                Vector2 delta = mousePosition.Update();
 
-                Vector2 delta = lastMousePos - mouse;
-                
                 camera.Rotate(delta * sensitivity);
-
-                lastMousePos = mouse;
             }
 
 
