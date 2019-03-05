@@ -50,6 +50,8 @@ namespace RTE.Engine
 
         public void Draw(params Actor[] actors)
         {
+            Capabilities.Instance.DepthTest = true;
+
             shaderProgram.Enable();
 
             view.Matrix = camera.View;

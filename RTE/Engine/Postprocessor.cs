@@ -82,8 +82,7 @@ namespace RTE.Engine
 
         public void DrawFrame()
         {
-            bool isDepthEnabled = GL.IsEnabled(EnableCap.DepthTest);
-            GL.Disable(EnableCap.DepthTest);
+            Capabilities.Instance.DepthTest = false;
 
             frameBuffer.Unbind();
 
@@ -93,9 +92,6 @@ namespace RTE.Engine
             shaderProgram.BindUniforms();
             quad.Draw();
             shaderProgram.Disable();
-
-            if (isDepthEnabled)
-                GL.Enable(EnableCap.DepthTest);
         }
     }
 }

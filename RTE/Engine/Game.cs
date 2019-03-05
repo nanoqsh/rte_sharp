@@ -91,15 +91,25 @@ namespace RTE.Engine
             Viewport.Instance
                 .Resize(ClientRectangle);
 
-            actor = new Actor(
-                "actor",
-                new Mesh("Icosphere.obj")
-                );
-
             scene = new Scene("main")
-                .AddActor(actor);
+                .AddActor(new Actor(
+                    "actor",
+                    new Mesh("Icosphere.obj")
+                    ))
+                .AddActor(new Actor(
+                    "block",
+                    new Mesh("Block.obj"),
+                    new Transform(new Vector3(4, 0, 0), new Vector3(0, 0.1f, 0.6f))
+                    ))
+                .AddActor(new Actor(
+                    "block2",
+                    new Mesh("Block.obj"),
+                    new Transform(new Vector3(2, 1, 2), new Vector3(0.4f, 0, -0.6f))
+                    ));
 
-            GL.PolygonMode(MaterialFace.FrontAndBack, PolygonMode.Fill);
+            actor = scene.GetActor("actor");
+
+            GL.PolygonMode(MaterialFace.Front, PolygonMode.Fill);
 
             CheckOpenGLError();
         }
