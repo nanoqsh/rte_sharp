@@ -61,7 +61,6 @@ namespace RTE.Engine
                 new UniformColor("color", Color.Coral)
                 );
 
-
             camera = new Camera(
                 new Vector3(0.0f, 0.0f, -2.0f),
                 new Vector3(0.0f, 0.0f, -1.0f)

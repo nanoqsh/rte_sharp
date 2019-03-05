@@ -2,7 +2,6 @@
 using RTE.Engine.Vectors;
 using RTE.OBJReader;
 using RTE.OBJReader.Data;
-using RTE.OBJReader.OBJFormat;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -12,8 +11,8 @@ namespace RTE.Engine
 {
     class Mesh : IDisposable
     {
-        private ArrayObject<Vector5> arrayObject;
-        private ShaderProgram shaderProgram;
+        private readonly ArrayObject<Vector5> arrayObject;
+        private readonly ShaderProgram shaderProgram;
 
         public Mesh(string meshName, ShaderProgram shader)
         {
