@@ -12,8 +12,24 @@ namespace RTE
         {
             Game game = new Game(WIDTH, HEIGHT, "RTE", 2);
 
+            string[] attributes = new string[]
+            {
+                "coord",
+                "texCoord"
+            };
+
+            string[] uniforms = new string[]
+            {
+                "color",
+                "pixelSize",
+                "tex",
+                "projection",
+                "view",
+                "model"
+            };
+
             Console.WriteLine(game.VideoVersion);
-            Console.WriteLine(game.GetDebugInfo());
+            Console.WriteLine(game.GetMeshRenderer().GetDebugInfo(attributes, uniforms));
             
             game.Run(60);
         }

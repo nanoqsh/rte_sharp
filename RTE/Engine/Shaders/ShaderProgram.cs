@@ -84,7 +84,10 @@ namespace RTE.Engine.Shaders
         public void Enable()
         {
             GL.UseProgram(Index);
+        }
 
+        public void BindUniforms()
+        {
             foreach (KeyValuePair<int, Uniform> pair in uniforms)
                 pair.Value.Bind(pair.Key);
         }

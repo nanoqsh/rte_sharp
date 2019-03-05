@@ -88,6 +88,7 @@ namespace RTE.Engine
             GL.Viewport(client);
 
             shaderProgram.Enable();
+            shaderProgram.BindUniforms();
             quad.Draw();
             shaderProgram.Disable();
 

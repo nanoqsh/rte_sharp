@@ -4,7 +4,6 @@ using OpenTK;
 using OpenTK.Graphics;
 using OpenTK.Graphics.OpenGL4;
 using OpenTK.Input;
-using RTE.Engine.Shaders;
 
 namespace RTE.Engine
 {
@@ -12,19 +11,8 @@ namespace RTE.Engine
     {
         public readonly string VideoVersion;
 
-        private readonly ShaderProgram MeshShaderProgram;
-        private Mesh mesh;
-
         private Postprocessor postprocessor;
         private readonly int pixelSize;
-
-        private readonly UniformMatrix model;
-        private readonly UniformMatrix view;
-        private readonly UniformMatrix projection;
-
-        private Vector3 position;
-        private Vector3 rotation;
-        private Vector3 scale;
 
         private readonly Camera camera;
 
@@ -32,8 +20,12 @@ namespace RTE.Engine
 
         private readonly HashSet<Key> pressedKeys = new HashSet<Key>();
 
-        public Game(int width, int height, string title, int pixelSize = 1) :
-            base(
+        private readonly MeshRenderer meshRenderer;
+        private Actor block;
+        private Actor actor;
+
+        public Game(int width, int height, string title, int pixelSize = 1)
+            : base(
                   width,
                   height,
                   new GraphicsMode(new ColorFormat(32), 8),
@@ -51,69 +43,21 @@ namespace RTE.Engine
 
             VideoVersion = GL.GetString(StringName.Version);
 
-            MeshShaderProgram = new ShaderProgram(
-                new ShaderVertex("meshVS.glsl"),
-                new ShaderFragment("meshFS.glsl")
-                );
-
-            MeshShaderProgram.AddUniforms(
-                new UniformTexture("tex", new Texture("BaseTexture.png"), 0),
-                new UniformColor("color", Color.Coral)
-                );
-
             camera = new Camera(
                 new Vector3(0.0f, 0.0f, -2.0f),
                 new Vector3(0.0f, 0.0f, -1.0f)
                 );
 
-            view = new UniformMatrix("view", camera.View);
-
-            projection = new UniformMatrix(
-                "projection",
-                CreatePerspective(width / (float) height)
-                );
-            
-            MeshShaderProgram.AddUniforms(view, projection);
-
-            position = new Vector3(0.0f, 0.0f, 0.0f);
-            rotation = new Vector3(0.0f, 0.0f, 0.0f);
-            scale = new Vector3(1.0f, 1.0f, 1.0f);
-
-            Matrix4 matrix =
-                  Matrix4.CreateTranslation(position)
-                * Matrix4.CreateFromQuaternion(new Quaternion(rotation))
-                * Matrix4.CreateScale(scale);
-
-            model = new UniformMatrix("model", matrix);
-            MeshShaderProgram.AddUniforms(model);
+            meshRenderer = new MeshRenderer()
+                .SetCamera(camera)
+                .SetPerspectiveAspect(
+                    ClientRectangle.Width / (float)ClientRectangle.Height
+                    );
         }
 
-        private static Matrix4 CreatePerspective(float aspect)
+        public MeshRenderer GetMeshRenderer()
         {
-            return Matrix4.CreatePerspectiveFieldOfView(
-                1.6f,
-                aspect,
-                0.1f,
-                100.0f
-                );
-        }
-
-        public string GetDebugInfo()
-        {
-            string[] attributes = new string[] { "coord", "texCoord" };
-            string[] uniforms = new string[] { "color", "pixelSize", "tex", "projView", "model" };
-            string res = "";
-
-            foreach ((string key, int value) in MeshShaderProgram.GetAttributes(attributes))
-                res += key + ": " + value + "\n";
-
-            foreach ((string key, int value) in MeshShaderProgram.GetUniforms(uniforms))
-                res += key + ": " + value + "\n";
-
-            foreach (Shader sh in MeshShaderProgram.Shaders)
-                res += sh.Name + ": " + sh.GetLogInfo();
-
-            return res;
+            return meshRenderer;
         }
 
         private static void CheckOpenGLError()
@@ -151,8 +95,16 @@ namespace RTE.Engine
         protected override void OnLoad(EventArgs e)
         {
             base.OnLoad(e);
+            
+            actor = new Actor(
+                "actor",
+                meshRenderer.CreateMesh("Icosphere.obj")
+                );
 
-            mesh = new Mesh("Block.obj", MeshShaderProgram);
+            block = new Actor(
+                "block",
+                meshRenderer.CreateMesh("Block.obj")
+                );
 
             postprocessor = new Postprocessor(ClientRectangle, pixelSize);
 
@@ -191,62 +143,58 @@ namespace RTE.Engine
                 camera.Move(cameraSpeed * -camera.Front);
 
             if (pressedKeys.Contains(Key.A))
-                camera.Move(-Vector3.Normalize(Vector3.Cross(camera.Front, Vector3.UnitY)) * cameraSpeed);
+                camera.Move(-Vector3.Normalize(
+                    Vector3.Cross(camera.Front, Vector3.UnitY)) * cameraSpeed
+                    );
 
             if (pressedKeys.Contains(Key.D))
-                camera.Move(Vector3.Normalize(Vector3.Cross(camera.Front, Vector3.UnitY)) * cameraSpeed);
+                camera.Move(Vector3.Normalize(
+                    Vector3.Cross(camera.Front, Vector3.UnitY)) * cameraSpeed
+                    );
 
 
             const float rotationSpeed = 0.1f;
 
             if (pressedKeys.Contains(Key.Number1))
-                rotation.X = rotation.X + rotationSpeed;
+                actor.Transform.Rotation.X += rotationSpeed;
 
             if (pressedKeys.Contains(Key.Number2))
-                rotation.X -= rotationSpeed;
+                actor.Transform.Rotation.X -= rotationSpeed;
 
             if (pressedKeys.Contains(Key.Number3))
-                rotation.Y += rotationSpeed;
+                actor.Transform.Rotation.Y += rotationSpeed;
 
             if (pressedKeys.Contains(Key.Number4))
-                rotation.Y -= rotationSpeed;
+                actor.Transform.Rotation.Y -= rotationSpeed;
 
             if (pressedKeys.Contains(Key.Number5))
-                rotation.Z += rotationSpeed;
+                actor.Transform.Rotation.Z += rotationSpeed;
 
             if (pressedKeys.Contains(Key.Number6))
-                rotation.Z -= rotationSpeed;
+                actor.Transform.Rotation.Z -= rotationSpeed;
 
             const float scaleSpeed = 0.1f;
 
             if (pressedKeys.Contains(Key.Z))
-                scale.X += scaleSpeed;
+                actor.Transform.Scale.X += scaleSpeed;
 
             if (pressedKeys.Contains(Key.X))
-                scale.X -= scaleSpeed;
+                actor.Transform.Scale.X -= scaleSpeed;
 
             const float positionSpeed = 0.1f;
 
             if (pressedKeys.Contains(Key.T))
-                position.Z -= positionSpeed;
+                actor.Transform.Position.Z -= positionSpeed;
 
             if (pressedKeys.Contains(Key.G))
-                position.Z += positionSpeed;
+                actor.Transform.Position.Z += positionSpeed;
 
             if (pressedKeys.Contains(Key.F))
-                position.X += positionSpeed;
+                actor.Transform.Position.X += positionSpeed;
 
             if (pressedKeys.Contains(Key.H))
-                position.X -= positionSpeed;
-            
+                actor.Transform.Position.X -= positionSpeed;
 
-            model.Matrix =
-                  Matrix4.CreateScale(scale)
-                * Matrix4.CreateFromQuaternion(new Quaternion(rotation))
-                * Matrix4.CreateTranslation(position);
-
-            
-            view.Matrix = camera.View;
         }
 
         protected override void OnRenderFrame(FrameEventArgs e)
@@ -265,9 +213,7 @@ namespace RTE.Engine
                 | ClearBufferMask.DepthBufferBit
                 );
 
-            MeshShaderProgram.Enable();
-            mesh.Draw();
-            MeshShaderProgram.Disable();
+            meshRenderer.Draw(actor, block);
 
             //
             postprocessor.DrawFrame();
@@ -281,7 +227,7 @@ namespace RTE.Engine
 
             postprocessor.Resize(ClientRectangle);
 
-            projection.Matrix = CreatePerspective(
+            meshRenderer.SetPerspectiveAspect(
                 ClientRectangle.Width / (float)ClientRectangle.Height
                 );
         }
