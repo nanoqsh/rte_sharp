@@ -156,46 +156,51 @@ namespace RTE.Engine
 
             const float rotationSpeed = 0.1f;
 
+            Transform tr = actor.Transform;
+
             if (pressedKeys.Contains(Key.Number1))
-                actor.Transform.Rotation.X += rotationSpeed;
+                tr.RotateByX(rotationSpeed);
 
             if (pressedKeys.Contains(Key.Number2))
-                actor.Transform.Rotation.X -= rotationSpeed;
+                tr.RotateByX(-rotationSpeed);
 
             if (pressedKeys.Contains(Key.Number3))
-                actor.Transform.Rotation.Y += rotationSpeed;
+                tr.RotateByY(rotationSpeed);
 
             if (pressedKeys.Contains(Key.Number4))
-                actor.Transform.Rotation.Y -= rotationSpeed;
+                tr.RotateByY(-rotationSpeed);
 
             if (pressedKeys.Contains(Key.Number5))
-                actor.Transform.Rotation.Z += rotationSpeed;
+                tr.RotateByZ(rotationSpeed);
 
             if (pressedKeys.Contains(Key.Number6))
-                actor.Transform.Rotation.Z -= rotationSpeed;
+                tr.RotateByZ(-rotationSpeed);
 
             const float scaleSpeed = 0.1f;
 
             if (pressedKeys.Contains(Key.Z))
-                actor.Transform.Scale.X += scaleSpeed;
+                tr.ScaleByX(scaleSpeed);
 
             if (pressedKeys.Contains(Key.X))
-                actor.Transform.Scale.X -= scaleSpeed;
+                tr.ScaleByX(-scaleSpeed);
 
             const float positionSpeed = 0.1f;
 
+            Vector3 movePos = new Vector3();
+
             if (pressedKeys.Contains(Key.T))
-                actor.Transform.Position.Z -= positionSpeed;
+                movePos.Z = positionSpeed;
 
             if (pressedKeys.Contains(Key.G))
-                actor.Transform.Position.Z += positionSpeed;
+                movePos.Z = -positionSpeed;
 
             if (pressedKeys.Contains(Key.F))
-                actor.Transform.Position.X += positionSpeed;
+                movePos.X = positionSpeed;
 
             if (pressedKeys.Contains(Key.H))
-                actor.Transform.Position.X -= positionSpeed;
+                movePos.X = -positionSpeed;
 
+            tr.Move(movePos);
         }
 
         protected override void OnRenderFrame(FrameEventArgs e)

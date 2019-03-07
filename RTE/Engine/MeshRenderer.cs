@@ -65,7 +65,7 @@ namespace RTE.Engine
 
             shaderProgram.Enable();
 
-            // reverse matrix multiplication order (;_;)
+            // Reversed order of matrix multiplication (;_;)
             projView.Matrix = camera.View * projection;
 
             shaderProgram.BindUniform(projViewUniformKey);
