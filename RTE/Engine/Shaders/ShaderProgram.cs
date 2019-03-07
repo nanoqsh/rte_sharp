@@ -60,7 +60,7 @@ namespace RTE.Engine.Shaders
             return GL.GetAttribLocation(Index, name);
         }
 
-        public int GetUniform(string name)
+        public int GetUniformKey(string name)
         {
             return GL.GetUniformLocation(Index, name);
         }
@@ -69,7 +69,7 @@ namespace RTE.Engine.Shaders
         {
             foreach (Uniform uniform in uniforms)
             {
-                int key = GetUniform(uniform.Name);
+                int key = GetUniformKey(uniform.Name);
 
                 if (key >= 0)
                     this.uniforms.Add(key, uniform);
@@ -90,6 +90,11 @@ namespace RTE.Engine.Shaders
         {
             foreach (KeyValuePair<int, Uniform> pair in uniforms)
                 pair.Value.Bind(pair.Key);
+        }
+
+        public void BindUniform(int uniformKey)
+        {
+            uniforms[uniformKey].Bind(uniformKey);
         }
 
         public void Disable()

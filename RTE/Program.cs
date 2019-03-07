@@ -21,10 +21,8 @@ namespace RTE
             string[] uniforms = new string[]
             {
                 "color",
-                "pixelSize",
                 "tex",
-                "projection",
-                "view",
+                "projView",
                 "model"
             };
 

@@ -1,13 +1,18 @@
 ﻿using OpenTK;
 using RTE.Engine.Shaders;
+using System;
 
 namespace RTE.Engine
 {
     class MeshRenderer
     {
         private UniformMatrix model;
-        private UniformMatrix view;
-        private UniformMatrix projection;
+        private UniformMatrix projView;
+        private Matrix4 projection;
+
+        private int modelUniformKey;
+        private int projViewUniformKey;
+        private int texUniformKey;
 
         private readonly ShaderProgram shaderProgram;
         public ShaderProgram ShaderProgram
@@ -36,16 +41,22 @@ namespace RTE.Engine
                 new ShaderFragment("meshFS.glsl")
                 );
 
-            shaderProgram.AddUniforms(
-                new UniformTexture("tex", new Texture("BaseTexture.png"), 0),
-                new UniformColor("color", Color.Coral)
+            UniformTexture texUniform = new UniformTexture(
+                "tex",
+                new Texture("BaseTexture.png"),
+                0
                 );
 
-            model = new UniformMatrix("model", Matrix4.Identity);
-            view = new UniformMatrix("view", Matrix4.Identity);
-            projection = new UniformMatrix("projection", Matrix4.Identity);
+            shaderProgram.AddUniforms(texUniform);
 
-            shaderProgram.AddUniforms(model, view, projection);
+            model = new UniformMatrix("model", Matrix4.Identity);
+            projView = new UniformMatrix("projView", Matrix4.Identity);
+
+            shaderProgram.AddUniforms(model, projView);
+
+            modelUniformKey = shaderProgram.GetUniformKey(model.Name);
+            projViewUniformKey = shaderProgram.GetUniformKey(projView.Name);
+            texUniformKey = shaderProgram.GetUniformKey(texUniform.Name);
         }
 
         public void Draw(params Actor[] actors)
@@ -54,12 +65,16 @@ namespace RTE.Engine
 
             shaderProgram.Enable();
 
-            view.Matrix = camera.View;
+            // reverse matrix multiplication order (;_;)
+            projView.Matrix = camera.View * projection;
+
+            shaderProgram.BindUniform(projViewUniformKey);
+            shaderProgram.BindUniform(texUniformKey);
 
             foreach (Actor actor in actors)
             {
                 model.Matrix = actor.Transform.GetModel();
-                shaderProgram.BindUniforms();
+                shaderProgram.BindUniform(modelUniformKey);
                 actor.Mesh.Draw();
             }
 
@@ -68,7 +83,7 @@ namespace RTE.Engine
 
         public MeshRenderer SetPerspectiveAspect(float aspect)
         {
-            projection.Matrix = Matrix4.CreatePerspectiveFieldOfView(
+            projection = Matrix4.CreatePerspectiveFieldOfView(
                 1.6f,
                 aspect,
                 0.1f,
