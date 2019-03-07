@@ -48,7 +48,13 @@ namespace RTE.Engine
 
         public Transform SetPosition(float x, float y, float z)
         {
-            return SetPosition(new Vector3(x, y, z));
+            position.X = x;
+            position.Y = y;
+            position.Z = z;
+
+            isModified = true;
+
+            return this;
         }
 
         public Transform SetPosition(Vector3 position)
@@ -62,7 +68,13 @@ namespace RTE.Engine
 
         public Transform Move(float x, float y, float z)
         {
-            return Move(new Vector3(x, y, z));
+            position.X += x;
+            position.Y += y;
+            position.Z += z;
+
+            isModified = true;
+
+            return this;
         }
 
         public Transform Move(Vector3 position)
@@ -76,7 +88,20 @@ namespace RTE.Engine
 
         public Transform SetRotation(float x, float y, float z)
         {
-            return SetRotation(new Quaternion(x, y, z));
+            rotation = new Quaternion(x, y, z);
+
+            isModified = true;
+
+            return this;
+        }
+
+        public Transform SetRotation(Vector3 rotation)
+        {
+            this.rotation = new Quaternion(rotation);
+
+            isModified = true;
+
+            return this;
         }
 
         public Transform SetRotation(Quaternion rotation)
@@ -88,27 +113,36 @@ namespace RTE.Engine
             return this;
         }
 
-        public Transform RotateByX(float angle)
+        public Transform RotateByX(float radians)
         {
-            rotation *= new Quaternion(angle, 0, 0);
+            rotation *= new Quaternion(radians, 0, 0);
+
+            isModified = true;
+
+            return this;
+        }
+        
+        public Transform RotateByY(float radians)
+        {
+            rotation *= new Quaternion(0, radians, 0);
 
             isModified = true;
 
             return this;
         }
 
-        public Transform RotateByY(float angle)
+        public Transform RotateByZ(float radians)
         {
-            rotation *= new Quaternion(0, angle, 0);
+            rotation *= new Quaternion(0, 0, radians);
 
             isModified = true;
 
             return this;
         }
 
-        public Transform RotateByZ(float angle)
+        public Transform RotateAroundAxis(Vector3 axis, float radians)
         {
-            rotation *= new Quaternion(0, 0, angle);
+            rotation *= Quaternion.FromAxisAngle(axis, radians);
 
             isModified = true;
 
@@ -117,7 +151,13 @@ namespace RTE.Engine
 
         public Transform SetScale(float x, float y, float z)
         {
-            return SetScale(new Vector3(x, y, z));
+            scale.X = x;
+            scale.Y = y;
+            scale.Z = z;
+
+            isModified = true;
+
+            return this;
         }
 
         public Transform SetScale(Vector3 scale)
