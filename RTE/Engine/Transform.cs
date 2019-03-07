@@ -10,8 +10,8 @@ namespace RTE.Engine
             get => position;
         }
 
-        private Vector3 rotation;
-        public Vector3 Rotation
+        private Quaternion rotation;
+        public Quaternion Rotation
         {
             get => rotation;
         }
@@ -26,24 +26,29 @@ namespace RTE.Engine
         private Matrix4 model;
 
         public Transform()
-            : this(Vector3.Zero, Vector3.Zero, Vector3.One)
+            : this(Vector3.Zero, Quaternion.Identity, Vector3.One)
         { }
 
         public Transform(Vector3 position)
-            : this(position, Vector3.Zero, Vector3.One)
+            : this(position, Quaternion.Identity, Vector3.One)
         { }
 
-        public Transform(Vector3 position, Vector3 rotation)
+        public Transform(Vector3 position, Quaternion rotation)
             : this(position, rotation, Vector3.One)
         { }
 
-        public Transform(Vector3 position, Vector3 rotation, Vector3 scale)
+        public Transform(Vector3 position, Quaternion rotation, Vector3 scale)
         {
             this.position = position;
             this.rotation = rotation;
             this.scale = scale;
 
             isModified = true;
+        }
+
+        public Transform SetPosition(float x, float y, float z)
+        {
+            return SetPosition(new Vector3(x, y, z));
         }
 
         public Transform SetPosition(Vector3 position)
@@ -55,6 +60,11 @@ namespace RTE.Engine
             return this;
         }
 
+        public Transform Move(float x, float y, float z)
+        {
+            return Move(new Vector3(x, y, z));
+        }
+
         public Transform Move(Vector3 position)
         {
             this.position += position;
@@ -64,7 +74,12 @@ namespace RTE.Engine
             return this;
         }
 
-        public Transform SetRotation(Vector3 rotation)
+        public Transform SetRotation(float x, float y, float z)
+        {
+            return SetRotation(new Quaternion(x, y, z));
+        }
+
+        public Transform SetRotation(Quaternion rotation)
         {
             this.rotation = rotation;
 
@@ -75,7 +90,7 @@ namespace RTE.Engine
 
         public Transform RotateByX(float angle)
         {
-            rotation.X += angle;
+            rotation *= new Quaternion(angle, 0, 0);
 
             isModified = true;
 
@@ -84,7 +99,7 @@ namespace RTE.Engine
 
         public Transform RotateByY(float angle)
         {
-            rotation.Y += angle;
+            rotation *= new Quaternion(0, angle, 0);
 
             isModified = true;
 
@@ -93,11 +108,16 @@ namespace RTE.Engine
 
         public Transform RotateByZ(float angle)
         {
-            rotation.Z += angle;
+            rotation *= new Quaternion(0, 0, angle);
 
             isModified = true;
 
             return this;
+        }
+
+        public Transform SetScale(float x, float y, float z)
+        {
+            return SetScale(new Vector3(x, y, z));
         }
 
         public Transform SetScale(Vector3 scale)
@@ -141,7 +161,7 @@ namespace RTE.Engine
             if (isModified)
                 model =
                       Matrix4.CreateScale(scale)
-                    * Matrix4.CreateFromQuaternion(new Quaternion(rotation))
+                    * Matrix4.CreateFromQuaternion(rotation)
                     * Matrix4.CreateTranslation(position);
 
             return model;

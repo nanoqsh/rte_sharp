@@ -99,12 +99,12 @@ namespace RTE.Engine
                 .AddActor(new Actor(
                     "block",
                     new Mesh("Block.obj"),
-                    new Transform(new Vector3(4, 0, 0), new Vector3(0, 0.1f, 0.6f))
+                    new Transform(new Vector3(4, 0, 0), new Quaternion(0, 0.1f, 0.6f))
                     ))
                 .AddActor(new Actor(
                     "block2",
                     new Mesh("Block.obj"),
-                    new Transform(new Vector3(2, 1, 2), new Vector3(0.4f, 0, -0.6f))
+                    new Transform(new Vector3(2, 1, 2), new Quaternion(0.4f, 0, -0.6f))
                     ));
 
             actor = scene.GetActor("actor");
