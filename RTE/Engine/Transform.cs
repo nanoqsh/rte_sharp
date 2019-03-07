@@ -204,6 +204,8 @@ namespace RTE.Engine
                     * Matrix4.CreateFromQuaternion(rotation)
                     * Matrix4.CreateTranslation(position);
 
+            isModified = false;
+
             return model;
         }
     }
