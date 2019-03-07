@@ -109,6 +109,8 @@ namespace RTE.Engine
 
             actor = scene.GetActor("actor");
 
+            scene.SceneLight = new SceneLight(Color4.Coral);
+
             GL.PolygonMode(MaterialFace.Front, PolygonMode.Fill);
 
             CheckOpenGLError();
@@ -183,24 +185,7 @@ namespace RTE.Engine
 
             if (pressedKeys.Contains(Key.X))
                 tr.ScaleByX(-scaleSpeed);
-
-            const float positionSpeed = 0.1f;
-
-            Vector3 movePos = new Vector3();
-
-            if (pressedKeys.Contains(Key.T))
-                movePos.Z = positionSpeed;
-
-            if (pressedKeys.Contains(Key.G))
-                movePos.Z = -positionSpeed;
-
-            if (pressedKeys.Contains(Key.F))
-                movePos.X = positionSpeed;
-
-            if (pressedKeys.Contains(Key.H))
-                movePos.X = -positionSpeed;
-
-            tr.Move(movePos);
+            
         }
 
         protected override void OnRenderFrame(FrameEventArgs e)

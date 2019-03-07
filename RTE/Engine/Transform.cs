@@ -1,4 +1,5 @@
 ﻿using OpenTK;
+using System;
 
 namespace RTE.Engine
 {
@@ -107,6 +108,25 @@ namespace RTE.Engine
         public Transform SetRotation(Quaternion rotation)
         {
             this.rotation = rotation;
+
+            isModified = true;
+
+            return this;
+        }
+
+        public Transform Rotate(float x, float y, float z)
+        {
+            return Rotate(new Quaternion(x, y, z));
+        }
+
+        public Transform Rotate(Vector3 rotation)
+        {
+            return Rotate(new Quaternion(rotation));
+        }
+
+        public Transform Rotate(Quaternion rotation)
+        {
+            this.rotation *= rotation;
 
             isModified = true;
 

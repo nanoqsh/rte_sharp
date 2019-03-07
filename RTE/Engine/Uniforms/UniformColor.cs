@@ -1,13 +1,13 @@
-﻿using OpenTK;
+﻿using OpenTK.Graphics;
 using OpenTK.Graphics.OpenGL4;
 
 namespace RTE.Engine
 {
     class UniformColor : Uniform
     {
-        public Color Color;
+        public Color4 Color;
 
-        public UniformColor(string name, Color color)
+        public UniformColor(string name, Color4 color)
             : base(name)
         {
             Color = color;

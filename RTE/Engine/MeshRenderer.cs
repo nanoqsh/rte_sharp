@@ -1,6 +1,5 @@
 ﻿using OpenTK;
 using RTE.Engine.Shaders;
-using System;
 
 namespace RTE.Engine
 {
@@ -10,9 +9,9 @@ namespace RTE.Engine
         private UniformMatrix projView;
         private Matrix4 projection;
 
-        private int modelUniformKey;
-        private int projViewUniformKey;
-        private int texUniformKey;
+        private readonly int modelUniformKey;
+        private readonly int projViewUniformKey;
+        private readonly int texUniformKey;
 
         private readonly ShaderProgram shaderProgram;
         public ShaderProgram ShaderProgram
@@ -21,6 +20,9 @@ namespace RTE.Engine
         }
 
         private Camera camera;
+
+        private UniformColor ambient;
+        private readonly int ambientUniformKey;
 
         private static MeshRenderer instance;
         public static MeshRenderer Instance
@@ -57,9 +59,13 @@ namespace RTE.Engine
             modelUniformKey = shaderProgram.GetUniformKey(model.Name);
             projViewUniformKey = shaderProgram.GetUniformKey(projView.Name);
             texUniformKey = shaderProgram.GetUniformKey(texUniform.Name);
+
+            ambient = new UniformColor("ambient", Color.Black);
+            shaderProgram.AddUniforms(ambient);
+            ambientUniformKey = shaderProgram.GetUniformKey(ambient.Name);
         }
 
-        public void Draw(params Actor[] actors)
+        public void Draw(Actor[] actors, SceneLight sceneLight)
         {
             Capabilities.Instance.DepthTest = true;
 
@@ -70,6 +76,9 @@ namespace RTE.Engine
 
             shaderProgram.BindUniform(projViewUniformKey);
             shaderProgram.BindUniform(texUniformKey);
+
+            ambient.Color = sceneLight.AmbientColor;
+            shaderProgram.BindUniform(ambientUniformKey);
 
             foreach (Actor actor in actors)
             {

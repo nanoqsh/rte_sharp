@@ -12,6 +12,8 @@ namespace RTE.Engine
 
         private readonly SceneRenderer sceneRenderer;
 
+        public SceneLight SceneLight;
+
         public Scene(string name)
         {
             Name = name;
@@ -19,6 +21,8 @@ namespace RTE.Engine
 
             sceneRenderer = new SceneRenderer(this)
                 .SetBackgroundColor(Color4.DarkSalmon);
+
+            SceneLight = new SceneLight();
         }
 
         public void Draw()
