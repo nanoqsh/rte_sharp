@@ -109,7 +109,7 @@ namespace RTE.Engine
 
             actor = scene.GetActor("actor");
 
-            scene.SceneLight = new SceneLight(Color4.Coral);
+            scene.AmbientColor = Color4.Coral;
 
             GL.PolygonMode(MaterialFace.Front, PolygonMode.Fill);
 

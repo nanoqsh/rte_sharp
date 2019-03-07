@@ -12,7 +12,7 @@ namespace RTE.Engine
 
         private readonly SceneRenderer sceneRenderer;
 
-        public SceneLight SceneLight;
+        public Color4 AmbientColor;
 
         public Scene(string name)
         {
@@ -22,7 +22,7 @@ namespace RTE.Engine
             sceneRenderer = new SceneRenderer(this)
                 .SetBackgroundColor(Color4.DarkSalmon);
 
-            SceneLight = new SceneLight();
+            AmbientColor = Color4.White;
         }
 
         public void Draw()

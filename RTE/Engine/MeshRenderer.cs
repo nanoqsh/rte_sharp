@@ -65,7 +65,7 @@ namespace RTE.Engine
             ambientUniformKey = shaderProgram.GetUniformKey(ambient.Name);
         }
 
-        public void Draw(Actor[] actors, SceneLight sceneLight)
+        public void Draw(Actor[] actors, Scene scene)
         {
             Capabilities.Instance.DepthTest = true;
 
@@ -77,7 +77,7 @@ namespace RTE.Engine
             shaderProgram.BindUniform(projViewUniformKey);
             shaderProgram.BindUniform(texUniformKey);
 
-            ambient.Color = sceneLight.AmbientColor;
+            ambient.Color = scene.AmbientColor;
             shaderProgram.BindUniform(ambientUniformKey);
 
             foreach (Actor actor in actors)
