@@ -1,6 +1,6 @@
 ﻿
 uniform sampler2D tex;
-uniform vec3 lightColor;
+uniform vec4 lightColor;
 
 in vec2 FSTexCoord;
 

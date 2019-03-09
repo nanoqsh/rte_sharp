@@ -1,16 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using OpenTK.Graphics.OpenGL4;
+using RTE.Engine.Shaders;
 
-namespace RTE.Engine.Shaders
+namespace RTE.Engine
 {
     class ShaderProgram : IDisposable
     {
         public readonly int Index;
         public readonly Shader[] Shaders;
-        
-        private readonly Dictionary<int, Uniform> uniforms;
+
+        public readonly Dictionary<int, Uniform> Uniforms;
 
         public ShaderProgram(params Shader[] shaders)
         {
@@ -20,7 +20,6 @@ namespace RTE.Engine.Shaders
             foreach (Shader shader in shaders)
                 GL.AttachShader(Index, shader.Index);
             
-
             GL.LinkProgram(Index);
 
             GL.GetProgram(
@@ -31,7 +30,7 @@ namespace RTE.Engine.Shaders
             if (linkStatus == 0)
                 throw new Exception("Error attach shaders!");
             
-            uniforms = new Dictionary<int, Uniform>();
+            Uniforms = new Dictionary<int, Uniform>();
 
             foreach (Shader shader in shaders)
                 GL.DeleteShader(shader.Index);
@@ -43,24 +42,12 @@ namespace RTE.Engine.Shaders
             GL.DeleteProgram(Index);
         }
 
-        public Dictionary<string, int> GetAttributes(params string[] names)
-        {
-            return names
-                .ToDictionary(n => n, n => GL.GetAttribLocation(Index, n));
-        }
-
-        public Dictionary<string, int> GetUniforms(params string[] names)
-        {
-            return names
-                .ToDictionary(n => n, n => GL.GetUniformLocation(Index, n));
-        }
-
-        public int GetAttribute(string name)
+        public int GetAttributeIndex(string name)
         {
             return GL.GetAttribLocation(Index, name);
         }
 
-        public int GetUniformKey(string name)
+        public int GetUniformIndex(string name)
         {
             return GL.GetUniformLocation(Index, name);
         }
@@ -69,16 +56,16 @@ namespace RTE.Engine.Shaders
         {
             foreach (Uniform uniform in uniforms)
             {
-                int key = GetUniformKey(uniform.Name);
+                int key = GetUniformIndex(uniform.Name);
 
                 if (key >= 0)
-                    this.uniforms.Add(key, uniform);
+                    Uniforms.Add(key, uniform);
             }
         }
 
         public void ClearUniforms()
         {
-            uniforms.Clear();
+            Uniforms.Clear();
         }
 
         public void Enable()
@@ -88,13 +75,13 @@ namespace RTE.Engine.Shaders
 
         public void BindUniforms()
         {
-            foreach (KeyValuePair<int, Uniform> pair in uniforms)
+            foreach (KeyValuePair<int, Uniform> pair in Uniforms)
                 pair.Value.Bind(pair.Key);
         }
 
         public void BindUniform(int uniformKey)
         {
-            uniforms[uniformKey].Bind(uniformKey);
+            Uniforms[uniformKey].Bind(uniformKey);
         }
 
         public void Disable()

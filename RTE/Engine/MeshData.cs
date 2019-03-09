@@ -3,7 +3,6 @@ using RTE.OBJReader.Data;
 using RTE.OBJReader.OBJFormat;
 using System.Collections.Generic;
 using System;
-using System.Linq;
 
 namespace RTE.Engine
 {

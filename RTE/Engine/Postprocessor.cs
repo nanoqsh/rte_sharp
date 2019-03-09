@@ -21,8 +21,8 @@ namespace RTE.Engine
             Viewport.OnResize += Resize;
 
             shaderProgram = new ShaderProgram(
-                new ShaderVertex("defaultVertexShader.glsl"),
-                new ShaderFragment("defaultFragmentShader.glsl")
+                new ShaderVertex("postVS.glsl"),
+                new ShaderFragment("postFS.glsl")
                 );
 
             shaderProgram.AddUniforms(
@@ -30,8 +30,8 @@ namespace RTE.Engine
                 );
 
             quad = Quad.Make().AddAttributes(
-                new Attribute("position", shaderProgram.GetAttribute("position"), 2, 4, 0),
-                new Attribute("texCoords", shaderProgram.GetAttribute("texCoords"), 2, 4, 2)
+                new Attribute("position", shaderProgram.GetAttributeIndex("position"), 2, 4, 0),
+                new Attribute("texCoords", shaderProgram.GetAttributeIndex("texCoords"), 2, 4, 2)
                 );
         }
 

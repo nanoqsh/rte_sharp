@@ -20,7 +20,7 @@ namespace RTE.Engine
             Actors = new Dictionary<string, Actor>();
 
             sceneRenderer = new SceneRenderer(this)
-                .SetBackgroundColor(Color4.LightSkyBlue);
+                .SetBackgroundColor(Color4.DarkOliveGreen);
 
             AmbientColor = Color4.White;
         }

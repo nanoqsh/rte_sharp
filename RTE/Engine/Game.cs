@@ -4,6 +4,7 @@ using OpenTK;
 using OpenTK.Graphics;
 using OpenTK.Graphics.OpenGL4;
 using OpenTK.Input;
+using RTE.Engine.Materials;
 
 namespace RTE.Engine
 {
@@ -89,45 +90,41 @@ namespace RTE.Engine
 
             Viewport.Resize(ClientRectangle);
 
+            Material defMaterial = new DefaultMaterial("def");
+            Material texMaterial = new DefaultMaterial(
+                "tex",
+                new Texture("BaseTexture.png")
+                );
+
+            Material emissiveMaterial = new EmissiveMaterial(
+                "em",
+                new Texture("BaseTexture.png")
+                );
+
             scene = new Scene("main")
                 .AddActor(new Actor(
                     "actor",
-                    new Mesh("Icosphere.obj")
+                    new Mesh("Icosphere.obj", defMaterial)
                     ))
                 .AddActor(new Actor(
                     "block",
-                    new Mesh("Block.obj"),
+                    new Mesh("Block.obj", defMaterial),
                     new Transform(new Vector3(4, 0, 0), new Quaternion(0, 0.1f, 0.6f))
                     ))
                 .AddActor(new Actor(
                     "block2",
-                    new Mesh("Block.obj"),
+                    new Mesh("Block.obj", texMaterial),
                     new Transform(new Vector3(2, 1, 2), new Quaternion(0.4f, 0, -0.6f))
                     ))
                 .AddActor(new Actor(
-                    "stone1",
-                    new Mesh("Stone.obj"),
+                    "stone",
+                    new Mesh("Stone.obj", emissiveMaterial),
                     new Transform(new Vector3(-3, 0, 2))
-                    ))
-                .AddActor(new Actor(
-                    "stone2",
-                    new Mesh("Stone.obj"),
-                    new Transform(new Vector3(-5, 0, 2))
-                    ))
-                .AddActor(new Actor(
-                    "stone3",
-                    new Mesh("Stone.obj"),
-                    new Transform(new Vector3(-5, 2, 2))
-                    ))
-                .AddActor(new Actor(
-                    "stone4",
-                    new Mesh("Stone.obj"),
-                    new Transform(new Vector3(-5, 0, 0))
                     ));
 
             actor = scene.GetActor("actor");
 
-            scene.AmbientColor = Color4.LightSkyBlue;
+            scene.AmbientColor = Color4.DarkOliveGreen;
 
             GL.PolygonMode(MaterialFace.Front, PolygonMode.Fill);
 

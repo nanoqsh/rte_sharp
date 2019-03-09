@@ -1,4 +1,4 @@
-﻿using RTE.Engine.Shaders;
+﻿using RTE.Engine.Materials;
 using RTE.Engine.Vectors;
 using RTE.OBJReader;
 using RTE.OBJReader.Data;
@@ -13,20 +13,24 @@ namespace RTE.Engine
     {
         private readonly ArrayObject<Vector5> arrayObject;
 
-        public Mesh(string meshName)
+        public Material Material { get; }
+
+        public Mesh(string meshName, Material material)
         {
+            Material = material;
+
             DataObject data = ReadObjectsFromFile(meshName).First();
 
             MeshData meshData = new MeshData(data);
 
-            ShaderProgram shader = MeshRenderer.ShaderProgram;
+            ShaderProgram shader = material.Shader;
 
             arrayObject = new ElementArrayObject<Vector5>(meshData.Vectors)
                 .CreateElementBuffer(meshData.Indexes)
                 .SetDrawMode(DrawMode.Triangles)
                 .AddAttributes(
-                    new Attribute("coord", shader.GetAttribute("coord"), 3, 5, 0),
-                    new Attribute("texCoord", shader.GetAttribute("texCoord"), 2, 5, 3)
+                    new Attribute("coord", shader.GetAttributeIndex("coord"), 3, 5, 0),
+                    new Attribute("texCoord", shader.GetAttributeIndex("texCoord"), 2, 5, 3)
                     );
         }
 
