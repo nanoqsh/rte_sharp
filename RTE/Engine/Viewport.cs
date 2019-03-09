@@ -3,52 +3,37 @@ using System;
 
 namespace RTE.Engine
 {
-    class Viewport
+    static class Viewport
     {
-        private Rectangle size;
-        public Rectangle Size { get => size; }
+        private static Rectangle size;
+        public static Rectangle Size { get => size; }
 
-        private int pixelSize;
-        public int PixelSize { get => pixelSize; }
+        private static int pixelSize;
+        public static int PixelSize { get => pixelSize; }
 
         public delegate void OnResizeHandler(Rectangle size);
 
-        public event OnResizeHandler OnResize;
-        
-        private static readonly Viewport instance;
-        public static Viewport Instance
-        {
-            get => instance;
-        }
+        public static event OnResizeHandler OnResize;
 
         static Viewport()
-        {
-            instance = new Viewport();
-        }
-
-        private Viewport()
         {
             size = new Rectangle();
             pixelSize = 1;
         }
 
-        public Viewport Resize(Rectangle size)
+        public static void Resize(Rectangle size)
         {
-            this.size = size;
+            Viewport.size = size;
 
             OnResize?.Invoke(size);
-
-            return this;
         }
 
-        public Viewport SetPixelSize(int pixelSize)
+        public static void SetPixelSize(int pixelSize)
         {
             if (pixelSize < 1)
                 throw new ArgumentException($"pixelSize must be at least 1");
 
-            this.pixelSize = pixelSize;
-
-            return this;
+            Viewport.pixelSize = pixelSize;
         }
     }
 }

@@ -38,16 +38,15 @@ namespace RTE.Engine
 
             VideoVersion = GL.GetString(StringName.Version);
 
-            Viewport.Instance.SetPixelSize(pixelSize);
+            Viewport.SetPixelSize(pixelSize);
 
             camera = new Camera(
                 new Vector3(0.0f, 0.0f, -2.0f),
                 new Vector3(0.0f, 0.0f, -1.0f)
                 );
 
-            MeshRenderer.Instance
-                .SetCamera(camera)
-                .SetPerspectiveAspect(
+            MeshRenderer.SetCamera(camera);
+            MeshRenderer.SetPerspectiveAspect(
                     ClientRectangle.Width / (float)ClientRectangle.Height
                     );
         }
@@ -88,8 +87,7 @@ namespace RTE.Engine
         {
             base.OnLoad(e);
 
-            Viewport.Instance
-                .Resize(ClientRectangle);
+            Viewport.Resize(ClientRectangle);
 
             scene = new Scene("main")
                 .AddActor(new Actor(
@@ -105,11 +103,31 @@ namespace RTE.Engine
                     "block2",
                     new Mesh("Block.obj"),
                     new Transform(new Vector3(2, 1, 2), new Quaternion(0.4f, 0, -0.6f))
+                    ))
+                .AddActor(new Actor(
+                    "stone1",
+                    new Mesh("Stone.obj"),
+                    new Transform(new Vector3(-3, 0, 2))
+                    ))
+                .AddActor(new Actor(
+                    "stone2",
+                    new Mesh("Stone.obj"),
+                    new Transform(new Vector3(-5, 0, 2))
+                    ))
+                .AddActor(new Actor(
+                    "stone3",
+                    new Mesh("Stone.obj"),
+                    new Transform(new Vector3(-5, 2, 2))
+                    ))
+                .AddActor(new Actor(
+                    "stone4",
+                    new Mesh("Stone.obj"),
+                    new Transform(new Vector3(-5, 0, 0))
                     ));
 
             actor = scene.GetActor("actor");
 
-            scene.AmbientColor = Color4.Coral;
+            scene.AmbientColor = Color4.LightSkyBlue;
 
             GL.PolygonMode(MaterialFace.Front, PolygonMode.Fill);
 
@@ -201,9 +219,9 @@ namespace RTE.Engine
         {
             base.OnResize(e);
 
-            Viewport.Instance.Resize(ClientRectangle);
+            Viewport.Resize(ClientRectangle);
 
-            MeshRenderer.Instance.SetPerspectiveAspect(
+            MeshRenderer.SetPerspectiveAspect(
                 ClientRectangle.Width / (float)ClientRectangle.Height
                 );
         }

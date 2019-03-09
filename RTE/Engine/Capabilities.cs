@@ -2,10 +2,10 @@
 
 namespace RTE.Engine
 {
-    class Capabilities
+    static class Capabilities
     {
-        private bool depthTest;
-        public bool DepthTest
+        private static bool depthTest;
+        public static bool DepthTest
         {
             get => depthTest;
             set
@@ -19,8 +19,8 @@ namespace RTE.Engine
             }
         }
 
-        private bool stencilTest;
-        public bool StencilTest
+        private static bool stencilTest;
+        public static bool StencilTest
         {
             get => stencilTest;
             set
@@ -34,18 +34,7 @@ namespace RTE.Engine
             }
         }
 
-        private static readonly Capabilities instance;
-        public static Capabilities Instance
-        {
-            get => instance;
-        }
-
         static Capabilities()
-        {
-            instance = new Capabilities();
-        }
-
-        private Capabilities()
         {
             GL.Disable(EnableCap.DepthTest);
             depthTest = false;

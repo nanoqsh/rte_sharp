@@ -27,7 +27,7 @@ namespace RTE
             };
 
             Console.WriteLine(game.VideoVersion);
-            Console.WriteLine(MeshRenderer.Instance.GetDebugInfo(attributes, uniforms));
+            Console.WriteLine(MeshRenderer.GetDebugInfo(attributes, uniforms));
             
             game.Run(60);
         }

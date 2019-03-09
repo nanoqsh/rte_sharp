@@ -13,14 +13,12 @@ namespace RTE.Engine
 
         public Postprocessor()
         {
-            Viewport viewport = Viewport.Instance;
-
             frameBuffer = new FrameBuffer(
-                viewport.Size.Width / viewport.PixelSize,
-                viewport.Size.Height / viewport.PixelSize
+                Viewport.Size.Width / Viewport.PixelSize,
+                Viewport.Size.Height / Viewport.PixelSize
                 );
 
-            viewport.OnResize += Resize;
+            Viewport.OnResize += Resize;
 
             shaderProgram = new ShaderProgram(
                 new ShaderVertex("defaultVertexShader.glsl"),
@@ -48,11 +46,9 @@ namespace RTE.Engine
         {
             frameBuffer.Dispose();
 
-            Viewport viewport = Viewport.Instance;
-
             frameBuffer = new FrameBuffer(
-                viewport.Size.Width / viewport.PixelSize,
-                viewport.Size.Height / viewport.PixelSize
+                Viewport.Size.Width / Viewport.PixelSize,
+                Viewport.Size.Height / Viewport.PixelSize
                 );
 
             shaderProgram.ClearUniforms();
@@ -63,13 +59,11 @@ namespace RTE.Engine
 
         public void Bind()
         {
-            Viewport viewport = Viewport.Instance;
-
             GL.Viewport(new Rectangle(
                 0,
                 0,
-                viewport.Size.Width / viewport.PixelSize,
-                viewport.Size.Height / viewport.PixelSize
+                Viewport.Size.Width / Viewport.PixelSize,
+                Viewport.Size.Height / Viewport.PixelSize
                 ));
 
             frameBuffer.Bind();
@@ -82,11 +76,11 @@ namespace RTE.Engine
 
         public void DrawFrame()
         {
-            Capabilities.Instance.DepthTest = false;
+            Capabilities.DepthTest = false;
 
             frameBuffer.Unbind();
 
-            GL.Viewport(Viewport.Instance.Size);
+            GL.Viewport(Viewport.Size);
 
             shaderProgram.Enable();
             shaderProgram.BindUniforms();

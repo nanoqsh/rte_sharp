@@ -19,7 +19,7 @@ namespace RTE.Engine
 
             MeshData meshData = new MeshData(data);
 
-            ShaderProgram shader = MeshRenderer.Instance.ShaderProgram;
+            ShaderProgram shader = MeshRenderer.ShaderProgram;
 
             arrayObject = new ElementArrayObject<Vector5>(meshData.Vectors)
                 .CreateElementBuffer(meshData.Indexes)

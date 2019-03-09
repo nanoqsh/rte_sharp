@@ -3,39 +3,28 @@ using RTE.Engine.Shaders;
 
 namespace RTE.Engine
 {
-    class MeshRenderer
+    static class MeshRenderer
     {
-        private UniformMatrix model;
-        private UniformMatrix projView;
-        private Matrix4 projection;
+        private static UniformMatrix model;
+        private static UniformMatrix projView;
+        private static Matrix4 projection;
 
-        private readonly int modelUniformKey;
-        private readonly int projViewUniformKey;
+        private static readonly int modelUniformKey;
+        private static readonly int projViewUniformKey;
 
-        private readonly ShaderProgram shaderProgram;
-        public ShaderProgram ShaderProgram
+        private static readonly ShaderProgram shaderProgram;
+        public static ShaderProgram ShaderProgram
         {
             get => shaderProgram;
         }
 
-        private Camera camera;
+        private static Camera camera;
 
-        private readonly int texUniformKey;
-        private UniformColor ambient;
-        private readonly int ambientUniformKey;
-
-        private static readonly MeshRenderer instance;
-        public static MeshRenderer Instance
-        {
-            get => instance;
-        }
+        private static readonly int texUniformKey;
+        private static UniformColor ambient;
+        private static readonly int ambientUniformKey;
 
         static MeshRenderer()
-        {
-            instance = new MeshRenderer();
-        }
-
-        private MeshRenderer()
         {
             shaderProgram = new ShaderProgram(
                 new ShaderVertex("meshVS.glsl"),
@@ -64,9 +53,9 @@ namespace RTE.Engine
             ambientUniformKey = shaderProgram.GetUniformKey(ambient.Name);
         }
 
-        public void Draw(Actor[] actors, Scene scene)
+        public static void Draw(Actor[] actors, Scene scene)
         {
-            Capabilities.Instance.DepthTest = true;
+            Capabilities.DepthTest = true;
 
             shaderProgram.Enable();
 
@@ -89,7 +78,7 @@ namespace RTE.Engine
             shaderProgram.Disable();
         }
 
-        public MeshRenderer SetPerspectiveAspect(float aspect)
+        public static void SetPerspectiveAspect(float aspect)
         {
             projection = Matrix4.CreatePerspectiveFieldOfView(
                 1.6f,
@@ -97,18 +86,14 @@ namespace RTE.Engine
                 0.1f,
                 100.0f
                 );
-
-            return this;
         }
 
-        public MeshRenderer SetCamera(Camera camera)
+        public static void SetCamera(Camera camera)
         {
-            this.camera = camera;
-
-            return this;
+            MeshRenderer.camera = camera;
         }
 
-        public string GetDebugInfo(string[] attributes, string[] uniforms)
+        public static string GetDebugInfo(string[] attributes, string[] uniforms)
         {
             string res = "";
 

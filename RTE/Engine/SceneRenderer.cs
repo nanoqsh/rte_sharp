@@ -40,7 +40,7 @@ namespace RTE.Engine
                 | ClearBufferMask.DepthBufferBit
                 );
 
-            MeshRenderer.Instance.Draw(actors, scene);
+            MeshRenderer.Draw(actors, scene);
 
             postprocessor.DrawFrame();
         }

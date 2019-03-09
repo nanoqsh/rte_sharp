@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System;
-using OpenTK.Graphics;
 using System.Linq;
+using OpenTK.Graphics;
 
 namespace RTE.Engine
 {
@@ -20,7 +20,7 @@ namespace RTE.Engine
             Actors = new Dictionary<string, Actor>();
 
             sceneRenderer = new SceneRenderer(this)
-                .SetBackgroundColor(Color4.DarkSalmon);
+                .SetBackgroundColor(Color4.LightSkyBlue);
 
             AmbientColor = Color4.White;
         }
