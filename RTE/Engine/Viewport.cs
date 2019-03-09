@@ -15,16 +15,15 @@ namespace RTE.Engine
 
         public event OnResizeHandler OnResize;
         
-        private static Viewport instance;
+        private static readonly Viewport instance;
         public static Viewport Instance
         {
-            get
-            {
-                if (instance == null)
-                    instance = new Viewport();
+            get => instance;
+        }
 
-                return instance;
-            }
+        static Viewport()
+        {
+            instance = new Viewport();
         }
 
         private Viewport()

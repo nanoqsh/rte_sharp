@@ -1,7 +1,6 @@
 ﻿using OpenTK.Graphics.OpenGL4;
-using RTE.Engine.Shaders;
 
-namespace RTE.Engine
+namespace RTE.Engine.Shaders
 {
     class ShaderFragment : Shader
     {

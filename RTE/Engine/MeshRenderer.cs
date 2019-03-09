@@ -11,7 +11,6 @@ namespace RTE.Engine
 
         private readonly int modelUniformKey;
         private readonly int projViewUniformKey;
-        private readonly int texUniformKey;
 
         private readonly ShaderProgram shaderProgram;
         public ShaderProgram ShaderProgram
@@ -21,19 +20,19 @@ namespace RTE.Engine
 
         private Camera camera;
 
+        private readonly int texUniformKey;
         private UniformColor ambient;
         private readonly int ambientUniformKey;
 
-        private static MeshRenderer instance;
+        private static readonly MeshRenderer instance;
         public static MeshRenderer Instance
         {
-            get
-            {
-                if (instance == null)
-                    instance = new MeshRenderer();
+            get => instance;
+        }
 
-                return instance;
-            }
+        static MeshRenderer()
+        {
+            instance = new MeshRenderer();
         }
 
         private MeshRenderer()

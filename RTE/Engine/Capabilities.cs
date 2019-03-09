@@ -4,18 +4,6 @@ namespace RTE.Engine
 {
     class Capabilities
     {
-        private static Capabilities instance;
-        public static Capabilities Instance
-        {
-            get
-            {
-                if (instance == null)
-                    instance = new Capabilities();
-
-                return instance;
-            }
-        }
-
         private bool depthTest;
         public bool DepthTest
         {
@@ -44,6 +32,17 @@ namespace RTE.Engine
 
                 stencilTest = value;
             }
+        }
+
+        private static readonly Capabilities instance;
+        public static Capabilities Instance
+        {
+            get => instance;
+        }
+
+        static Capabilities()
+        {
+            instance = new Capabilities();
         }
 
         private Capabilities()
