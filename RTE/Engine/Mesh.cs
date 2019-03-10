@@ -29,8 +29,8 @@ namespace RTE.Engine
                 .CreateElementBuffer(meshData.Indexes)
                 .SetDrawMode(DrawMode.Triangles)
                 .AddAttributes(
-                    new Attribute("coord", shader.GetAttributeIndex("coord"), 3, 5, 0),
-                    new Attribute("texCoord", shader.GetAttributeIndex("texCoord"), 2, 5, 3)
+                    new Attribute(shader.GetAttributeIndex("coord"), 3, 5, 0),
+                    new Attribute(shader.GetAttributeIndex("texCoord"), 2, 5, 3)
                     );
         }
 

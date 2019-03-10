@@ -16,13 +16,15 @@ namespace RTE.Engine
         {
             Capabilities.DepthTest = true;
 
+            Matrix4 projView = camera.View * projection;
+
             foreach (Actor actor in actors)
             {
                 actor.Mesh.Material.Shader.Enable();
 
                 actor.Mesh.Material.BindGlobal(
                     actor.Transform.GetModel(),
-                    camera.View * projection,
+                    projView,
                     scene.AmbientColor
                     );
 
@@ -37,7 +39,7 @@ namespace RTE.Engine
         public static void SetPerspectiveAspect(float aspect)
         {
             projection = Matrix4.CreatePerspectiveFieldOfView(
-                1.6f,
+                1.5f,
                 aspect,
                 0.1f,
                 100.0f

@@ -98,8 +98,8 @@ namespace RTE.Engine
 
             Material emissiveMaterial = new EmissiveMaterial(
                 "em",
-                new Texture("BaseTexture.png"),
-                Color4.Lime
+                new Texture("BaseTexture2.png"),
+                Color4.White
                 );
 
             scene = new Scene("main")
@@ -119,11 +119,48 @@ namespace RTE.Engine
                     ))
                 .AddActor(new Actor(
                     "stone",
-                    new Mesh("Stone.obj", emissiveMaterial),
+                    new Mesh("Stone.obj", texMaterial),
                     new Transform(new Vector3(-3, 0, 2))
+                    ))
+                .AddActor(new Actor(
+                    "glow",
+                    new Mesh("Glow.obj", emissiveMaterial),
+                    new Transform(
+                        new Vector3(4.5f, -1.5f, -3),
+                        new Quaternion(2.6f, -1.2f, -1),
+                        Vector3.One * 0.9f
+                        )
+                    ))
+                .AddActor(new Actor(
+                    "lamp",
+                    new Mesh("Lamp.obj", emissiveMaterial),
+                    new Transform(
+                        new Vector3(-1.5f, -1.2f, 0),
+                        new Quaternion(1.2f, 1.2f, 1),
+                        Vector3.One * 0.5f
+                        )
+                    ))
+                .AddActor(new Actor(
+                    "lamp2",
+                    new Mesh("Lamp.obj", emissiveMaterial),
+                    new Transform(
+                        new Vector3(3, 3, 1),
+                        new Quaternion(2.2f, 1.2f, 0),
+                        Vector3.One * 0.5f
+                        )
                     ));
 
             actor = scene.GetActor("actor");
+
+            Material base2 = new DefaultMaterial("base", new Texture("BaseTexture2.png"));
+
+            for (int x = -10; x < 10; x++)
+                for (int y = -10; y < 10; y++)
+                    scene.AddActor(new Actor(
+                        $"obj.{x}.{y}",
+                        new Mesh("Bricks.obj", base2),
+                        new Transform(new Vector3(x * 2, -4, y * 2))
+                        ));
 
             scene.AmbientColor = Color4.CadetBlue;
 
@@ -153,7 +190,7 @@ namespace RTE.Engine
             }
 
 
-            float cameraSpeed = 1.0f * (float) e.Time;
+            float cameraSpeed = 2.0f * (float) e.Time;
 
             if (pressedKeys.Contains(Key.W))
                 camera.Move(cameraSpeed * camera.Front);

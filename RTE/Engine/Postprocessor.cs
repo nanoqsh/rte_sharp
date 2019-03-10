@@ -33,8 +33,8 @@ namespace RTE.Engine
                 );
 
             quad = Quad.Make().AddAttributes(
-                new Attribute("position", shaderProgram.GetAttributeIndex("position"), 2, 4, 0),
-                new Attribute("texCoords", shaderProgram.GetAttributeIndex("texCoords"), 2, 4, 2)
+                new Attribute(shaderProgram.GetAttributeIndex("position"), 2, 4, 0),
+                new Attribute(shaderProgram.GetAttributeIndex("texCoords"), 2, 4, 2)
                 );
         }
 
