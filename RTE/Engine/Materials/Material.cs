@@ -1,5 +1,6 @@
 ﻿using OpenTK;
 using OpenTK.Graphics;
+using System;
 
 namespace RTE.Engine.Materials
 {
@@ -8,40 +9,40 @@ namespace RTE.Engine.Materials
         public readonly string Name;
         public abstract ShaderProgram Shader { get; }
 
+        private readonly UniformMatrix model;
+        private readonly UniformMatrix projView;
+        private readonly UniformColor ambient;
+
         protected Material(string name)
         {
             Name = name;
 
-            Shader.ClearUniforms();
+            model = new UniformMatrix(Shader.GetUniformIndex("model"));
+            projView = new UniformMatrix(Shader.GetUniformIndex("projView"));
+            ambient = new UniformColor(Shader.GetUniformIndex("ambient"));
 
-            Shader.AddUniforms(
-                new UniformMatrix("model", Matrix4.Identity),
-                new UniformMatrix("projView", Matrix4.Identity),
-                new UniformColor("ambient", Color4.Black)
-                );
+            Console.WriteLine("{0}:", name);
+            Console.WriteLine("Model: {0}", model.Index);
+            Console.WriteLine("ProjView: {0}", projView.Index);
+            Console.WriteLine("Ambient: {0}", ambient.Index);
+            Console.WriteLine();
         }
 
         public abstract void Bind();
 
         public void BindGlobal(Matrix4 model, Matrix4 projView, Color4 ambient)
         {
-            int modelIndex = Shader.GetUniformIndex("model");
-            int projViewIndex = Shader.GetUniformIndex("projView");
-            int ambientIndex = Shader.GetUniformIndex("ambient");
+            this.model.Matrix = model;
+            this.model.Bind();
 
-            (Shader.Uniforms[modelIndex] as UniformMatrix).Matrix = model;
-            (Shader.Uniforms[projViewIndex] as UniformMatrix).Matrix = projView;
+            this.projView.Matrix = projView;
+            this.projView.Bind();
 
-            int k = ambientIndex;
-
-            if (k != -1)
-                (Shader.Uniforms[k] as UniformColor).Color = ambient;
-
-            Shader.BindUniform(modelIndex);
-            Shader.BindUniform(projViewIndex);
-
-            if (k != -1)
-                Shader.BindUniform(ambientIndex);
+            if (this.ambient.Index != -1)
+            {
+                this.ambient.Color = ambient;
+                this.ambient.Bind();
+            }
         }
     }
 }

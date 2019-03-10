@@ -5,8 +5,6 @@
         public override ShaderProgram Shader => MaterialShaders.DefaultMeshShader;
 
         private readonly UniformTexture uniformTexture;
-        private readonly Texture texture;
-        private readonly int uniformTextureKey;
 
         public DefaultMaterial(string name)
             : this(name, new Texture("EmptyTexture.png"))
@@ -16,15 +14,16 @@
         public DefaultMaterial(string name, Texture texture)
             : base(name)
         {
-            this.texture = texture;
-            uniformTexture = new UniformTexture("tex", texture, 0);
-            Shader.AddUniforms(uniformTexture);
-            uniformTextureKey = Shader.GetUniformIndex(uniformTexture.Name);
+            uniformTexture = new UniformTexture(
+                Shader.GetUniformIndex("tex"),
+                texture,
+                0
+                );
         }
 
         public override void Bind()
         {
-            Shader.BindUniform(uniformTextureKey);
+            uniformTexture.Bind();
         }
     }
 }

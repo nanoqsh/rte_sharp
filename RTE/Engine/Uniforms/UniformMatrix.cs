@@ -7,15 +7,20 @@ namespace RTE.Engine
     {
         public Matrix4 Matrix;
 
-        public UniformMatrix(string name, Matrix4 matrix)
-            : base(name)
+        public UniformMatrix(int index)
+            : this(index, Matrix4.Identity)
+        {
+        }
+
+        public UniformMatrix(int index, Matrix4 matrix)
+            : base(index)
         {
             Matrix = matrix;
         }
 
-        public override void Bind(int index)
+        public override void Bind()
         {
-            GL.UniformMatrix4(index, false, ref Matrix);
+            GL.UniformMatrix4(Index, false, ref Matrix);
         }
     }
 }

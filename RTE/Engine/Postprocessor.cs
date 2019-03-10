@@ -10,6 +10,7 @@ namespace RTE.Engine
         private readonly ShaderProgram shaderProgram;
         private readonly ArrayObject<Vector4> quad;
         private FrameBuffer frameBuffer;
+        private UniformTexture uniformTexture;
 
         public Postprocessor()
         {
@@ -25,8 +26,10 @@ namespace RTE.Engine
                 new ShaderFragment("postFS.glsl")
                 );
 
-            shaderProgram.AddUniforms(
-                new UniformTexture("tex", frameBuffer.Frame, 0)
+            uniformTexture = new UniformTexture(
+                shaderProgram.GetUniformIndex("tex"),
+                frameBuffer.Frame,
+                0
                 );
 
             quad = Quad.Make().AddAttributes(
@@ -51,9 +54,10 @@ namespace RTE.Engine
                 Viewport.Size.Height / Viewport.PixelSize
                 );
 
-            shaderProgram.ClearUniforms();
-            shaderProgram.AddUniforms(
-                new UniformTexture("tex", frameBuffer.Frame, 0)
+            uniformTexture = new UniformTexture(
+                shaderProgram.GetUniformIndex("tex"),
+                frameBuffer.Frame,
+                0
                 );
         }
 
@@ -83,7 +87,7 @@ namespace RTE.Engine
             GL.Viewport(Viewport.Size);
 
             shaderProgram.Enable();
-            shaderProgram.BindUniforms();
+            uniformTexture.Bind();
             quad.Draw();
             shaderProgram.Disable();
         }

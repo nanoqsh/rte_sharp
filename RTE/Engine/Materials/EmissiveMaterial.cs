@@ -7,10 +7,7 @@ namespace RTE.Engine.Materials
         public override ShaderProgram Shader => MaterialShaders.EmissiveMeshShader;
 
         private readonly UniformTexture uniformTexture;
-        private readonly int uniformTextureKey;
-
         private readonly UniformColor uniformLightColor;
-        private readonly int uniformLightColorKey;
 
         public EmissiveMaterial(string name)
             : this(name, new Texture("EmptyTexture.png"), Color4.White)
@@ -25,19 +22,22 @@ namespace RTE.Engine.Materials
         public EmissiveMaterial(string name, Texture texture, Color4 lightColor)
             : base(name)
         {
-            uniformTexture = new UniformTexture("tex", texture, 0);
-            Shader.AddUniforms(uniformTexture);
-            uniformTextureKey = Shader.GetUniformIndex(uniformTexture.Name);
+            uniformTexture = new UniformTexture(
+                Shader.GetAttributeIndex("tex"),
+                texture,
+                0
+                );
 
-            uniformLightColor = new UniformColor("lightColor", lightColor);
-            Shader.AddUniforms(uniformLightColor);
-            uniformLightColorKey = Shader.GetUniformIndex(uniformLightColor.Name);
+            uniformLightColor = new UniformColor(
+                Shader.GetUniformIndex("lightColor"),
+                lightColor
+                );
         }
 
         public override void Bind()
         {
-            Shader.BindUniform(uniformTextureKey);
-            Shader.BindUniform(uniformLightColorKey);
+            uniformTexture.Bind();
+            uniformLightColor.Bind();
         }
     }
 }

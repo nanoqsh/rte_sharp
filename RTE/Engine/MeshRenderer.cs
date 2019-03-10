@@ -1,5 +1,4 @@
 ﻿using OpenTK;
-using RTE.Engine.Shaders;
 
 namespace RTE.Engine
 {

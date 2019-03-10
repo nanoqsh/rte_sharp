@@ -98,7 +98,8 @@ namespace RTE.Engine
 
             Material emissiveMaterial = new EmissiveMaterial(
                 "em",
-                new Texture("BaseTexture.png")
+                new Texture("BaseTexture.png"),
+                Color4.Lime
                 );
 
             scene = new Scene("main")
@@ -124,7 +125,7 @@ namespace RTE.Engine
 
             actor = scene.GetActor("actor");
 
-            scene.AmbientColor = Color4.DarkOliveGreen;
+            scene.AmbientColor = Color4.CadetBlue;
 
             GL.PolygonMode(MaterialFace.Front, PolygonMode.Fill);
 

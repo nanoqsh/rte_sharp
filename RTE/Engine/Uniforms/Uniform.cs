@@ -2,13 +2,13 @@
 {
     abstract class Uniform
     {
-        public string Name { get; }
+        public readonly int Index;
 
-        protected Uniform(string name)
+        protected Uniform(int index)
         {
-            Name = name;
+            Index = index;
         }
 
-        public abstract void Bind(int index);
+        public abstract void Bind();
     }
 }

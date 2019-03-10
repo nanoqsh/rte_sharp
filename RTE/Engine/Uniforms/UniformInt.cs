@@ -7,15 +7,20 @@ namespace RTE.Engine
     {
         public readonly int Value;
 
-        public UniformInt(string name, int value)
-            : base(name)
+        public UniformInt(int index)
+            : this(index, 0)
+        {
+        }
+
+        public UniformInt(int index, int value)
+            : base(index)
         {
             Value = value;
         }
 
-        public override void Bind(int index)
+        public override void Bind()
         {
-            GL.Uniform1(index, Value);
+            GL.Uniform1(Index, Value);
         }
     }
 }
