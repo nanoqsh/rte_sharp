@@ -1,6 +1,6 @@
-﻿namespace RTE.Engine.Vectors
+﻿namespace RTE.Engine.Vertexes
 {
-    struct Vector5
+    struct Vertex5
     {
         public readonly float X;
         public readonly float Y;
@@ -8,7 +8,7 @@
         public readonly float W;
         public readonly float V;
 
-        public Vector5(float x, float y, float z, float w, float v)
+        public Vertex5(float x, float y, float z, float w, float v)
         {
             X = x;
             Y = y;

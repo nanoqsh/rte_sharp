@@ -1,5 +1,5 @@
 ﻿using RTE.Engine.Materials;
-using RTE.Engine.Vectors;
+using RTE.Engine.Vertexes;
 using RTE.OBJReader;
 using RTE.OBJReader.Data;
 using System;
@@ -11,7 +11,7 @@ namespace RTE.Engine
 {
     class Mesh : IDisposable
     {
-        private readonly ArrayObject<Vector5> arrayObject;
+        private readonly ArrayObject<Vertex8> arrayObject;
 
         public Material Material { get; }
 
@@ -25,12 +25,13 @@ namespace RTE.Engine
 
             ShaderProgram shader = material.Shader;
 
-            arrayObject = new ElementArrayObject<Vector5>(meshData.Vectors)
+            arrayObject = new ElementArrayObject<Vertex8>(meshData.Vectors)
                 .CreateElementBuffer(meshData.Indexes)
                 .SetDrawMode(DrawMode.Triangles)
                 .AddAttributes(
-                    new Attribute(shader.GetAttributeIndex("coord"), 3, 5, 0),
-                    new Attribute(shader.GetAttributeIndex("texCoord"), 2, 5, 3)
+                    new Attribute(shader.GetAttributeIndex("coord"), 3, 8, 0),
+                    new Attribute(shader.GetAttributeIndex("normal"), 3, 8, 3),
+                    new Attribute(shader.GetAttributeIndex("texCoord"), 2, 8, 6)
                     );
         }
 
