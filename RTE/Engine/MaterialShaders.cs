@@ -33,5 +33,20 @@ namespace RTE.Engine
                 return emissiveMeshShader;
             }
         }
+
+        private static ShaderProgram gouraudMeshShader;
+        public static ShaderProgram GouraudMeshShader
+        {
+            get
+            {
+                if (gouraudMeshShader == null)
+                    gouraudMeshShader = new ShaderProgram(
+                        new ShaderVertex("meshGouraudVS.glsl"),
+                        new ShaderFragment("meshGouraudFS.glsl")
+                        );
+
+                return gouraudMeshShader;
+            }
+        }
     }
 }

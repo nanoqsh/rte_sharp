@@ -44,6 +44,12 @@
       <None Update="Models\Wood.obj">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
+      <None Update="Shaders\meshGouraudFS.glsl">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="Shaders\meshGouraudVS.glsl">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
       <None Update="Shaders\postFS.glsl">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>

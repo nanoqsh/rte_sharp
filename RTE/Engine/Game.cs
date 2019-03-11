@@ -94,7 +94,7 @@ namespace RTE.Engine
             Color4 lightColor = Color4.Yellow;
             Color4 specularColor = Color4.LightGoldenrodYellow;
 
-            Material defMaterial = new MaterialDefault(
+            Material defMaterial = new MaterialDefaultGouraud(
                 "def",
                 new Texture("EmptyTexture.png"),
                 lightPos,
@@ -102,7 +102,7 @@ namespace RTE.Engine
                 specularColor.ToVector3()
                 );
 
-            Material texMaterial = new MaterialDefault(
+            Material texMaterial = new MaterialDefaultGouraud(
                 "tex",
                 new Texture("BaseTexture.png"),
                 lightPos,
@@ -166,7 +166,7 @@ namespace RTE.Engine
 
             actor = scene.GetActor("actor");
 
-            Material base2 = new MaterialDefault(
+            Material base2 = new MaterialDefaultGouraud(
                 "base",
                 new Texture("BaseTexture2.png"),
                 lightPos,
