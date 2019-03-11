@@ -54,12 +54,6 @@ namespace RTE.Engine
                 Viewport.Size.Width / Viewport.PixelSize,
                 Viewport.Size.Height / Viewport.PixelSize
                 );
-
-            uniformTexture = new UniformTexture(
-                shaderProgram.GetUniformIndex("tex"),
-                frameBuffer.Frame,
-                0
-                );
         }
 
         public void Bind()
@@ -88,6 +82,7 @@ namespace RTE.Engine
             GL.Viewport(Viewport.Size);
 
             shaderProgram.Enable();
+            uniformTexture.Value = frameBuffer.Frame;
             uniformTexture.Bind();
             quad.Draw();
             shaderProgram.Disable();

@@ -3,24 +3,19 @@ using OpenTK.Graphics.OpenGL4;
 
 namespace RTE.Engine.Uniforms
 {
-    class UniformInt : Uniform
+    class UniformInt : Uniform<int>
     {
-        public readonly int Value;
-
-        public UniformInt(int index)
-            : this(index, 0)
-        {
-        }
-
         public UniformInt(int index, int value)
-            : base(index)
+            : base(index, value)
         {
-            Value = value;
         }
 
         public override void Bind()
         {
-            GL.Uniform1(Index, Value);
+            if (isModified)
+                GL.Uniform1(Index, value);
+
+            isModified = false;
         }
     }
 }

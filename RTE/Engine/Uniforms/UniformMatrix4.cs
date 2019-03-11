@@ -3,24 +3,24 @@ using OpenTK;
 
 namespace RTE.Engine.Uniforms
 {
-    class UniformMatrix4 : Uniform
+    class UniformMatrix4 : Uniform<Matrix4>
     {
-        public Matrix4 Matrix;
-
         public UniformMatrix4(int index)
             : this(index, Matrix4.Identity)
         {
         }
 
-        public UniformMatrix4(int index, Matrix4 matrix)
-            : base(index)
+        public UniformMatrix4(int index, Matrix4 value)
+            : base(index, value)
         {
-            Matrix = matrix;
         }
 
         public override void Bind()
         {
-            GL.UniformMatrix4(Index, false, ref Matrix);
+            if (isModified)
+                GL.UniformMatrix4(Index, false, ref value);
+
+            isModified = false;
         }
     }
 }

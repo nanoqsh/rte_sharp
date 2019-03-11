@@ -8,6 +8,7 @@ namespace RTE.Engine.Materials
         public override ShaderProgram Shader => MaterialShaders.DefaultMeshShader;
 
         private readonly UniformTexture uniformTexture;
+        private readonly Texture texture;
 
         private readonly UniformVector3 uniformLightPosition;
         private readonly UniformVector3 uniformLightColor;
@@ -39,6 +40,8 @@ namespace RTE.Engine.Materials
                 0
                 );
 
+            this.texture = texture;
+
             uniformLightPosition = new UniformVector3(
                 Shader.GetUniformIndex("lightPosition"),
                 lightPosition
@@ -57,6 +60,7 @@ namespace RTE.Engine.Materials
 
         public override void Bind()
         {
+            uniformTexture.Value = texture;
             uniformTexture.Bind();
             uniformLightPosition.Bind();
             uniformLightColor.Bind();

@@ -1,5 +1,4 @@
 ﻿using OpenTK;
-using OpenTK.Graphics;
 using RTE.Engine.Uniforms;
 using System;
 
@@ -45,21 +44,21 @@ namespace RTE.Engine.Materials
             Vector3 ambient
             )
         {
-            this.model.Matrix = model;
+            this.model.Value = model;
             this.model.Bind();
 
-            this.projView.Matrix = projView;
+            this.projView.Value = projView;
             this.projView.Bind();
 
-            this.normalMatrix.Matrix = normalMatrix;
+            this.normalMatrix.Value = normalMatrix;
             this.normalMatrix.Bind();
 
-            this.viewPosition.Vector = viewPosition;
+            this.viewPosition.Value = viewPosition;
             this.viewPosition.Bind();
 
             if (this.ambient.Index != -1)
             {
-                this.ambient.Vector = ambient;
+                this.ambient.Value = ambient;
                 this.ambient.Bind();
             }
         }

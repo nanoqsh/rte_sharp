@@ -4,10 +4,8 @@ using OpenTK.Graphics.OpenGL4;
 
 namespace RTE.Engine.Uniforms
 {
-    class UniformVector3 : Uniform
+    class UniformVector3 : Uniform<Vector3>
     {
-        public Vector3 Vector;
-
         public UniformVector3(int index)
             : this(index, Vector3.Zero)
         {
@@ -19,14 +17,16 @@ namespace RTE.Engine.Uniforms
         }
 
         public UniformVector3(int index, Vector3 vector)
-            : base(index)
+            : base(index, vector)
         {
-            Vector = vector;
         }
 
         public override void Bind()
         {
-            GL.Uniform3(Index, ref Vector);
+            if (isModified)
+                GL.Uniform3(Index, ref value);
+
+            isModified = false;
         }
     }
 }

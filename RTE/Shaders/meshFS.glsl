@@ -1,11 +1,12 @@
 ﻿
 uniform sampler2D tex;
+uniform vec3 specularColor;
+
 uniform vec3 ambient;
+uniform vec3 viewPosition;
 
 uniform vec3 lightPosition;
 uniform vec3 lightColor;
-uniform vec3 specularColor;
-uniform vec3 viewPosition;
 
 in vec3 FSPosition;
 in vec3 FSNormal;

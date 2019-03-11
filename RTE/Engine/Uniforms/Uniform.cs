@@ -1,14 +1,29 @@
 ﻿namespace RTE.Engine.Uniforms
 {
-    abstract class Uniform
+    abstract class Uniform<T>
     {
         public readonly int Index;
 
-        protected Uniform(int index)
+        protected bool isModified;
+        protected T value;
+
+        protected Uniform(int index, T value)
         {
             Index = index;
+            this.value = value;
+            isModified = true;
         }
 
         public abstract void Bind();
+
+        public T Value
+        {
+            get => value;
+            set
+            {
+                this.value = value;
+                isModified = true;
+            }
+        }
     }
 }
