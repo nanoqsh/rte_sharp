@@ -2,6 +2,7 @@
 using System;
 using System.Linq;
 using OpenTK.Graphics;
+using OpenTK;
 
 namespace RTE.Engine
 {

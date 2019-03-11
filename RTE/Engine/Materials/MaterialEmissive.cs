@@ -1,25 +1,26 @@
 ﻿using OpenTK.Graphics;
+using RTE.Engine.Uniforms;
 
 namespace RTE.Engine.Materials
 {
-    class EmissiveMaterial : Material
+    class MaterialEmissive : Material
     {
         public override ShaderProgram Shader => MaterialShaders.EmissiveMeshShader;
 
         private readonly UniformTexture uniformTexture;
         private readonly UniformColor uniformLightColor;
 
-        public EmissiveMaterial(string name)
+        public MaterialEmissive(string name)
             : this(name, new Texture("EmptyTexture.png"), Color4.White)
         {
         }
 
-        public EmissiveMaterial(string name, Texture texture)
+        public MaterialEmissive(string name, Texture texture)
             : this(name, texture, Color4.White)
         {
         }
 
-        public EmissiveMaterial(string name, Texture texture, Color4 lightColor)
+        public MaterialEmissive(string name, Texture texture, Color4 lightColor)
             : base(name)
         {
             uniformTexture = new UniformTexture(

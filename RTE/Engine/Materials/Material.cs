@@ -1,5 +1,6 @@
 ﻿using OpenTK;
 using OpenTK.Graphics;
+using RTE.Engine.Uniforms;
 using System;
 
 namespace RTE.Engine.Materials
@@ -12,6 +13,7 @@ namespace RTE.Engine.Materials
         private readonly UniformMatrix model;
         private readonly UniformMatrix projView;
         private readonly UniformColor ambient;
+        private readonly UniformMatrix3 normalMat;
 
         protected Material(string name)
         {
@@ -20,11 +22,13 @@ namespace RTE.Engine.Materials
             model = new UniformMatrix(Shader.GetUniformIndex("model"));
             projView = new UniformMatrix(Shader.GetUniformIndex("projView"));
             ambient = new UniformColor(Shader.GetUniformIndex("ambient"));
+            normalMat = new UniformMatrix3(Shader.GetUniformIndex("normalMat"));
 
             Console.WriteLine("{0}:", name);
             Console.WriteLine("Model: {0}", model.Index);
             Console.WriteLine("ProjView: {0}", projView.Index);
             Console.WriteLine("Ambient: {0}", ambient.Index);
+            Console.WriteLine("NormalMat: {0}", normalMat.Index);
             Console.WriteLine();
         }
 
@@ -43,6 +47,9 @@ namespace RTE.Engine.Materials
                 this.ambient.Color = ambient;
                 this.ambient.Bind();
             }
+            
+            normalMat.Matrix = Matrix3.Transpose(new Matrix3(model).Inverted());
+            normalMat.Bind();
         }
     }
 }

@@ -90,13 +90,25 @@ namespace RTE.Engine
 
             Viewport.Resize(ClientRectangle);
 
-            Material defMaterial = new DefaultMaterial("def");
-            Material texMaterial = new DefaultMaterial(
-                "tex",
-                new Texture("BaseTexture.png")
+            Vector3 lightPos = new Vector3(-1.5f, -1.2f, 0);
+            Color4 lc = Color4.Yellow;
+            Vector3 lightColor = new Vector3(lc.R, lc.G, lc.B);
+
+            Material defMaterial = new MaterialDefault(
+                "def",
+                new Texture("EmptyTexture.png"),
+                lightPos,
+                lightColor
                 );
 
-            Material emissiveMaterial = new EmissiveMaterial(
+            Material texMaterial = new MaterialDefault(
+                "tex",
+                new Texture("BaseTexture.png"),
+                lightPos,
+                lightColor
+                );
+
+            Material emissiveMaterial = new MaterialEmissive(
                 "em",
                 new Texture("BaseTexture2.png"),
                 Color4.White
@@ -122,7 +134,7 @@ namespace RTE.Engine
                     new Mesh("Stone.obj", texMaterial),
                     new Transform(new Vector3(-3, 0, 2))
                     ))
-                .AddActor(new Actor(
+                /*.AddActor(new Actor(
                     "glow",
                     new Mesh("Glow.obj", emissiveMaterial),
                     new Transform(
@@ -130,7 +142,7 @@ namespace RTE.Engine
                         new Quaternion(2.6f, -1.2f, -1),
                         Vector3.One * 0.9f
                         )
-                    ))
+                    ))*/
                 .AddActor(new Actor(
                     "lamp",
                     new Mesh("Lamp.obj", emissiveMaterial),
@@ -140,7 +152,7 @@ namespace RTE.Engine
                         Vector3.One * 0.5f
                         )
                     ))
-                .AddActor(new Actor(
+                /*.AddActor(new Actor(
                     "lamp2",
                     new Mesh("Lamp.obj", emissiveMaterial),
                     new Transform(
@@ -148,11 +160,16 @@ namespace RTE.Engine
                         new Quaternion(2.2f, 1.2f, 0),
                         Vector3.One * 0.5f
                         )
-                    ));
+                    ))*/;
 
             actor = scene.GetActor("actor");
 
-            Material base2 = new DefaultMaterial("base", new Texture("BaseTexture2.png"));
+            Material base2 = new MaterialDefault(
+                "base",
+                new Texture("BaseTexture2.png"),
+                lightPos,
+                lightColor
+                );
 
             for (int x = -10; x < 10; x++)
                 for (int y = -10; y < 10; y++)

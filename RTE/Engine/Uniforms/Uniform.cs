@@ -1,4 +1,4 @@
-﻿namespace RTE.Engine
+﻿namespace RTE.Engine.Uniforms
 {
     abstract class Uniform
     {

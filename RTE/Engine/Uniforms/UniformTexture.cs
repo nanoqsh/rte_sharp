@@ -1,7 +1,7 @@
 ﻿using OpenTK.Graphics.OpenGL4;
 using System;
 
-namespace RTE.Engine
+namespace RTE.Engine.Uniforms
 {
     class UniformTexture : Uniform
     {

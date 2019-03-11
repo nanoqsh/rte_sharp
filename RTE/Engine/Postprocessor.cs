@@ -2,6 +2,7 @@
 using OpenTK;
 using OpenTK.Graphics.OpenGL4;
 using RTE.Engine.Shaders;
+using RTE.Engine.Uniforms;
 
 namespace RTE.Engine
 {

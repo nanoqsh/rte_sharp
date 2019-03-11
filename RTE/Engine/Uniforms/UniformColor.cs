@@ -1,7 +1,7 @@
 ﻿using OpenTK.Graphics;
 using OpenTK.Graphics.OpenGL4;
 
-namespace RTE.Engine
+namespace RTE.Engine.Uniforms
 {
     class UniformColor : Uniform
     {
