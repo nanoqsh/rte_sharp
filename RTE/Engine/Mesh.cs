@@ -29,7 +29,7 @@ namespace RTE.Engine
                 .CreateElementBuffer(meshData.Indexes)
                 .SetDrawMode(DrawMode.Triangles)
                 .AddAttributes(
-                    new Attribute(shader.GetAttributeIndex("coord"), 3, 8, 0),
+                    new Attribute(shader.GetAttributeIndex("position"), 3, 8, 0),
                     new Attribute(shader.GetAttributeIndex("normal"), 3, 8, 3),
                     new Attribute(shader.GetAttributeIndex("texCoord"), 2, 8, 6)
                     );

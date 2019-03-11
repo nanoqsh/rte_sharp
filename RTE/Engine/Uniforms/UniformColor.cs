@@ -3,16 +3,16 @@ using OpenTK.Graphics.OpenGL4;
 
 namespace RTE.Engine.Uniforms
 {
-    class UniformColor : Uniform
+    class UniformColor4 : Uniform
     {
         public Color4 Color;
 
-        public UniformColor(int index)
+        public UniformColor4(int index)
             : this(index, Color4.Black)
         {
         }
 
-        public UniformColor(int index, Color4 color)
+        public UniformColor4(int index, Color4 color)
             : base(index)
         {
             Color = color;

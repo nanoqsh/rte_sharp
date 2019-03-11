@@ -91,21 +91,20 @@ namespace RTE.Engine
             Viewport.Resize(ClientRectangle);
 
             Vector3 lightPos = new Vector3(-1.5f, -1.2f, 0);
-            Color4 lc = Color4.Yellow;
-            Vector3 lightColor = new Vector3(lc.R, lc.G, lc.B);
+            Color4 lightColor = Color4.Yellow;
 
             Material defMaterial = new MaterialDefault(
                 "def",
                 new Texture("EmptyTexture.png"),
                 lightPos,
-                lightColor
+                lightColor.ToVector3()
                 );
 
             Material texMaterial = new MaterialDefault(
                 "tex",
                 new Texture("BaseTexture.png"),
                 lightPos,
-                lightColor
+                lightColor.ToVector3()
                 );
 
             Material emissiveMaterial = new MaterialEmissive(
@@ -168,7 +167,7 @@ namespace RTE.Engine
                 "base",
                 new Texture("BaseTexture2.png"),
                 lightPos,
-                lightColor
+                lightColor.ToVector3()
                 );
 
             for (int x = -10; x < 10; x++)

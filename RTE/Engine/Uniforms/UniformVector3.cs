@@ -1,4 +1,5 @@
 ﻿using OpenTK;
+using OpenTK.Graphics;
 using OpenTK.Graphics.OpenGL4;
 
 namespace RTE.Engine.Uniforms
@@ -9,6 +10,11 @@ namespace RTE.Engine.Uniforms
 
         public UniformVector3(int index)
             : this(index, Vector3.Zero)
+        {
+        }
+
+        public UniformVector3(int index, Color4 color)
+            : this(index, new Vector3(color.R, color.G, color.B))
         {
         }
 

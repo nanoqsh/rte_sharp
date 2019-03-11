@@ -25,6 +25,7 @@ namespace RTE.Engine
                 actor.Mesh.Material.BindGlobal(
                     actor.Transform.GetModel(),
                     projView,
+                    actor.Transform.GetNormalMatrix(),
                     scene.AmbientColor
                     );
 

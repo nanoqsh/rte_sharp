@@ -3,16 +3,16 @@ using OpenTK;
 
 namespace RTE.Engine.Uniforms
 {
-    class UniformMatrix : Uniform
+    class UniformMatrix4 : Uniform
     {
         public Matrix4 Matrix;
 
-        public UniformMatrix(int index)
+        public UniformMatrix4(int index)
             : this(index, Matrix4.Identity)
         {
         }
 
-        public UniformMatrix(int index, Matrix4 matrix)
+        public UniformMatrix4(int index, Matrix4 matrix)
             : base(index)
         {
             Matrix = matrix;

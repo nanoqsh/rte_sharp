@@ -8,7 +8,7 @@ namespace RTE.Engine.Materials
         public override ShaderProgram Shader => MaterialShaders.EmissiveMeshShader;
 
         private readonly UniformTexture uniformTexture;
-        private readonly UniformColor uniformLightColor;
+        private readonly UniformColor4 uniformLightColor;
 
         public MaterialEmissive(string name)
             : this(name, new Texture("EmptyTexture.png"), Color4.White)
@@ -29,7 +29,7 @@ namespace RTE.Engine.Materials
                 0
                 );
 
-            uniformLightColor = new UniformColor(
+            uniformLightColor = new UniformColor4(
                 Shader.GetUniformIndex("lightColor"),
                 lightColor
                 );

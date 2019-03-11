@@ -228,5 +228,10 @@ namespace RTE.Engine
 
             return model;
         }
+
+        public Matrix3 GetNormalMatrix()
+        {
+            return Matrix3.Transpose(new Matrix3(GetModel()).Inverted());
+        }
     }
 }
