@@ -25,6 +25,11 @@ namespace RTE.Engine.Shaders
             Index = GL.CreateShader(ShaderType);
             GL.ShaderSource(Index, shaderCode);
             GL.CompileShader(Index);
+
+            GL.GetShader(Index, ShaderParameter.CompileStatus, out int isCompiled);
+            
+            if (isCompiled == 0)
+                throw new Exception($"Shader {shaderName} compile: {GetLogInfo()}");
         }
 
         public string GetLogInfo()

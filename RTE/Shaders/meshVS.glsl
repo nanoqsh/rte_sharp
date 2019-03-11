@@ -15,6 +15,7 @@ void main()
 {
 	FSNormal = normalMatrix * normal;
 	FSPosition = vec3(model * vec4(position, 1.0f));
+
 	FSTexCoord = vec2(texCoord.x, 1.0f - texCoord.y);
 	gl_Position = projView * model * vec4(position, 1.0f);
 }

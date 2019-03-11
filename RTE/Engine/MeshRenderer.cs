@@ -15,7 +15,7 @@ namespace RTE.Engine
         public static void Draw(Actor[] actors, Scene scene)
         {
             Capabilities.DepthTest = true;
-
+            
             Matrix4 projView = camera.View * projection;
 
             foreach (Actor actor in actors)
@@ -26,6 +26,7 @@ namespace RTE.Engine
                     actor.Transform.GetModel(),
                     projView,
                     actor.Transform.GetNormalMatrix(),
+                    camera.Position,
                     scene.AmbientColor
                     );
 

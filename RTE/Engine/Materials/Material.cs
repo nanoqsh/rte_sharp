@@ -12,8 +12,9 @@ namespace RTE.Engine.Materials
 
         private readonly UniformMatrix4 model;
         private readonly UniformMatrix4 projView;
-        private readonly UniformColor4 ambient;
+        private readonly UniformVector3 ambient;
         private readonly UniformMatrix3 normalMatrix;
+        private readonly UniformVector3 viewPosition;
 
         protected Material(string name)
         {
@@ -21,14 +22,16 @@ namespace RTE.Engine.Materials
 
             model = new UniformMatrix4(Shader.GetUniformIndex("model"));
             projView = new UniformMatrix4(Shader.GetUniformIndex("projView"));
-            ambient = new UniformColor4(Shader.GetUniformIndex("ambient"));
+            ambient = new UniformVector3(Shader.GetUniformIndex("ambient"));
             normalMatrix = new UniformMatrix3(Shader.GetUniformIndex("normalMatrix"));
+            viewPosition = new UniformVector3(Shader.GetUniformIndex("viewPosition"));
 
             Console.WriteLine("{0}:", name);
             Console.WriteLine("Model: {0}", model.Index);
             Console.WriteLine("ProjView: {0}", projView.Index);
             Console.WriteLine("Ambient: {0}", ambient.Index);
             Console.WriteLine("normalMatrix: {0}", normalMatrix.Index);
+            Console.WriteLine("viewPosition: {0}", viewPosition.Index);
             Console.WriteLine();
         }
 
@@ -38,7 +41,8 @@ namespace RTE.Engine.Materials
             Matrix4 model,
             Matrix4 projView,
             Matrix3 normalMatrix,
-            Color4 ambient
+            Vector3 viewPosition,
+            Vector3 ambient
             )
         {
             this.model.Matrix = model;
@@ -50,9 +54,12 @@ namespace RTE.Engine.Materials
             this.normalMatrix.Matrix = normalMatrix;
             this.normalMatrix.Bind();
 
+            this.viewPosition.Vector = viewPosition;
+            this.viewPosition.Bind();
+
             if (this.ambient.Index != -1)
             {
-                this.ambient.Color = ambient;
+                this.ambient.Vector = ambient;
                 this.ambient.Bind();
             }
         }
