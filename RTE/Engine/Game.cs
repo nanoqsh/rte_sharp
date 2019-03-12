@@ -91,23 +91,25 @@ namespace RTE.Engine
             Viewport.Resize(ClientRectangle);
 
             Vector3 lightPos = new Vector3(-1.5f, -1.2f, 0);
-            Color4 lightColor = Color4.Yellow;
-            Color4 specularColor = Color4.LightGoldenrodYellow;
+            Color4 lightColor = Color4.Red;
+            Color4 specularColor = Color4.Yellow;
 
-            Material defMaterial = new MaterialDefaultGouraud(
+            Material defMaterial = new MaterialDefault(
                 "def",
                 new Texture("EmptyTexture.png"),
                 lightPos,
                 lightColor.ToVector3(),
-                specularColor.ToVector3()
+                specularColor.ToVector3(),
+                32
                 );
 
-            Material texMaterial = new MaterialDefaultGouraud(
+            Material texMaterial = new MaterialDefault(
                 "tex",
                 new Texture("BaseTexture.png"),
                 lightPos,
                 lightColor.ToVector3(),
-                specularColor.ToVector3()
+                specularColor.ToVector3(),
+                32
                 );
 
             Material emissiveMaterial = new MaterialEmissive(
@@ -166,12 +168,13 @@ namespace RTE.Engine
 
             actor = scene.GetActor("actor");
 
-            Material base2 = new MaterialDefaultGouraud(
+            Material base2 = new MaterialDefault(
                 "base",
                 new Texture("BaseTexture2.png"),
                 lightPos,
                 lightColor.ToVector3(),
-                specularColor.ToVector3()
+                specularColor.ToVector3(),
+                32
                 );
 
             for (int x = -10; x < 10; x++)

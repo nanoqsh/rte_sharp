@@ -7,12 +7,13 @@ namespace RTE.Engine.Materials
     {
         public override ShaderProgram Shader => MaterialShaders.DefaultMeshShader;
 
-        private readonly UniformTexture uniformTexture;
+        private readonly UniformTexture uniformDiffuse;
         private readonly Texture texture;
 
         private readonly UniformVector3 uniformLightPosition;
         private readonly UniformVector3 uniformLightColor;
         private readonly UniformVector3 uniformSpecularColor;
+        private readonly UniformFloat uniformShininess;
 
         public MaterialDefault(string name)
             : this(
@@ -20,7 +21,8 @@ namespace RTE.Engine.Materials
                   new Texture("EmptyTexture.png"),
                   Vector3.Zero,
                   Vector3.One,
-                  Vector3.One
+                  Vector3.One,
+                  1f
                   )
         {
         }
@@ -30,11 +32,12 @@ namespace RTE.Engine.Materials
             Texture texture,
             Vector3 lightPosition,
             Vector3 lightColor,
-            Vector3 specularColor
+            Vector3 specularColor,
+            float shininess
             )
             : base(name)
         {
-            uniformTexture = new UniformTexture(
+            uniformDiffuse = new UniformTexture(
                 Shader.GetUniformIndex("tex"),
                 texture,
                 0
@@ -56,15 +59,21 @@ namespace RTE.Engine.Materials
                 Shader.GetUniformIndex("specularColor"),
                 specularColor
                 );
+
+            uniformShininess = new UniformFloat(
+                Shader.GetUniformIndex("shininess"),
+                1f
+                );
         }
 
         public override void Bind()
         {
-            uniformTexture.Value = texture;
-            uniformTexture.Bind();
+            uniformDiffuse.Value = texture;
+            uniformDiffuse.Bind();
             uniformLightPosition.Bind();
             uniformLightColor.Bind();
             uniformSpecularColor.Bind();
+            uniformShininess.Bind();
         }
     }
 }

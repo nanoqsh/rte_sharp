@@ -9,9 +9,10 @@ namespace RTE.Engine.Materials
             Texture texture,
             Vector3 lightPosition,
             Vector3 lightColor,
-            Vector3 specularColor
+            Vector3 specularColor,
+            float shininess
             )
-            : base(name, texture, lightPosition, lightColor, specularColor)
+            : base(name, texture, lightPosition, lightColor, specularColor, shininess)
         {
         }
 

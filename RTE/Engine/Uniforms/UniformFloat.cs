@@ -2,9 +2,9 @@
 
 namespace RTE.Engine.Uniforms
 {
-    class UniformInt : Uniform<int>
+    class UniformFloat : Uniform<float>
     {
-        public UniformInt(int index, int value)
+        public UniformFloat(int index, float value)
             : base(index, value)
         {
         }

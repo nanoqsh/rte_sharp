@@ -1,4 +1,5 @@
-﻿
+﻿#version 330 core
+
 attribute vec2 position;
 attribute vec2 texCoord;
 

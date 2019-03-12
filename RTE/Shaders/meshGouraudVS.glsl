@@ -1,4 +1,5 @@
-﻿
+﻿#version 330 core
+
 attribute vec3 position;
 attribute vec3 normal;
 attribute vec2 texCoord;
@@ -19,22 +20,22 @@ out vec2 FSTexCoord;
 
 void main()
 {
-	vec3 modelPosition = vec3(model * vec4(position, 1.0f));
+	vec3 modelPosition = vec3(model * vec4(position, 1.0));
 
 	// diffuse
 	vec3 normal = normalize(normalMatrix * normal);
 	vec3 lightDir = normalize(lightPosition - modelPosition);
-	vec3 diffuse = max(dot(normal, lightDir), 0.0f) * lightColor;
+	vec3 diffuse = max(dot(normal, lightDir), 0.0) * lightColor;
 
 	// specular
-    float specularStrength = 0.6f;
+    float specularStrength = 0.6;
     vec3 viewDir = normalize(viewPosition - modelPosition);
     vec3 reflectDir = reflect(-lightDir, normal);
-    float specPower = pow(max(dot(viewDir, reflectDir), 0.0f), 16);
+    float specPower = pow(max(dot(viewDir, reflectDir), 0.0), 16);
     vec3 specular = specularStrength * specPower * specularColor;
 
 	FSLightColor = ambient + diffuse + specular;
 
-	FSTexCoord = vec2(texCoord.x, 1.0f - texCoord.y);
-	gl_Position = projView * model * vec4(position, 1.0f);
+	FSTexCoord = vec2(texCoord.x, 1.0 - texCoord.y);
+	gl_Position = projView * model * vec4(position, 1.0);
 }
