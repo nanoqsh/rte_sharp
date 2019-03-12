@@ -1,24 +1,24 @@
 ﻿using OpenTK;
+using RTE.Engine.Materials;
 using RTE.Engine.Uniforms;
 
-namespace RTE.Engine.Materials
+namespace RTE.Engine.MaterialRenderers
 {
-    class DefaultRenderer : MaterialRenderer
+    class SolidRenderer : MaterialRenderer
     {
-        private readonly UniformTexture diffuse;
+        private readonly UniformVector3 color;
         private readonly UniformVector3 specular;
         private readonly UniformFloat shininess;
 
         private readonly UniformVector3 viewPosition;
         private readonly UniformVector3 ambient;
 
-        public DefaultRenderer(MaterialDefault material)
+        public SolidRenderer(MaterialSolid material)
             : base(material)
         {
-            diffuse = new UniformTexture(
-                Shader.GetUniformIndex("tex"),
-                material.Diffuse,
-                0
+            color = new UniformVector3(
+                Shader.GetUniformIndex("color"),
+                material.Color
                 );
 
             specular = new UniformVector3(
@@ -42,11 +42,11 @@ namespace RTE.Engine.Materials
                 );
         }
 
-        public override ShaderProgram Shader => MaterialShaders.Default;
+        public override ShaderProgram Shader => MaterialShaders.Solid;
 
         public override void Bind()
         {
-            diffuse.SetUniform();
+            color.SetUniform();
             specular.SetUniform();
             shininess.SetUniform();
         }

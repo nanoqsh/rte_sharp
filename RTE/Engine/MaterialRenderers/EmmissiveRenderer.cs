@@ -1,8 +1,8 @@
 ﻿using OpenTK;
 using RTE.Engine.Uniforms;
-using System;
+using RTE.Engine.Materials;
 
-namespace RTE.Engine.Materials
+namespace RTE.Engine.MaterialRenderers
 {
     class EmmissiveRenderer : MaterialRenderer
     {

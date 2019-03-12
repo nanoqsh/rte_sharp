@@ -164,7 +164,7 @@ namespace RTE.Engine
 
             actor = scene.GetActor("actor");
 
-            Material base2 = new MaterialDefault(
+            Material base2 = new MaterialGouraud(
                 "base",
                 new Texture("BaseTexture2.png"),
                 specularColor,
@@ -178,6 +178,18 @@ namespace RTE.Engine
                         new Mesh("Bricks.obj", base2),
                         new Transform(new Vector3(x * 2, -4, y * 2))
                         ));
+
+            Material solid = new MaterialSolid(
+                "solid",
+                Color4.Khaki,
+                Color4.Gold
+                );
+
+            scene.AddActor(new Actor(
+                "solid_obj",
+                new Mesh("Block.obj", solid),
+                new Transform(new Vector3(1, -1.6f, 3))
+                ));
 
             scene.AmbientColor = Color4.CadetBlue.ToVector3();
 

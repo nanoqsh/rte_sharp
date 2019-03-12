@@ -1,4 +1,6 @@
-﻿namespace RTE.Engine.Materials
+﻿using RTE.Engine.MaterialRenderers;
+
+namespace RTE.Engine.Materials
 {
     abstract class Material
     {

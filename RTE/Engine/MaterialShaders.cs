@@ -30,5 +30,14 @@ namespace RTE.Engine
                 new ShaderFragment("meshGouraudFS.glsl")
                 ));
         }
+
+        private static ShaderProgram solid;
+        public static ShaderProgram Solid
+        {
+            get => solid ?? (solid = new ShaderProgram(
+                new ShaderVertex("meshVS.glsl"),
+                new ShaderFragment("solidFS.glsl")
+                ));
+        }
     }
 }

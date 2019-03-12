@@ -1,5 +1,5 @@
 ﻿using OpenTK;
-using RTE.Engine.Materials;
+using RTE.Engine.MaterialRenderers;
 
 namespace RTE.Engine
 {

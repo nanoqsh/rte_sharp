@@ -1,4 +1,5 @@
 ﻿using OpenTK.Graphics;
+using RTE.Engine.MaterialRenderers;
 
 namespace RTE.Engine.Materials
 {
@@ -25,16 +26,9 @@ namespace RTE.Engine.Materials
         }
 
         private EmmissiveRenderer renderer;
-
         public override MaterialRenderer Renderer
         {
-            get
-            {
-                if (renderer == null)
-                    renderer = new EmmissiveRenderer(this);
-
-                return renderer;
-            }
+            get => renderer ?? (renderer = new EmmissiveRenderer(this));
         }
     }
 }

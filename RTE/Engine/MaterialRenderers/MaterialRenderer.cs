@@ -1,7 +1,8 @@
 ﻿using OpenTK;
 using RTE.Engine.Uniforms;
+using RTE.Engine.Materials;
 
-namespace RTE.Engine.Materials
+namespace RTE.Engine.MaterialRenderers
 {
     abstract class MaterialRenderer
     {
