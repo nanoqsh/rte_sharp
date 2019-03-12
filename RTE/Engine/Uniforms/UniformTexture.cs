@@ -16,16 +16,11 @@ namespace RTE.Engine.Uniforms
             Unit = unit;
         }
 
-        public override void Bind()
+        protected override void SetUniform()
         {
-            if (isModified)
-            {
-                GL.Uniform1(Index, Unit);
-                GL.ActiveTexture(TextureUnit.Texture0 + Unit);
-                GL.BindTexture(TextureTarget.Texture2D, value.Index);
-            }
-
-            isModified = false;
+            GL.Uniform1(Index, Unit);
+            GL.ActiveTexture(TextureUnit.Texture0 + Unit);
+            GL.BindTexture(TextureTarget.Texture2D, value.Index);
         }
     }
 }

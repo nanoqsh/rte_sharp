@@ -92,7 +92,7 @@ namespace RTE.Engine
 
             Vector3 lightPos = new Vector3(-1.5f, -1.2f, 0);
             Color4 lightColor = Color4.Red;
-            Color4 specularColor = Color4.Yellow;
+            Color4 specularColor = Color4.Blue;
 
             Material defMaterial = new MaterialDefault(
                 "def",

@@ -21,12 +21,9 @@ namespace RTE.Engine.Uniforms
         {
         }
 
-        public override void Bind()
+        protected override void SetUniform()
         {
-            if (isModified)
-                GL.Uniform3(Index, ref value);
-
-            isModified = false;
+            GL.Uniform3(Index, ref value);
         }
     }
 }

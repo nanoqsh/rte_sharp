@@ -9,12 +9,9 @@ namespace RTE.Engine.Uniforms
         {
         }
 
-        public override void Bind()
+        protected override void SetUniform()
         {
-            if (isModified)
-                GL.Uniform1(Index, value);
-
-            isModified = false;
+            GL.Uniform1(Index, value);
         }
     }
 }

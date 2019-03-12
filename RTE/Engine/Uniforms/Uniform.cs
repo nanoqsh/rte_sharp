@@ -4,7 +4,7 @@
     {
         public readonly int Index;
 
-        protected bool isModified;
+        private bool isModified;
         protected T value;
 
         protected Uniform(int index, T value)
@@ -14,7 +14,15 @@
             isModified = true;
         }
 
-        public abstract void Bind();
+        public void Bind()
+        {
+            if (isModified)
+                SetUniform();
+
+            isModified = false;
+        }
+
+        protected abstract void SetUniform();
 
         public T Value
         {
