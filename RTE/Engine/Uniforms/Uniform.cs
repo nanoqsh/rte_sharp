@@ -16,13 +16,16 @@
 
         public void Bind()
         {
+            if (Index == -1)
+                return;
+
             if (isModified)
                 SetUniform();
 
             isModified = false;
         }
 
-        protected abstract void SetUniform();
+        public abstract void SetUniform();
 
         public T Value
         {

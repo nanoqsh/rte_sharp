@@ -9,7 +9,7 @@ namespace RTE.Engine.Uniforms
         {
         }
 
-        protected override void SetUniform()
+        public override void SetUniform()
         {
             GL.Uniform1(Index, value);
         }

@@ -97,19 +97,15 @@ namespace RTE.Engine
             Material defMaterial = new MaterialDefault(
                 "def",
                 new Texture("EmptyTexture.png"),
-                lightPos,
-                lightColor.ToVector3(),
-                specularColor.ToVector3(),
-                32
+                specularColor,
+                2
                 );
 
             Material texMaterial = new MaterialDefault(
                 "tex",
                 new Texture("BaseTexture.png"),
-                lightPos,
-                lightColor.ToVector3(),
-                specularColor.ToVector3(),
-                32
+                Color.Green,
+                2
                 );
 
             Material emissiveMaterial = new MaterialEmissive(
@@ -171,10 +167,8 @@ namespace RTE.Engine
             Material base2 = new MaterialDefault(
                 "base",
                 new Texture("BaseTexture2.png"),
-                lightPos,
-                lightColor.ToVector3(),
-                specularColor.ToVector3(),
-                32
+                specularColor,
+                8
                 );
 
             for (int x = -10; x < 10; x++)
@@ -186,6 +180,8 @@ namespace RTE.Engine
                         ));
 
             scene.AmbientColor = Color4.CadetBlue.ToVector3();
+
+            scene.Light = new Light(lightColor, lightPos);
 
             GL.PolygonMode(MaterialFace.Front, PolygonMode.Fill);
 

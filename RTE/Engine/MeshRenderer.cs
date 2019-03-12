@@ -1,4 +1,5 @@
 ﻿using OpenTK;
+using RTE.Engine.Materials;
 
 namespace RTE.Engine
 {
@@ -20,21 +21,27 @@ namespace RTE.Engine
 
             foreach (Actor actor in actors)
             {
-                actor.Mesh.Material.Shader.Enable();
+                MaterialRenderer renderer = actor.Mesh.Material.Renderer;
 
-                actor.Mesh.Material.BindGlobal(
+                renderer.Shader.Enable();
+
+                renderer.BindMVP(
                     actor.Transform.GetModel(),
                     projView,
-                    actor.Transform.GetNormalMatrix(),
+                    actor.Transform.GetNormalMatrix()
+                    );
+
+                renderer.BindAmbient(
                     camera.Position,
                     scene.AmbientColor
                     );
 
-                actor.Mesh.Material.Bind();
+                renderer.Bind();
+                renderer.BindLight(scene.Light);
 
                 actor.Mesh.Draw();
 
-                actor.Mesh.Material.Shader.Disable();
+                renderer.Shader.Disable();
             }
         }
 

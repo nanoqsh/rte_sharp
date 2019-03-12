@@ -1,12 +1,15 @@
 ﻿#version 330 core
 
+// material
 uniform sampler2D tex;
 uniform vec3 specularColor;
 uniform float shininess;
 
+// ambient
 uniform vec3 ambient;
 uniform vec3 viewPosition;
 
+// light
 uniform vec3 lightPosition;
 uniform vec3 lightColor;
 
@@ -25,7 +28,7 @@ void main()
     vec3 viewDir = normalize(viewPosition - FSPosition);
     vec3 reflectDir = reflect(-lightDir, normal);
     float specPower = pow(max(dot(viewDir, reflectDir), 0.0), shininess);
-    vec3 specular = 0.6 * specPower * specularColor;
+    vec3 specular = specPower * specularColor;
 
 	vec3 result = ambient + diffuse + specular;
 	gl_FragColor = texture2D(tex, FSTexCoord) * vec4(result, 1.0);

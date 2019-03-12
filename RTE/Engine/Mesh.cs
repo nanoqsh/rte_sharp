@@ -23,7 +23,7 @@ namespace RTE.Engine
 
             MeshData meshData = new MeshData(data);
 
-            ShaderProgram shader = material.Shader;
+            ShaderProgram shader = material.Renderer.Shader;
 
             arrayObject = new ElementArrayObject<Vertex8>(meshData.Vectors)
                 .CreateElementBuffer(meshData.Indexes)

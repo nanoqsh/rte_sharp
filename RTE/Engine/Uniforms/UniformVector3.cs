@@ -21,7 +21,7 @@ namespace RTE.Engine.Uniforms
         {
         }
 
-        protected override void SetUniform()
+        public override void SetUniform()
         {
             GL.Uniform3(Index, ref value);
         }

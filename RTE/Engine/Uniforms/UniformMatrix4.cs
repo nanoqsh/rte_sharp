@@ -15,7 +15,7 @@ namespace RTE.Engine.Uniforms
         {
         }
 
-        protected override void SetUniform()
+        public override void SetUniform()
         {
             GL.UniformMatrix4(Index, false, ref value);
         }

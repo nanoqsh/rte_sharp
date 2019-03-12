@@ -16,7 +16,7 @@ namespace RTE.Engine.Uniforms
             Unit = unit;
         }
 
-        protected override void SetUniform()
+        public override void SetUniform()
         {
             GL.Uniform1(Index, Unit);
             GL.ActiveTexture(TextureUnit.Texture0 + Unit);

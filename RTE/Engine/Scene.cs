@@ -15,6 +15,8 @@ namespace RTE.Engine
 
         public Vector3 AmbientColor;
 
+        public Light Light;
+
         public Scene(string name)
         {
             Name = name;
