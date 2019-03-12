@@ -24,7 +24,7 @@ namespace RTE.Engine.Materials
                 );
         }
 
-        public override ShaderProgram Shader => MaterialShaders.EmissiveMeshShader;
+        public override ShaderProgram Shader => MaterialShaders.Emissive;
 
         public override void Bind()
         {

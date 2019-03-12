@@ -4,49 +4,31 @@ namespace RTE.Engine
 {
     static class MaterialShaders
     {
-        private static ShaderProgram defaultMeshShader;
-        public static ShaderProgram DefaultMeshShader
+        private static ShaderProgram _default;
+        public static ShaderProgram Default
         {
-            get
-            {
-                if (defaultMeshShader == null)
-                    defaultMeshShader = new ShaderProgram(
-                        new ShaderVertex("meshVS.glsl"),
-                        new ShaderFragment("meshFS.glsl")
-                        );
-
-                return defaultMeshShader;
-            }
+            get => _default ?? (_default = new ShaderProgram(
+                new ShaderVertex("meshVS.glsl"),
+                new ShaderFragment("meshFS.glsl")
+                ));
         }
 
-        private static ShaderProgram emissiveMeshShader;
-        public static ShaderProgram EmissiveMeshShader
+        private static ShaderProgram emissive;
+        public static ShaderProgram Emissive
         {
-            get
-            {
-                if (emissiveMeshShader == null)
-                    emissiveMeshShader = new ShaderProgram(
-                        new ShaderVertex("meshVS.glsl"),
-                        new ShaderFragment("emissiveFS.glsl")
-                        );
-
-                return emissiveMeshShader;
-            }
+            get => emissive ?? (emissive = new ShaderProgram(
+                new ShaderVertex("meshVS.glsl"),
+                new ShaderFragment("emissiveFS.glsl")
+                ));
         }
 
-        private static ShaderProgram gouraudMeshShader;
-        public static ShaderProgram GouraudMeshShader
+        private static ShaderProgram gouraud;
+        public static ShaderProgram Gouraud
         {
-            get
-            {
-                if (gouraudMeshShader == null)
-                    gouraudMeshShader = new ShaderProgram(
-                        new ShaderVertex("meshGouraudVS.glsl"),
-                        new ShaderFragment("meshGouraudFS.glsl")
-                        );
-
-                return gouraudMeshShader;
-            }
+            get => gouraud ?? (gouraud = new ShaderProgram(
+                new ShaderVertex("meshGouraudVS.glsl"),
+                new ShaderFragment("meshGouraudFS.glsl")
+                ));
         }
     }
 }

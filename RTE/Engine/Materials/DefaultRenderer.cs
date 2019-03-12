@@ -42,7 +42,7 @@ namespace RTE.Engine.Materials
                 );
         }
 
-        public override ShaderProgram Shader => MaterialShaders.DefaultMeshShader;
+        public override ShaderProgram Shader => MaterialShaders.Default;
 
         public override void Bind()
         {
