@@ -39,5 +39,14 @@ namespace RTE.Engine
                 new ShaderFragment("solidFS.glsl")
                 ));
         }
+
+        private static ShaderProgram transparent;
+        public static ShaderProgram Transparent
+        {
+            get => transparent ?? (transparent = new ShaderProgram(
+                new ShaderVertex("meshVS.glsl"),
+                new ShaderFragment("transparentFS.glsl")
+                ));
+        }
     }
 }

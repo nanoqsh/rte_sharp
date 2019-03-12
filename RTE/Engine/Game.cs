@@ -179,6 +179,30 @@ namespace RTE.Engine
                         new Transform(new Vector3(x * 2, -4, y * 2))
                         ));
 
+            Material ems = new MaterialEmissive(
+                "ems",
+                new Texture("BaseTexture2.png"),
+                Color4.PapayaWhip
+                );
+
+            scene.AddActor(new Actor(
+                "ems_obj",
+                new Mesh("Glow.obj", ems),
+                new Transform(new Vector3(-8, -1.6f, 5))
+                ));
+
+            Material def = new MaterialDefault(
+                "def",
+                new Texture("BaseTexture2.png"),
+                Color4.RosyBrown
+                );
+
+            scene.AddActor(new Actor(
+                "def_obj",
+                new Mesh("Coal.obj", def),
+                new Transform(new Vector3(-8, -1.6f, 2))
+                ));
+
             Material solid = new MaterialSolid(
                 "solid",
                 Color4.Khaki,
@@ -188,14 +212,56 @@ namespace RTE.Engine
             scene.AddActor(new Actor(
                 "solid_obj",
                 new Mesh("Block.obj", solid),
-                new Transform(new Vector3(1, -1.6f, 3))
+                new Transform(new Vector3(-8, -1.6f, -1))
+                ));
+
+            Material guro = new MaterialGouraud(
+                "guro",
+                new Texture("BaseTexture2.png"),
+                Color4.Azure,
+                32
+                );
+
+            scene.AddActor(new Actor(
+                "guro_obj",
+                new Mesh("Dirt.obj", guro),
+                new Transform(new Vector3(-8, -1.6f, -7))
+                ));
+
+            Material bl = new MaterialDefault(
+                "bl",
+                new Texture("EmptyTexture.png"),
+                Color4.White,
+                32
+                );
+
+            scene.AddActor(new Actor(
+                "bl_obj",
+                new Mesh("Block.obj", bl),
+                new Transform(new Vector3(-8, -1.6f, -10))
+                ));
+
+            Material trans = new MaterialTransparent(
+                "trans",
+                new Texture("BaseTexture.png"),
+                0.7f
+                );
+
+            scene.AddActor(new Actor(
+                "trans_obj",
+                new Mesh("Block.obj", trans),
+                new Transform(new Vector3(-8, -1.6f, -4))
                 ));
 
             scene.AmbientColor = Color4.CadetBlue.ToVector3();
 
             scene.Light = new Light(lightColor, lightPos);
+            
+            GL.Enable(EnableCap.CullFace);
+            GL.CullFace(CullFaceMode.Back);
 
-            GL.PolygonMode(MaterialFace.Front, PolygonMode.Fill);
+            GL.Enable(EnableCap.Blend);
+            GL.BlendFunc(BlendingFactor.SrcAlpha, BlendingFactor.OneMinusSrcAlpha);
 
             CheckOpenGLError();
         }
@@ -269,7 +335,6 @@ namespace RTE.Engine
 
             if (pressedKeys.Contains(Key.X))
                 tr.ScaleByX(-scaleSpeed);
-            
         }
 
         protected override void OnRenderFrame(FrameEventArgs e)
