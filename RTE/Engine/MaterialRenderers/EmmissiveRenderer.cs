@@ -36,7 +36,7 @@ namespace RTE.Engine.MaterialRenderers
         {
         }
 
-        public override void BindLight(Light light)
+        public override void BindLight(PointLight[] lights)
         {
         }
     }

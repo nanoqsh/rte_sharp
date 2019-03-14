@@ -15,7 +15,7 @@ namespace RTE.Engine
 
         public Vector3 AmbientColor;
 
-        public Light Light;
+        public PointLight[] Lights;
 
         public Scene(string name)
         {
@@ -23,7 +23,7 @@ namespace RTE.Engine
             Actors = new Dictionary<string, Actor>();
 
             sceneRenderer = new SceneRenderer(this)
-                .SetBackgroundColor(Color4.CadetBlue);
+                .SetBackgroundColor(Color4.DarkSlateBlue);
 
             AmbientColor = Color4.White.ToVector3();
         }

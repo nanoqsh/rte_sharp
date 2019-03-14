@@ -3,18 +3,18 @@ using OpenTK.Graphics;
 
 namespace RTE.Engine
 {
-    class Light
+    class DirectionalLight
     {
         public readonly Color4 Color;
-        public readonly Vector3 Position;
+        public readonly Vector3 Direction;
 
-        public Light(
+        public DirectionalLight(
             Color4 color = new Color4(),
-            Vector3 position = new Vector3()
+            Vector3 direction = new Vector3()
             )
         {
             Color = color;
-            Position = position;
+            Direction = direction;
         }
     }
 }

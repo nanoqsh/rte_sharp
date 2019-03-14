@@ -25,7 +25,7 @@ namespace RTE.Engine.MaterialRenderers
 
         public abstract void Bind();
 
-        public abstract void BindLight(Light light);
+        public abstract void BindLight(PointLight[] lights);
 
         public abstract void BindAmbient(Vector3 viewPosition, Vector3 ambient);
 

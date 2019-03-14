@@ -4,26 +4,35 @@ namespace RTE.Engine
 {
     class LightRenderer
     {
-        public readonly UniformVector3 Color;
-        public readonly UniformVector3 Position;
+        public readonly UniformVector3[] Colors;
+        public readonly UniformVector3[] Positions;
 
-        public LightRenderer(Light light, ShaderProgram shader)
+        public LightRenderer(PointLight[] lights, ShaderProgram shader)
         {
-            Color = new UniformVector3(
-                shader.GetUniformIndex("lightColor"),
-                light.Color.ToVector3()
+            Colors = new UniformVector3[lights.Length];
+            Positions = new UniformVector3[lights.Length];
+
+            for (int i = 0; i < lights.Length; i++)
+            {
+                Colors[i] = new UniformVector3(
+                    shader.GetUniformIndex($"lights[{i}].color"),
+                    lights[i].Color.ToVector3()
                 );
 
-            Position = new UniformVector3(
-                shader.GetUniformIndex("lightPosition"),
-                light.Position
-                );
+                Positions[i] = new UniformVector3(
+                    shader.GetUniformIndex($"lights[{i}].position"),
+                    lights[i].Position
+                    );
+            }
         }
 
         public void Bind()
         {
-            Color.Bind();
-            Position.Bind();
+            foreach (UniformVector3 color in Colors)
+                color.Bind();
+
+            foreach (UniformVector3 position in Positions)
+                position.Bind();
         }
     }
 }

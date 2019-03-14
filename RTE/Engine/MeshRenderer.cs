@@ -37,7 +37,7 @@ namespace RTE.Engine
                     );
 
                 renderer.Bind();
-                renderer.BindLight(scene.Light);
+                renderer.BindLight(scene.Lights);
 
                 actor.Mesh.Draw();
 

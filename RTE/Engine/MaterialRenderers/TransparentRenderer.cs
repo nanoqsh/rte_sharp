@@ -47,10 +47,10 @@ namespace RTE.Engine.MaterialRenderers
 
         private LightRenderer LightRenderer;
 
-        public override void BindLight(Light light)
+        public override void BindLight(PointLight[] lights)
         {
             if (LightRenderer == null)
-                LightRenderer = new LightRenderer(light, Shader);
+                LightRenderer = new LightRenderer(lights, Shader);
 
             LightRenderer.Bind();
         }

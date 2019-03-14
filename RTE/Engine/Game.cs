@@ -89,23 +89,21 @@ namespace RTE.Engine
             base.OnLoad(e);
 
             Viewport.Resize(ClientRectangle);
-
-            Vector3 lightPos = new Vector3(-1.5f, -1.2f, 0);
-            Color4 lightColor = Color4.Red;
-            Color4 specularColor = Color4.Blue;
+            
+            Color4 specularColor = Color4.Yellow;
 
             Material defMaterial = new MaterialDefault(
                 "def",
                 new Texture("EmptyTexture.png"),
                 specularColor,
-                2
+                16
                 );
 
             Material texMaterial = new MaterialDefault(
                 "tex",
                 new Texture("BaseTexture.png"),
                 Color.Green,
-                2
+                16
                 );
 
             Material emissiveMaterial = new MaterialEmissive(
@@ -134,7 +132,7 @@ namespace RTE.Engine
                     new Mesh("Stone.obj", texMaterial),
                     new Transform(new Vector3(-3, 0, 2))
                     ))
-                /*.AddActor(new Actor(
+                .AddActor(new Actor(
                     "glow",
                     new Mesh("Glow.obj", emissiveMaterial),
                     new Transform(
@@ -142,7 +140,7 @@ namespace RTE.Engine
                         new Quaternion(2.6f, -1.2f, -1),
                         Vector3.One * 0.9f
                         )
-                    ))*/
+                    ))
                 .AddActor(new Actor(
                     "lamp",
                     new Mesh("Lamp.obj", emissiveMaterial),
@@ -152,7 +150,7 @@ namespace RTE.Engine
                         Vector3.One * 0.5f
                         )
                     ))
-                /*.AddActor(new Actor(
+                .AddActor(new Actor(
                     "lamp2",
                     new Mesh("Lamp.obj", emissiveMaterial),
                     new Transform(
@@ -160,15 +158,15 @@ namespace RTE.Engine
                         new Quaternion(2.2f, 1.2f, 0),
                         Vector3.One * 0.5f
                         )
-                    ))*/;
+                    ));
 
             actor = scene.GetActor("actor");
 
-            Material base2 = new MaterialGouraud(
+            Material base2 = new MaterialDefault(
                 "base",
                 new Texture("BaseTexture2.png"),
                 specularColor,
-                8
+                16
                 );
 
             for (int x = -10; x < 10; x++)
@@ -178,84 +176,16 @@ namespace RTE.Engine
                         new Mesh("Bricks.obj", base2),
                         new Transform(new Vector3(x * 2, -4, y * 2))
                         ));
+            
 
-            Material ems = new MaterialEmissive(
-                "ems",
-                new Texture("BaseTexture2.png"),
-                Color4.PapayaWhip
-                );
+            scene.AmbientColor = new Vector3(0.1f, 0.1f, 0.1f);
 
-            scene.AddActor(new Actor(
-                "ems_obj",
-                new Mesh("Glow.obj", ems),
-                new Transform(new Vector3(-8, -1.6f, 5))
-                ));
-
-            Material def = new MaterialDefault(
-                "def",
-                new Texture("BaseTexture2.png"),
-                Color4.RosyBrown
-                );
-
-            scene.AddActor(new Actor(
-                "def_obj",
-                new Mesh("Coal.obj", def),
-                new Transform(new Vector3(-8, -1.6f, 2))
-                ));
-
-            Material solid = new MaterialSolid(
-                "solid",
-                Color4.Khaki,
-                Color4.Gold
-                );
-
-            scene.AddActor(new Actor(
-                "solid_obj",
-                new Mesh("Block.obj", solid),
-                new Transform(new Vector3(-8, -1.6f, -1))
-                ));
-
-            Material guro = new MaterialGouraud(
-                "guro",
-                new Texture("BaseTexture2.png"),
-                Color4.Azure,
-                32
-                );
-
-            scene.AddActor(new Actor(
-                "guro_obj",
-                new Mesh("Dirt.obj", guro),
-                new Transform(new Vector3(-8, -1.6f, -7))
-                ));
-
-            Material bl = new MaterialDefault(
-                "bl",
-                new Texture("EmptyTexture.png"),
-                Color4.White,
-                32
-                );
-
-            scene.AddActor(new Actor(
-                "bl_obj",
-                new Mesh("Block.obj", bl),
-                new Transform(new Vector3(-8, -1.6f, -10))
-                ));
-
-            Material trans = new MaterialTransparent(
-                "trans",
-                new Texture("BaseTexture.png"),
-                0.7f
-                );
-
-            scene.AddActor(new Actor(
-                "trans_obj",
-                new Mesh("Block.obj", trans),
-                new Transform(new Vector3(-8, -1.6f, -4))
-                ));
-
-            scene.AmbientColor = Color4.CadetBlue.ToVector3();
-
-            scene.Light = new Light(lightColor, lightPos);
+            scene.Lights = new PointLight[3]
+            {
+                new PointLight(Color4.Red, new Vector3(-1.5f, -1.2f, 0)),
+                new PointLight(Color4.Blue, new Vector3(4.5f, -1.5f, -3)),
+                new PointLight(Color4.Green, new Vector3(3, 3, 1))
+            };
             
             GL.Enable(EnableCap.CullFace);
             GL.CullFace(CullFaceMode.Back);
