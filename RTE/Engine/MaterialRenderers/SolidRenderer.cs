@@ -17,7 +17,7 @@ namespace RTE.Engine.MaterialRenderers
             : base(material)
         {
             color = new UniformVector3(
-                Shader.GetUniformIndex("color"),
+                Shader.GetUniformIndex("matColor"),
                 material.Color
                 );
 

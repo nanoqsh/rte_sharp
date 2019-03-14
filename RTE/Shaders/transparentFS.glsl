@@ -15,6 +15,8 @@ in vec3 FSPosition;
 in vec3 FSNormal;
 in vec2 FSTexCoord;
 
+out vec4 color;
+
 void main()
 {
 	// diffuse
@@ -22,5 +24,5 @@ void main()
 	vec3 lightDir = normalize(lightPosition - FSPosition);
 	vec3 diffuse = max(dot(normal, lightDir), 0.0) * lightColor;
 
-	gl_FragColor = texture2D(tex, FSTexCoord) * vec4(ambient + diffuse, opacity);
+	color = texture2D(tex, FSTexCoord) * vec4(ambient + diffuse, opacity);
 }

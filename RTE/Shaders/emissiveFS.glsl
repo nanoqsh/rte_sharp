@@ -7,7 +7,9 @@ in vec3 FSPosition;
 in vec3 FSNormal;
 in vec2 FSTexCoord;
 
+out vec4 color;
+
 void main()
 {
-	gl_FragColor = texture2D(tex, FSTexCoord) * lightColor;
+	color = texture2D(tex, FSTexCoord) * lightColor;
 }

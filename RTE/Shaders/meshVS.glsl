@@ -1,8 +1,8 @@
 ﻿#version 330 core
 
-attribute vec3 position;
-attribute vec3 normal;
-attribute vec2 texCoord;
+in vec3 position;
+in vec3 normal;
+in vec2 texCoord;
 
 uniform mat4 model;
 uniform mat4 projView;
