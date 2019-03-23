@@ -112,27 +112,32 @@ namespace RTE.Engine
                 Color4.White
                 );
 
-            scene = new Scene("main")
-                .AddActor(new Actor(
+            scene = new Scene("main");
+
+            scene.AddActor(new Actor(
                     "actor",
                     new Mesh("Icosphere.obj", defMaterial)
-                    ))
-                .AddActor(new Actor(
+                    ));
+
+            scene.AddActor(new Actor(
                     "block",
                     new Mesh("Block.obj", defMaterial),
                     new Transform(new Vector3(4, 0, 0), new Quaternion(0, 0.1f, 0.6f))
-                    ))
-                .AddActor(new Actor(
+                    ));
+
+            scene.AddActor(new Actor(
                     "block2",
                     new Mesh("Block.obj", texMaterial),
                     new Transform(new Vector3(2, 1, 2), new Quaternion(0.4f, 0, -0.6f))
-                    ))
-                .AddActor(new Actor(
+                    ));
+
+            scene.AddActor(new Actor(
                     "stone",
                     new Mesh("Stone.obj", texMaterial),
                     new Transform(new Vector3(-3, 0, 2))
-                    ))
-                .AddActor(new Actor(
+                    ));
+
+            scene.AddActor(new Actor(
                     "glow",
                     new Mesh("Glow.obj", emissiveMaterial),
                     new Transform(
@@ -140,8 +145,9 @@ namespace RTE.Engine
                         new Quaternion(2.6f, -1.2f, -1),
                         Vector3.One * 0.9f
                         )
-                    ))
-                .AddActor(new Actor(
+                    ));
+
+            scene.AddActor(new Actor(
                     "lamp",
                     new Mesh("Lamp.obj", emissiveMaterial),
                     new Transform(
@@ -149,8 +155,9 @@ namespace RTE.Engine
                         new Quaternion(1.2f, 1.2f, 1),
                         Vector3.One * 0.5f
                         )
-                    ))
-                .AddActor(new Actor(
+                    ));
+
+            scene.AddActor(new Actor(
                     "lamp2",
                     new Mesh("Lamp.obj", emissiveMaterial),
                     new Transform(
@@ -161,6 +168,8 @@ namespace RTE.Engine
                     ));
 
             actor = scene.GetActor("actor");
+
+            scene.BackgroundColor = Color4.DarkSlateBlue;
 
             Material base2 = new MaterialDefault(
                 "base",

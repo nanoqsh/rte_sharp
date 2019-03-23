@@ -15,6 +15,18 @@ namespace RTE.Engine
 
         public Vector3 AmbientColor;
 
+        private Color4 backgroundColor;
+        public Color4 BackgroundColor
+        {
+            get => backgroundColor;
+            set
+            {
+                backgroundColor = value;
+
+                sceneRenderer.BackgroundColor = backgroundColor;
+            }
+        }
+
         public PointLight[] Lights;
 
         public Scene(string name)
@@ -22,10 +34,13 @@ namespace RTE.Engine
             Name = name;
             Actors = new Dictionary<string, Actor>();
 
-            sceneRenderer = new SceneRenderer(this)
-                .SetBackgroundColor(Color4.DarkSlateBlue);
-
             AmbientColor = Color4.White.ToVector3();
+            backgroundColor = Color4.Black;
+
+            sceneRenderer = new SceneRenderer(this)
+            {
+                BackgroundColor = BackgroundColor
+            };
         }
 
         public void Draw()

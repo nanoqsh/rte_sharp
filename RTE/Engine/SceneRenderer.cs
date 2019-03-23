@@ -7,8 +7,7 @@ namespace RTE.Engine
     {
         private readonly Scene scene;
 
-        public Color4 BackgroundColor { get => backgroundColor; }
-        private Color4 backgroundColor;
+        public Color4 BackgroundColor;
 
         private Postprocessor postprocessor;
 
@@ -18,14 +17,7 @@ namespace RTE.Engine
 
             postprocessor = new Postprocessor();
 
-            backgroundColor = Color4.Black;
-        }
-
-        public SceneRenderer SetBackgroundColor(Color4 color)
-        {
-            backgroundColor = color;
-
-            return this;
+            BackgroundColor = Color4.Black;
         }
 
         public void Draw(Actor[] actors)
@@ -34,7 +26,7 @@ namespace RTE.Engine
 
             GL.Enable(EnableCap.DepthTest);
 
-            GL.ClearColor(backgroundColor);
+            GL.ClearColor(BackgroundColor);
             GL.Clear(
                   ClearBufferMask.ColorBufferBit
                 | ClearBufferMask.DepthBufferBit
