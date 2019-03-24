@@ -8,7 +8,7 @@ using RTE.Engine.Materials;
 
 namespace RTE.Engine
 {
-    class Game : GameWindow
+    class Game
     {
         public readonly string VideoVersion;
 
@@ -21,17 +21,20 @@ namespace RTE.Engine
         private Actor actor;
         private Scene scene;
 
+        private GameWindow gameWindow;
+
         public Game(int width, int height, string title, int pixelSize = 1)
-            : base(
-                  width,
-                  height,
-                  new GraphicsMode(new ColorFormat(32), 8),
-                  title,
-                  GameWindowFlags.Default
-                  )
         {
-            VSync = VSyncMode.On;
-            CursorVisible = false;
+            gameWindow = new GameWindow(
+                width,
+                height,
+                new GraphicsMode(new ColorFormat(32), 8),
+                title,
+                GameWindowFlags.Default
+                );
+
+            gameWindow.VSync = VSyncMode.On;
+            gameWindow.CursorVisible = false;
 
             mousePosition = new MousePosition();
 
@@ -46,10 +49,20 @@ namespace RTE.Engine
                 new Vector3(0.0f, 0.0f, -1.0f)
                 );
 
+            var client = gameWindow.ClientRectangle;
+
             MeshRenderer.SetCamera(camera);
             MeshRenderer.SetPerspectiveAspect(
-                    ClientRectangle.Width / (float)ClientRectangle.Height
+                    client.Width / (float)client.Height
                     );
+
+            gameWindow.KeyDown += OnKeyDown;
+            gameWindow.KeyUp += OnKeyUp;
+            gameWindow.Load += OnLoad;
+            gameWindow.FocusedChanged += OnFocusedChanged;
+            gameWindow.UpdateFrame += OnUpdateFrame;
+            gameWindow.RenderFrame += OnRenderFrame;
+            gameWindow.Resize += OnResize;
         }
 
         private static void CheckOpenGLError()
@@ -62,33 +75,27 @@ namespace RTE.Engine
                 );
         }
 
-        protected override void OnKeyDown(KeyboardKeyEventArgs e)
+        private void OnKeyDown(object sender, KeyboardKeyEventArgs e)
         {
-            base.OnKeyDown(e);
-
             pressedKeys.Add(e.Key);
 
             if (e.Key == Key.F11)
-                WindowState = WindowState == WindowState.Fullscreen
+                gameWindow.WindowState = gameWindow.WindowState == WindowState.Fullscreen
                     ? WindowState.Normal
                     : WindowState.Fullscreen;
 
             if (e.Key == Key.Escape)
-                Exit();
+                gameWindow.Exit();
         }
 
-        protected override void OnKeyUp(KeyboardKeyEventArgs e)
+        private void OnKeyUp(object sender, KeyboardKeyEventArgs e)
         {
-            base.OnKeyUp(e);
-
             pressedKeys.Remove(e.Key);
         }
 
-        protected override void OnLoad(EventArgs e)
+        private void OnLoad(object sender, EventArgs e)
         {
-            base.OnLoad(e);
-
-            Viewport.Resize(ClientRectangle);
+            Viewport.Resize(gameWindow.ClientRectangle);
             
             Color4 specularColor = Color4.Yellow;
 
@@ -205,18 +212,14 @@ namespace RTE.Engine
             CheckOpenGLError();
         }
 
-        protected override void OnFocusedChanged(EventArgs e)
+        private void OnFocusedChanged(object sender, EventArgs e)
         {
-            base.OnFocusedChanged(e);
-
             mousePosition.Update();
         }
 
-        protected override void OnUpdateFrame(FrameEventArgs e)
+        private void OnUpdateFrame(object sender, FrameEventArgs e)
         {
-            base.OnUpdateFrame(e);
-
-            if (Focused)
+            if (gameWindow.Focused)
             {
                 const float sensitivity = 0.3f;
 
@@ -276,24 +279,27 @@ namespace RTE.Engine
                 tr.ScaleByX(-scaleSpeed);
         }
 
-        protected override void OnRenderFrame(FrameEventArgs e)
+        private void OnRenderFrame(object sender, FrameEventArgs e)
         {
-            base.OnRenderFrame(e);
-
             scene.Draw();
 
-            SwapBuffers();
+            gameWindow.SwapBuffers();
         }
 
-        protected override void OnResize(EventArgs e)
+        private void OnResize(object sender, EventArgs e)
         {
-            base.OnResize(e);
+            var client = gameWindow.ClientRectangle;
 
-            Viewport.Resize(ClientRectangle);
-
+            Viewport.Resize(client);
+            
             MeshRenderer.SetPerspectiveAspect(
-                ClientRectangle.Width / (float)ClientRectangle.Height
+                client.Width / (float)client.Height
                 );
+        }
+
+        public void Run(double updateRate)
+        {
+            gameWindow.Run(updateRate);
         }
     }
 }
